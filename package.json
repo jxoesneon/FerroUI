@@ -10,7 +10,7 @@
   "scripts": {
     "build": "tsc --build packages/engine/tsconfig.json && npm run build --workspaces --if-present",
     "test": "npm test --workspaces --if-present",
-    "lint": "eslint . --ext .ts,.tsx",
+    "lint": "eslint .",
     "dev": "npm run dev --workspaces --if-present"
   },
   "keywords": [
