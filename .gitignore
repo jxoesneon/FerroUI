@@ -34,6 +34,7 @@ packages/*/dist
 apps/*/dist
 **/*.js
 **/*.d.ts
+!**/src/**/*.d.ts
 !**/vite.config.ts
 !**/vite.config.js
 !**/eslint.config.js
