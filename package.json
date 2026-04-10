@@ -8,7 +8,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run build --workspaces --if-present",
+    "build": "tsc --build packages/engine/tsconfig.json && npm run build --workspaces --if-present",
     "test": "npm test --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
     "dev": "npm run dev --workspaces --if-present"
@@ -28,6 +28,7 @@
     "prettier": "^3.2.0",
     "rimraf": "^5.0.0",
     "typescript": "^5.4.0",
-    "vite-tsconfig-paths": "^6.1.1"
+    "vite-tsconfig-paths": "^6.1.1",
+    "zod": "^4.3.6"
   }
 }

@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
     "strict": true,
@@ -14,13 +14,22 @@
     "baseUrl": ".",
     "jsx": "react-jsx",
     "paths": {
-      "@alloy/engine": ["packages/engine/src"],
-      "@alloy/registry": ["packages/registry/src"],
-      "@alloy/schema": ["packages/schema/src"],
-      "@alloy/tools": ["packages/tools/src"],
-      "@alloy/telemetry": ["packages/telemetry/src"],
-      "@alloy/i18n": ["packages/i18n/src"]
+      "@alloy/engine": ["packages/engine/dist"],
+      "@alloy/registry": ["packages/registry/dist"],
+      "@alloy/schema": ["packages/schema/dist"],
+      "@alloy/tools": ["packages/tools/dist"],
+      "@alloy/telemetry": ["packages/telemetry/dist"],
+      "@alloy/i18n": ["packages/i18n/dist"]
     }
   },
+  "files": [],
+  "references": [
+    { "path": "packages/schema" },
+    { "path": "packages/telemetry" },
+    { "path": "packages/registry" },
+    { "path": "packages/tools" },
+    { "path": "packages/i18n" },
+    { "path": "packages/engine" }
+  ],
   "exclude": ["node_modules", "dist"]
 }

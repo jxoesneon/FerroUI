@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useAlloyLayout } from './hooks/useAlloyLayout';
-import { AlloyRenderer } from './components/AlloyRenderer';
-import { actionRouter, ActionRouterContext } from './services/ActionRouter';
-import './components/components-registration';
-import './App.css';
+import { useAlloyLayout } from '../../web/src/hooks/useAlloyLayout';
+import { AlloyRenderer } from '../../web/src/components/AlloyRenderer';
+import { actionRouter, ActionRouterContext } from '../../web/src/services/ActionRouter';
+import '../../web/src/components/components-registration';
+import '../../web/src/App.css';
 
 interface Toast {
   id: string;
@@ -13,7 +13,7 @@ interface Toast {
 
 function App() {
   const { layout, loading, error, refresh } = useAlloyLayout({
-    url: '/api/layout', // In a real app, this would be an absolute URL or proxy path
+    url: 'http://localhost:3001/api/layout', // Desktop app connects to local engine
   });
 
   const [toasts, setToasts] = useState<Toast[]>([]);
@@ -31,7 +31,6 @@ function App() {
       },
       navigate: (path: string, params?: any) => {
         console.log('Navigating to:', path, params);
-        window.history.pushState(params, '', path);
       },
     };
 
@@ -42,7 +41,7 @@ function App() {
     return (
       <div className="min-h-screen bg-red-50 flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-white shadow-xl rounded-lg p-6 border border-red-200">
-          <h1 className="text-2xl font-bold text-red-700 mb-4">Connection Error</h1>
+          <h1 className="text-2xl font-bold text-red-700 mb-4">Engine Connection Error</h1>
           <p className="text-red-600 mb-6">{error.message}</p>
           <button
             onClick={refresh}
@@ -58,7 +57,7 @@ function App() {
   return (
     <div className="alloy-app min-h-screen relative">
       {/* Main Layout Rendering */}
-      {layout?.layout && <AlloyRenderer component={layout.layout} />}
+      {layout?.layout && <AlloyRenderer component={layout.layout as any} />}
 
       {/* Loading Indicator */}
       {loading && (

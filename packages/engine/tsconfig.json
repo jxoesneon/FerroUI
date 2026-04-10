@@ -1,7 +1,17 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "rootDir": "src",
+    "composite": true,
+    "declaration": true
   },
+  "references": [
+    { "path": "../schema" },
+    { "path": "../telemetry" },
+    { "path": "../registry" },
+    { "path": "../tools" },
+    { "path": "../i18n" }
+  ],
   "include": ["src/**/*"]
 }
