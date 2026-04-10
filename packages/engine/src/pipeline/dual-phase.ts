@@ -58,8 +58,17 @@ ${toolManifest}
     yield { type: 'tool_call', toolCall: { name: call.name, args: call.args } };
     try {
       const result = await executeTool(call.name, call.args, {
-        session: { userId: context.userId, permissions: context.permissions },
-        request: { id: context.requestId },
+        session: { 
+          id: context.requestId, 
+          userId: context.userId, 
+          permissions: context.permissions, 
+          locale: context.locale 
+        },
+        request: { 
+          id: context.requestId, 
+          prompt: prompt, 
+          timestamp: new Date() 
+        },
         logger: console as any // Placeholder
       });
       toolOutputs[call.name] = result;

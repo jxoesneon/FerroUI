@@ -12,6 +12,11 @@ export function getTracer(): Tracer {
 }
 
 /**
+ * Default Alloy UI tracer
+ */
+export const tracer = getTracer();
+
+/**
  * Creates a span with Alloy UI standard attributes
  */
 export function startSpan(

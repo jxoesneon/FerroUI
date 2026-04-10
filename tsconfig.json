@@ -11,15 +11,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "incremental": true,
-    "baseUrl": ".",
-    "paths": {
-      "@alloy/engine": ["packages/engine/src"],
-      "@alloy/registry": ["packages/registry/src"],
-      "@alloy/schema": ["packages/schema/src"],
-      "@alloy/tools": ["packages/tools/src"],
-      "@alloy/telemetry": ["packages/telemetry/src"],
-      "@alloy/i18n": ["packages/i18n/src"]
-    }
+    "baseUrl": "."
   },
   "exclude": ["node_modules", "dist"]
 }
