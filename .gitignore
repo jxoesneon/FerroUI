@@ -41,3 +41,8 @@ apps/*/dist
 !**/packages/cli/bin/alloy.js
 !**/node_modules/**
 !**/.claude/**
+
+# MemPalace
+.fastembed_cache/*
+.entities.json
+.mempalace.yaml
