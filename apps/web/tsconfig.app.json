@@ -21,6 +21,6 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
-  "files": ["modules.d.ts"],
+  "files": ["src/modules.d.ts"],
   "include": ["src", "src/**/*.d.ts"]
 }

@@ -1,3 +1,4 @@
+/// <reference path="./modules.d.ts" />
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from '../src/App' // Assuming we can reuse web App or create a desktop one
