@@ -8,8 +8,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch",
-    "lint": "eslint src/**/*.ts"
+    "dev": "tsc --watch"
   },
   "dependencies": {
     "@opentelemetry/api": "1.9.0",
