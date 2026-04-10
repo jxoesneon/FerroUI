@@ -69,7 +69,11 @@ ${toolManifest}
           prompt: prompt, 
           timestamp: new Date() 
         },
-        logger: console as any // Placeholder
+        logger: console as any, // Placeholder
+        telemetry: {
+          recordEvent: () => {},
+          recordMetric: () => {}
+        }
       });
       toolOutputs[call.name] = result;
       yield { type: 'tool_output', toolOutput: { name: call.name, result } };

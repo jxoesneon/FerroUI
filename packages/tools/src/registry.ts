@@ -124,7 +124,7 @@ export async function executeTool(
     validatedParams = tool.parameters.parse(args);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      throw new ToolError('INVALID_PARAMS', 'Parameters failed validation.', error.errors);
+      throw new ToolError('INVALID_PARAMS', 'Parameters failed validation.', error.issues);
     }
     throw new ToolError('INVALID_PARAMS', 'Parameters failed validation.');
   }

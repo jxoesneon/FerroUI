@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useAlloyLayout } from './hooks/useAlloyLayout';
-import { AlloyRenderer } from './components/AlloyRenderer';
-import { actionRouter, ActionRouterContext } from './services/ActionRouter';
+import { useAlloyLayout } from './hooks/useAlloyLayout.js';
+import { AlloyRenderer } from './components/AlloyRenderer.js';
+import { actionRouter, ActionRouterContext } from './services/ActionRouter.js';
 import './components/components-registration';
 import './App.css';
 
@@ -22,14 +22,14 @@ function App() {
   useEffect(() => {
     const context: ActionRouterContext = {
       refresh,
-      showToast: (message, variant) => {
+      showToast: (message: string, variant: any) => {
         const id = Math.random().toString(36).substring(2, 9);
         setToasts((prev) => [...prev, { id, message, variant }]);
         setTimeout(() => {
           setToasts((prev) => prev.filter((t) => t.id !== id));
         }, 3000);
       },
-      navigate: (path, params) => {
+      navigate: (path: string, params?: any) => {
         console.log('Navigating to:', path, params);
         window.history.pushState(params, '', path);
       },

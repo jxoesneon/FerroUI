@@ -8,20 +8,20 @@ import { LlmRequest, RequestContext } from '../types';
  * Fuzzy matches a component type against the registry
  */
 export function fuzzyMatchComponent(type: string): string | undefined {
-  const allComponents = registry.getAllComponents().map(c => c.name);
+  const allComponents = registry.getAllComponents().map((c: any) => c.name);
   
   // Basic case-insensitive match
-  const exactMatch = allComponents.find(c => c.toLowerCase() === type.toLowerCase());
+  const exactMatch = allComponents.find((c: string) => c.toLowerCase() === type.toLowerCase());
   if (exactMatch) return exactMatch;
 
   // Simple edit distance (Levenshtein) or just prefix/contains
   const sortedMatches = allComponents
-    .map(c => ({
+    .map((c: string) => ({
       name: c,
       score: calculateSimilarity(c.toLowerCase(), type.toLowerCase())
     }))
-    .filter(m => m.score > 0.6)
-    .sort((a, b) => b.score - a.score);
+    .filter((m: any) => m.score > 0.6)
+    .sort((a: any, b: any) => b.score - a.score);
 
   return sortedMatches[0]?.name;
 }
@@ -71,7 +71,7 @@ export async function repairLayout(
     throw new Error(`Failed to repair layout after ${maxAttempts} attempts.`);
   }
 
-  const errorReport = errors.map(e => `- ${e.path}: ${e.message}`).join('\n');
+  const errorReport = errors.map((e: ValidationIssue) => `- ${e.path}: ${e.message}`).join('\n');
   
   const repairSystemPrompt = `
 # Alloy UI - Repair Mode

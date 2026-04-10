@@ -24,9 +24,10 @@
   "author": "Alloy Project Team",
   "license": "MIT",
   "devDependencies": {
-    "typescript": "^5.4.0",
-    "prettier": "^3.2.0",
     "eslint": "^8.57.0",
-    "rimraf": "^5.0.0"
+    "prettier": "^3.2.0",
+    "rimraf": "^5.0.0",
+    "typescript": "^5.4.0",
+    "vite-tsconfig-paths": "^6.1.1"
   }
 }

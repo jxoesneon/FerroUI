@@ -92,7 +92,7 @@ export function formatCurrency(
  * Basic translation function with interpolation
  */
 export function interpolate(template: string, options: TranslationOptions): string {
-  return template.replace(/{(\w+)}/g, (match, key) => {
+  return template.replace(/{(\w+)}/g, (match: string, key: string) => {
     return options[key] !== undefined ? String(options[key]) : match;
   });
 }

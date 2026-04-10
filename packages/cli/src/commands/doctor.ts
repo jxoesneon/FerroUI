@@ -1,6 +1,6 @@
 import { Command } from 'commander';
 import chalk from 'chalk';
-import execa from 'execa';
+import execa = require('execa');
 
 /**
  * Doctor Command

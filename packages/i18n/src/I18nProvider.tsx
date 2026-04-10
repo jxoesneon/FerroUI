@@ -51,6 +51,16 @@ export const I18nProvider: React.FC<I18nProviderProps> = ({
     onLocaleChange?.(newLocale);
   }, [onLocaleChange]);
 
+  const loadBundle = useCallback((newLocale: SupportedLocale, namespace: string, bundle: Record<string, string>) => {
+    setBundles((prev) => ({
+      ...prev,
+      [newLocale]: {
+        ...(prev[newLocale] || {}),
+        [namespace]: bundle,
+      },
+    }));
+  }, []);
+
   const t = useCallback((key: string, options?: TranslationOptions): string => {
     // Basic key resolution from bundles
     const value = resolveKey(bundles[locale], key) || key;
@@ -65,7 +75,8 @@ export const I18nProvider: React.FC<I18nProviderProps> = ({
     formatNumber: (num: number, options?: Intl.NumberFormatOptions) => formatNumber(num, locale, options),
     formatCurrency: (amount: number, currency: string, options?: Intl.NumberFormatOptions) => formatCurrency(amount, currency, locale, options),
     setLocale,
-  }), [locale, direction, t, setLocale]);
+    loadBundle,
+  }), [locale, direction, t, setLocale, loadBundle]);
 
   return (
     <I18nContext.Provider value={contextValue}>

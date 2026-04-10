@@ -26,3 +26,18 @@ dist/
 # Alloy Specific
 .alloy/
 alloy-eval-reports/
+
+# Build artifacts
+*.tsbuildinfo
+*.js.map
+packages/*/src/**/*.js
+packages/*/src/**/*.d.ts
+apps/*/src/**/*.js
+apps/*/src/**/*.d.ts
+!**/vite.config.js
+!**/eslint.config.js
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

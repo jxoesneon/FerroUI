@@ -2,8 +2,8 @@ import React, { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AlloyComponent } from '@alloy/schema';
 import { registry } from '@alloy/registry';
-import { AlloyErrorBoundary } from './ErrorBoundary';
-import { actionRouter } from '../services/ActionRouter';
+import { AlloyErrorBoundary } from './ErrorBoundary.js';
+import { actionRouter } from '../services/ActionRouter.js';
 
 interface AlloyRendererProps {
   component: AlloyComponent;
@@ -55,7 +55,7 @@ export const AlloyRenderer: React.FC<AlloyRendererProps> = ({ component }) => {
       >
         <ComponentImplementation {...props}>
           <AnimatePresence mode="popLayout">
-            {children?.map((child, index) => (
+            {children?.map((child: AlloyComponent, index: number) => (
               <AlloyRenderer key={child.id || `${type}-child-${index}`} component={child} />
             ))}
           </AnimatePresence>

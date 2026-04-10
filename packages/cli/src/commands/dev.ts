@@ -1,6 +1,6 @@
 import { Command } from 'commander';
 import chalk from 'chalk';
-import { execa } from 'execa';
+import execa = require('execa');
 import path from 'path';
 import fs from 'fs-extra';
 import ora from 'ora';
