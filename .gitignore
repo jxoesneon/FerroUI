@@ -44,5 +44,5 @@ apps/*/dist
 
 # MemPalace
 .fastembed_cache/*
-.entities.json
-.mempalace.yaml
+entities.json
+mempalace.yaml
