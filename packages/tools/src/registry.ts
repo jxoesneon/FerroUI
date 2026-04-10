@@ -166,6 +166,7 @@ export async function executeTool(
  * Cache invalidation placeholder
  * Based on Section 6.2 of the specification
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function invalidateCache(toolName: string, params?: any): Promise<void> {
   // This will be implemented by the engine's cache layer.
   // We provide the signature here for completion.

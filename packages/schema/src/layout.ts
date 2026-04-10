@@ -5,6 +5,7 @@ import {
   AriaPropsSchema, 
   LayoutMetadataSchema,
   ValidationResult,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ValidationIssue
 } from './types';
 import { validateTiers } from './tiers';

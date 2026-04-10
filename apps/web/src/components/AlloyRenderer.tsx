@@ -14,6 +14,7 @@ interface AlloyRendererProps {
  * Implements Section 8.3: Atomic Component Hierarchy & Section 8.4: Framer Motion Animations.
  */
 export const AlloyRenderer: React.FC<AlloyRendererProps> = ({ component }) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { type, id, props, children, action, aria } = component;
 
   // Resolve component implementation from the registry

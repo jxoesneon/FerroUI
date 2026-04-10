@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { createParser, ParsedEvent, ReconnectInterval } from 'eventsource-parser';
 import parsePartialJson from 'partial-json-parser';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { AlloyLayout, AlloyLayoutSchema } from '@alloy/schema';
 
 interface UseAlloyLayoutOptions {
@@ -30,7 +31,7 @@ export function useAlloyLayout({ url, initialRequestId }: UseAlloyLayoutOptions)
   }, []);
 
   useEffect(() => {
-    let controller = new AbortController();
+    const controller = new AbortController();
     setLoading(true);
     setError(null);
 
@@ -80,12 +81,14 @@ export function useAlloyLayout({ url, initialRequestId }: UseAlloyLayoutOptions)
 
         const parser = createParser(onParse);
 
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-
-          const chunk = decoder.decode(value, { stream: true });
-          parser.feed(chunk);
+        let done = false;
+        while (!done) {
+          const result = await reader.read();
+          done = result.done;
+          if (result.value) {
+            const chunk = decoder.decode(result.value, { stream: true });
+            parser.feed(chunk);
+          }
         }
 
         setLoading(false);

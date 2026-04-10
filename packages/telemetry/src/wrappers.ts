@@ -1,6 +1,7 @@
 import { Span, Attributes } from '@opentelemetry/api';
 import { withSpan } from './tracer';
 import { alloyMetrics } from './metrics';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { AlloyAttributes, LlmCallInfo, ToolCallInfo, PipelinePhase } from './types';
 
 /**

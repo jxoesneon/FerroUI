@@ -2,6 +2,7 @@ import { Command } from 'commander';
 import chalk from 'chalk';
 import execa = require('execa');
 import path from 'path';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import fs from 'fs-extra';
 import ora from 'ora';
 

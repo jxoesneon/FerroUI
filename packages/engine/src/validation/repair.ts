@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { z } from 'zod';
 import { AlloyLayout, validateLayout, ValidationIssue } from '@alloy/schema';
 import { registry } from '@alloy/registry';
@@ -35,7 +36,7 @@ function calculateSimilarity(s1: string, s2: string): number {
 }
 
 function editDistance(s1: string, s2: string): number {
-  const costs = new Array();
+  const costs = [];
   for (let i = 0; i <= s1.length; i++) {
     let lastValue = i;
     for (let j = 0; j <= s2.length; j++) {

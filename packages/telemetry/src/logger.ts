@@ -1,4 +1,5 @@
 import { logs, Logger, LogRecord } from '@opentelemetry/api-logs';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { AlloyAttributes } from './types';
 
 const INSTRUMENTATION_NAME = '@alloy/telemetry';
