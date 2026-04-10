@@ -19,7 +19,7 @@
       "@/*": ["./src/*"]
     }
   },
-  "files": ["src/modules.d.ts"],
+  "files": ["modules.d.ts"],
   "include": ["src", "src/**/*.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
