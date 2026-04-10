@@ -1,0 +1,109 @@
+import { useState, useEffect, useCallback } from 'react';
+import { createParser, ParsedEvent, ReconnectInterval } from 'eventsource-parser';
+import parsePartialJson from 'partial-json-parser';
+import { AlloyLayout, AlloyLayoutSchema } from '@alloy/schema';
+
+interface UseAlloyLayoutOptions {
+  url: string;
+  initialRequestId?: string;
+}
+
+interface UseAlloyLayoutResult {
+  layout: Partial<AlloyLayout> | null;
+  loading: boolean;
+  error: Error | null;
+  refresh: () => void;
+}
+
+/**
+ * Hook for consuming Alloy UI layouts via Server-Sent Events (SSE).
+ * Implements Section 8.5 of the System Architecture Document (Streaming Architecture).
+ */
+export function useAlloyLayout({ url, initialRequestId }: UseAlloyLayoutOptions): UseAlloyLayoutResult {
+  const [layout, setLayout] = useState<Partial<AlloyLayout> | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<Error | null>(null);
+  const [refreshCount, setRefreshCount] = useState<number>(0);
+
+  const refresh = useCallback(() => {
+    setRefreshCount((prev) => prev + 1);
+  }, []);
+
+  useEffect(() => {
+    let controller = new AbortController();
+    setLoading(true);
+    setError(null);
+
+    const fetchData = async () => {
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'text/event-stream',
+          },
+          body: JSON.stringify({
+            requestId: initialRequestId || crypto.randomUUID(),
+          }),
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch layout: ${response.statusText}`);
+        }
+
+        const reader = response.body?.getReader();
+        if (!reader) {
+          throw new Error('Response body is not readable');
+        }
+
+        const decoder = new TextDecoder();
+        let accumulatedData = '';
+
+        const onParse = (event: ParsedEvent | ReconnectInterval) => {
+          if (event.type === 'event') {
+            if (event.data === '[DONE]') {
+              setLoading(false);
+              return;
+            }
+
+            try {
+              // The event data might be a JSON chunk or a partial JSON string
+              accumulatedData += event.data;
+              const partialLayout = parsePartialJson(accumulatedData);
+              setLayout(partialLayout as Partial<AlloyLayout>);
+            } catch (e) {
+              console.error('Error parsing partial JSON:', e);
+            }
+          }
+        };
+
+        const parser = createParser(onParse);
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          const chunk = decoder.decode(value, { stream: true });
+          parser.feed(chunk);
+        }
+
+        setLoading(false);
+      } catch (err) {
+        if (err instanceof Error && err.name === 'AbortError') {
+          return;
+        }
+        setError(err instanceof Error ? err : new Error('Unknown error occurred'));
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      controller.abort();
+    };
+  }, [url, initialRequestId, refreshCount]);
+
+  return { layout, loading, error, refresh };
+}

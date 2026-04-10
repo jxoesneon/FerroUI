@@ -1,0 +1,10 @@
+import { render, screen } from '@testing-library/react';
+import { {{name}} } from './index';
+import { describe, it, expect } from 'vitest';
+
+describe('{{name}}', () => {
+  it('renders correctly', () => {
+    render(<{{name}}>Test Content</{{name}}>);
+    expect(screen.getByText('Test Content')).toBeDefined();
+  });
+});

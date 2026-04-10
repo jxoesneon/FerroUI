@@ -1,0 +1,27 @@
+{
+  "name": "@alloy/engine",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "@alloy/schema": "*",
+    "@alloy/registry": "*",
+    "@alloy/tools": "*",
+    "@alloy/telemetry": "*",
+    "@alloy/i18n": "*",
+    "zod": "^3.22.4",
+    "zod-to-json-schema": "^3.22.3",
+    "uuid": "^9.0.1",
+    "crypto-js": "^4.2.0"
+  },
+  "devDependencies": {
+    "@types/uuid": "^9.0.7",
+    "@types/crypto-js": "^4.2.1",
+    "typescript": "^5.3.3"
+  }
+}

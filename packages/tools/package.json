@@ -1,0 +1,20 @@
+{
+  "name": "@alloy/tools",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "@alloy/schema": "0.1.0",
+    "@alloy/telemetry": "0.1.0",
+    "zod": "^4.3.6",
+    "zod-to-json-schema": "^3.23.2"
+  },
+  "devDependencies": {
+    "typescript": ">=5.4.0"
+  }
+}

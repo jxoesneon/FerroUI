@@ -1,0 +1,40 @@
+/* Alloy UI Base Styles */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.alloy-app {
+  @apply bg-gray-50 text-gray-900 font-sans;
+}
+
+/* Custom Toast Animation */
+@keyframes bounce-in {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(-10%);
+  }
+  80% {
+    transform: translateX(5%);
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.4s ease-out forwards;
+}
+
+/* Dashboard Styles */
+.dashboard {
+  @apply container mx-auto;
+}
+
+/* Framer Motion Layout Helper */
+.motion-layout-container {
+  display: contents;
+}

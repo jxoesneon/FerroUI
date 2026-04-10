@@ -1,0 +1,32 @@
+{
+  "name": "alloy-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Alloy UI: AI-powered, server-driven UI meta-framework",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm test --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "dev": "npm run dev --workspaces --if-present"
+  },
+  "keywords": [
+    "ai",
+    "sdui",
+    "framework",
+    "react",
+    "typescript",
+    "llm"
+  ],
+  "author": "Alloy Project Team",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "prettier": "^3.2.0",
+    "eslint": "^8.57.0",
+    "rimraf": "^5.0.0"
+  }
+}

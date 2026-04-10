@@ -1,0 +1,25 @@
+import { registerTool } from '@alloy/tools';
+import { {{name}}ParamsSchema, {{name}}ResultSchema } from './schema';
+{{#if mock}}
+import { {{name}}Mock } from './mock';
+{{/if}}
+
+/**
+ * {{name}} tool ({{category}})
+ */
+export const {{name}} = registerTool({
+  name: '{{name}}',
+  description: '[Describe what this tool does]',
+  parameters: {{name}}ParamsSchema,
+  returns: {{name}}ResultSchema,
+  execute: async (params) => {
+    {{#if mock}}
+    if (process.env.NODE_ENV === 'development') {
+      return {{name}}Mock(params);
+    }
+    {{/if}}
+    
+    // Implement tool logic here
+    throw new Error('Not implemented');
+  },
+});
