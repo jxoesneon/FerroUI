@@ -23,7 +23,7 @@ jobs:
           npm config set prefix ${{ github.workspace }}/.npm-global
           echo "${{ github.workspace }}/.npm-global/bin" >> $GITHUB_PATH
           
-      - run: npm install --frozen-lockfile --unsafe-perm
+      - run: npm install --frozen-lockfile --offline --unsafe-perm
       - run: npm run build --if-present
       - run: npm test
       - run: npm run lint
