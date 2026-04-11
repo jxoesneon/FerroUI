@@ -18,9 +18,10 @@ jobs:
 
       - name: Configure npm
         run: |
-          mkdir -p /tmp/.npm-cache /tmp/.npm-global
-          npm config set cache /tmp/.npm-cache
-          npm config set prefix /tmp/.npm-global
+          mkdir -p ${{ github.workspace }}/.npm-cache ${{ github.workspace }}/.npm-global
+          npm config set cache ${{ github.workspace }}/.npm-cache
+          npm config set prefix ${{ github.workspace }}/.npm-global
+          echo "${{ github.workspace }}/.npm-global/bin" >> $GITHUB_PATH
           
       - run: npm install --frozen-lockfile
       - run: npm run build --if-present
