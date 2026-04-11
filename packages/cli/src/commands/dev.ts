@@ -1,6 +1,6 @@
 import { Command } from 'commander';
 import chalk from 'chalk';
-import execa = require('execa');
+import execa from 'execa';
 import path from 'path';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import fs from 'fs-extra';
@@ -24,29 +24,24 @@ export const devCommand = new Command('dev')
     try {
       // 1. Layout Playground (apps/web)
       const playgroundPort = options.port;
-      const playgroundProcess = execa('npm', ['run', 'dev', '--', '--port', playgroundPort], {
+      const playgroundProcess = execa('/usr/local/bin/npm', ['run', 'dev', '--', '--port', playgroundPort], {
         cwd: path.join(appsDir, 'web'),
         stdio: 'inherit',
-        env: { ...process.env, PORT: playgroundPort }
+        env: { ...process.env, PORT: playgroundPort.toString(), PATH: process.env.PATH }
       });
 
-      // 2. Orchestration Engine (Assume it can be run from packages/engine or apps/edge)
-      // Since apps/edge is empty, let's assume we run a dev server for the engine
+      // 2. Orchestration Engine
       const enginePort = options.enginePort;
-      // For now, let's assume we have a server.ts in packages/engine/src/server.ts
-      const engineProcess = execa('npx', ['ts-node', 'src/server.ts', '--port', enginePort], {
-        cwd: path.join(packagesDir, 'engine'),
+      const engineProcess = execa('/usr/local/bin/node', [path.join(packagesDir, 'engine/src/server.ts'), '--port', enginePort], {
         stdio: 'inherit',
-        env: { ...process.env, PORT: enginePort }
+        env: { ...process.env, PORT: enginePort, PATH: process.env.PATH }
       });
 
       // 3. Registry Inspector
       const inspectorPort = options.inspectorPort;
-      // Assume registry inspector is a tool or another app
-      const inspectorProcess = execa('npx', ['ts-node', 'src/inspector.ts', '--port', inspectorPort], {
-        cwd: path.join(packagesDir, 'registry'),
+      const inspectorProcess = execa('/usr/local/bin/node', [path.join(packagesDir, 'registry/src/inspector.ts'), '--port', inspectorPort], {
         stdio: 'inherit',
-        env: { ...process.env, PORT: inspectorPort }
+        env: { ...process.env, PORT: inspectorPort, PATH: process.env.PATH }
       });
 
       spinner.succeed(chalk.green('Services started!'));

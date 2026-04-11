@@ -5,7 +5,7 @@ import * as fs from 'fs';
  * CLI Wrapper for AlloyLayout Validation
  * Usage: cat layout.json | node validate.js
  */
-function main() {
+export function main() {
   const data = fs.readFileSync(0, 'utf-8');
   
   if (!data || data.trim() === '') {
@@ -33,4 +33,6 @@ function main() {
   }
 }
 
-main();
+if (typeof require !== 'undefined' && require.main === module) {
+  main();
+}

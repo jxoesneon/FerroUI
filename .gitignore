@@ -46,3 +46,16 @@ apps/*/dist
 .fastembed_cache/*
 entities.json
 mempalace.yaml
+
+# Runtime and Local Artifacts
+.npm-cache/
+.project_root
+.logs.json
+logs.json
+checkpoint-*.json
+npm-debug.log*
+.vitest/
+
+# OS specific files
+.DS_Store
+*.log

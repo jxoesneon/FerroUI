@@ -4,6 +4,9 @@ import { devCommand } from './commands/dev';
 import { generateCommand } from './commands/generate';
 import { evalCommand } from './commands/eval';
 import { doctorCommand } from './commands/doctor';
+import { createCommand } from './commands/create';
+import { buildCommand } from './commands/build';
+import { deployCommand } from './commands/deploy';
 
 const program = new Command();
 
@@ -17,6 +20,9 @@ program.addCommand(devCommand);
 program.addCommand(generateCommand);
 program.addCommand(evalCommand);
 program.addCommand(doctorCommand);
+program.addCommand(createCommand);
+program.addCommand(buildCommand);
+program.addCommand(deployCommand);
 
 program.on('command:*', () => {
   console.error(chalk.red('Invalid command: %s\nSee --help for a list of available commands.'), program.args.join(' '));

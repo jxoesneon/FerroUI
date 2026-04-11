@@ -4,7 +4,9 @@
   "private": true,
   "description": "Alloy UI: AI-powered, server-driven UI meta-framework",
   "workspaces": [
-    "apps/*",
+    "apps/web",
+    "apps/desktop",
+    "apps/edge",
     "packages/*"
   ],
   "scripts": {
@@ -23,16 +25,25 @@
   ],
   "author": "Alloy Project Team",
   "license": "MIT",
+  "overrides": {
+    "esbuild": "0.18.11"
+  },
   "devDependencies": {
     "@eslint/js": "^8.57.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@vitest/coverage-v8": "^4.1.4",
     "eslint": "^8.57.0",
     "eventsource-parser": "^3.0.6",
+    "jsdom": "^29.0.2",
     "partial-json-parser": "^1.2.2",
     "prettier": "^3.2.0",
     "rimraf": "^5.0.0",
-    "typescript": "^5.4.0",
+    "ts-node": "^10.9.2",
+    "typescript": "5.9.3",
     "typescript-eslint": "^7.18.0",
     "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^4.1.4",
     "zod": "^4.3.6"
   }
 }

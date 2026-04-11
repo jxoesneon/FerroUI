@@ -37,17 +37,58 @@ export class AlloyEngine {
       yield* runDualPhasePipeline(this.provider, prompt, context, this.config);
     } catch (error) {
       span.recordException(error as Error);
-      yield {
-        type: 'error',
-        error: {
-          code: 'ENGINE_FAILURE',
-          message: error instanceof Error ? error.message : 'An unexpected error occurred.',
-          retryable: false,
-        },
-      };
+      
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred.';
+      
+      // Determine if this is an unrecoverable failure (e.g. max repair attempts exceeded)
+      const isUnrecoverable = errorMessage.includes('repair') || errorMessage.includes('max attempts');
+
+      if (isUnrecoverable) {
+        // Yield Safe Mode Layout instead of raw error chunk
+        yield {
+          type: 'layout_chunk',
+          layout: this.getSafeModeLayout(context.requestId, context.locale)
+        };
+        yield { type: 'complete', content: 'Fallback: Safe Mode Active' };
+      } else {
+        yield {
+          type: 'error',
+          error: {
+            code: 'ENGINE_FAILURE',
+            message: errorMessage,
+            retryable: false,
+          },
+        };
+      }
     } finally {
       span.end();
     }
+  }
+
+  /**
+   * Generates a static, pre-built layout for use in Safe Mode.
+   */
+  private getSafeModeLayout(requestId: string, locale: string): any {
+    return {
+      schemaVersion: '1.0',
+      requestId,
+      locale,
+      layout: {
+        type: 'Dashboard',
+        id: 'safe-mode-dashboard',
+        children: [
+          {
+            type: 'StatusBanner',
+            id: 'safe-mode-banner',
+            props: {
+              status: 'error',
+              title: 'System in Safe Mode',
+              message: 'Alloy encountered an unrecoverable error during UI generation. Repair attempts have been exhausted to prevent further instability.'
+            }
+          }
+        ]
+      }
+    };
   }
 
   public setProvider(provider: LlmProvider): void {

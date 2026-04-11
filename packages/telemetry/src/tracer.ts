@@ -1,4 +1,7 @@
 import { trace, Tracer, Span, SpanOptions, Context, context } from '@opentelemetry/api';
+import { BasicTracerProvider, ConsoleSpanExporter, SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base';
+import { Resource } from '@opentelemetry/resources';
+import { ATTR_SERVICE_NAME } from '@opentelemetry/semantic-conventions';
 import { AlloyAttributes } from './types';
 
 const INSTRUMENTATION_NAME = '@alloy/telemetry';
@@ -15,6 +18,23 @@ export function getTracer(): Tracer {
  * Default Alloy UI tracer
  */
 export const tracer = getTracer();
+
+/**
+ * Initializes the telemetry SDK with a console exporter
+ */
+export function initializeTelemetry(serviceName: string = 'alloy-ui') {
+  const provider = new BasicTracerProvider({
+    resource: new Resource({
+      [ATTR_SERVICE_NAME]: serviceName,
+    }),
+  });
+
+  provider.addSpanProcessor(new SimpleSpanProcessor(new ConsoleSpanExporter()));
+  provider.register();
+
+  console.log(`[Telemetry] Initialized for service: ${serviceName}`);
+  return provider;
+}
 
 /**
  * Creates a span with Alloy UI standard attributes

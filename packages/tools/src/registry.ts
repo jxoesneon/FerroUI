@@ -162,18 +162,39 @@ export async function executeTool(
   }
 }
 
+export type InvalidationHandler = (toolName: string, params?: any) => Promise<void>;
+export type PatternInvalidationHandler = (pattern: string) => Promise<void>;
+
+let invalidationHandler: InvalidationHandler | null = null;
+let patternInvalidationHandler: PatternInvalidationHandler | null = null;
+
 /**
- * Cache invalidation placeholder
+ * Registers cache invalidation handlers from the engine
+ */
+export function registerCacheHandler(handlers: {
+  invalidate: InvalidationHandler;
+  invalidatePattern: PatternInvalidationHandler;
+}): void {
+  invalidationHandler = handlers.invalidate;
+  patternInvalidationHandler = handlers.invalidatePattern;
+}
+
+/**
+ * Cache invalidation
  * Based on Section 6.2 of the specification
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function invalidateCache(toolName: string, params?: any): Promise<void> {
-  // This will be implemented by the engine's cache layer.
-  // We provide the signature here for completion.
-  console.warn(`invalidateCache called for "${toolName}" but no cache layer is registered.`);
+  if (invalidationHandler) {
+    await invalidationHandler(toolName, params);
+  } else {
+    console.warn(`invalidateCache called for "${toolName}" but no cache layer is registered.`);
+  }
 }
 
 export async function invalidateCachePattern(pattern: string): Promise<void> {
-  // This will be implemented by the engine's cache layer.
-  console.warn(`invalidateCachePattern called for "${pattern}" but no cache layer is registered.`);
+  if (patternInvalidationHandler) {
+    await patternInvalidationHandler(pattern);
+  } else {
+    console.warn(`invalidateCachePattern called for "${pattern}" but no cache layer is registered.`);
+  }
 }

@@ -1,7 +1,7 @@
 import { Command } from 'commander';
 import chalk from 'chalk';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import execa = require('execa');
+import execa from 'execa';
 
 /**
  * Eval Command
