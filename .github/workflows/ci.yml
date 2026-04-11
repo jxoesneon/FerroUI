@@ -18,8 +18,9 @@ jobs:
 
       - name: Configure npm
         run: |
-          mkdir -p /tmp/.npm-cache
+          mkdir -p /tmp/.npm-cache /tmp/.npm-global
           npm config set cache /tmp/.npm-cache
+          npm config set prefix /tmp/.npm-global
           
       - run: npm install --frozen-lockfile
       - run: npm run build --if-present
