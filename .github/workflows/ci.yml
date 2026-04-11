@@ -9,21 +9,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container: node:20
     steps:
       - uses: actions/checkout@v4
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20.x'
-
-      - name: Configure npm
-        run: |
-          mkdir -p ${{ github.workspace }}/.npm-cache ${{ github.workspace }}/.npm-global
-          npm config set cache ${{ github.workspace }}/.npm-cache
-          npm config set prefix ${{ github.workspace }}/.npm-global
-          echo "${{ github.workspace }}/.npm-global/bin" >> $GITHUB_PATH
-          
-      - run: npm install --frozen-lockfile --offline --unsafe-perm
+      - run: npm install --frozen-lockfile
       - run: npm run build --if-present
       - run: npm test
       - run: npm run lint
