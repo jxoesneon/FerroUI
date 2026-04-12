@@ -2,23 +2,24 @@
 
 **Version:** 1.0  
 **Last Updated:** 2025-04-10  
-**Owner:** Platform Engineering Team  
+**Owner:** Platform Engineering Team
 
 ---
 
 ## 1. Overview
 
-This document outlines disaster recovery (DR) and business continuity (BC) procedures for Alloy UI.
+This document outlines disaster recovery (DR) and business continuity (BC)
+procedures for Alloy UI.
 
 ---
 
 ## 2. Recovery Objectives
 
-| Metric | Target | Measurement |
-|--------|--------|-------------|
-| RTO (Recovery Time Objective) | 4 hours | Time to restore service |
-| RPO (Recovery Point Objective) | 1 hour | Max data loss acceptable |
-| MTTR (Mean Time To Recovery) | 2 hours | Average recovery time |
+| Metric                         | Target  | Measurement              |
+| ------------------------------ | ------- | ------------------------ |
+| RTO (Recovery Time Objective)  | 4 hours | Time to restore service  |
+| RPO (Recovery Point Objective) | 1 hour  | Max data loss acceptable |
+| MTTR (Mean Time To Recovery)   | 2 hours | Average recovery time    |
 
 ---
 
@@ -26,14 +27,14 @@ This document outlines disaster recovery (DR) and business continuity (BC) proce
 
 ### 3.1 Scenario Matrix
 
-| Scenario | Likelihood | Impact | Recovery Strategy |
-|----------|------------|--------|-------------------|
-| Region outage | Low | High | Multi-region failover |
-| Database corruption | Low | Critical | Point-in-time restore |
-| Kubernetes cluster failure | Medium | High | Cluster rebuild |
-| LLM provider outage | Medium | Medium | Provider switch |
-| DDoS attack | Medium | Medium | CDN + WAF |
-| Data center fire | Very Low | Critical | DR site activation |
+| Scenario                   | Likelihood | Impact   | Recovery Strategy     |
+| -------------------------- | ---------- | -------- | --------------------- |
+| Region outage              | Low        | High     | Multi-region failover |
+| Database corruption        | Low        | Critical | Point-in-time restore |
+| Kubernetes cluster failure | Medium     | High     | Cluster rebuild       |
+| LLM provider outage        | Medium     | Medium   | Provider switch       |
+| DDoS attack                | Medium     | Medium   | CDN + WAF             |
+| Data center fire           | Very Low   | Critical | DR site activation    |
 
 ---
 
@@ -41,12 +42,12 @@ This document outlines disaster recovery (DR) and business continuity (BC) proce
 
 ### 4.1 Backup Types
 
-| Data | Frequency | Retention | Location |
-|------|-----------|-----------|----------|
-| Database | Hourly | 30 days | S3 + cross-region |
-| Configuration | On change | 90 days | Git + S3 |
-| Logs | Real-time | 90 days | S3 + CloudWatch |
-| Cache | N/A | N/A | Rebuild from source |
+| Data          | Frequency | Retention | Location            |
+| ------------- | --------- | --------- | ------------------- |
+| Database      | Hourly    | 30 days   | S3 + cross-region   |
+| Configuration | On change | 90 days   | Git + S3            |
+| Logs          | Real-time | 90 days   | S3 + CloudWatch     |
+| Cache         | N/A       | N/A       | Rebuild from source |
 
 ### 4.2 Database Backup
 
@@ -146,11 +147,11 @@ kubectl apply -f k8s/secrets-backup.yaml
 
 ### 7.1 DR Testing Schedule
 
-| Test | Frequency | Scope |
-|------|-----------|-------|
-| Backup restore | Monthly | Database |
-| Failover drill | Quarterly | Full stack |
-| Tabletop exercise | Annually | All scenarios |
+| Test              | Frequency | Scope         |
+| ----------------- | --------- | ------------- |
+| Backup restore    | Monthly   | Database      |
+| Failover drill    | Quarterly | Full stack    |
+| Tabletop exercise | Annually  | All scenarios |
 
 ### 7.2 Failover Test Procedure
 
@@ -168,12 +169,12 @@ kubectl apply -f k8s/secrets-backup.yaml
 
 ### 8.1 Critical Functions
 
-| Function | RTO | Recovery Method |
-|----------|-----|-----------------|
-| Layout generation | 1 hour | Provider switch |
-| Component registry | 4 hours | Restore from Git |
-| User sessions | 0 | Stateless design |
-| Analytics | 24 hours | Rebuild from logs |
+| Function           | RTO      | Recovery Method   |
+| ------------------ | -------- | ----------------- |
+| Layout generation  | 1 hour   | Provider switch   |
+| Component registry | 4 hours  | Restore from Git  |
+| User sessions      | 0        | Stateless design  |
+| Analytics          | 24 hours | Rebuild from logs |
 
 ### 8.2 Minimum Viable Service
 
@@ -193,12 +194,12 @@ If full recovery not possible:
 
 ## 9. Contact Information
 
-| Role | Name | Contact |
-|------|------|---------|
+| Role               | Name        | Contact   |
+| ------------------ | ----------- | --------- |
 | Incident Commander | On-call SRE | PagerDuty |
-| Engineering Lead | [Name] | [Phone] |
-| Product Manager | [Name] | [Phone] |
-| Executive Sponsor | [Name] | [Phone] |
+| Engineering Lead   | [Name]      | [Phone]   |
+| Product Manager    | [Name]      | [Phone]   |
+| Executive Sponsor  | [Name]      | [Phone]   |
 
 ---
 
@@ -212,6 +213,6 @@ If full recovery not possible:
 
 ## 11. Document History
 
-| Version | Date | Author | Changes |
-|---------|------|--------|---------|
-| 1.0 | 2025-04-10 | Platform Team | Initial release |
+| Version | Date       | Author        | Changes         |
+| ------- | ---------- | ------------- | --------------- |
+| 1.0     | 2025-04-10 | Platform Team | Initial release |

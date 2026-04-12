@@ -2,13 +2,15 @@
 
 **Version:** 1.0  
 **Last Updated:** 2025-04-10  
-**Platform:** Cloudflare Workers  
+**Platform:** Cloudflare Workers
 
 ---
 
 ## 1. Overview
 
-This guide covers deploying Alloy UI to Cloudflare Workers for edge computing. Edge deployment provides:
+This guide covers deploying Alloy UI to Cloudflare Workers for edge computing.
+Edge deployment provides:
+
 - Global low latency (<50ms cold start)
 - Automatic scaling
 - Durable Objects for session state
@@ -75,28 +77,28 @@ ALLOY_DEFAULT_PROVIDER = "openai"
 // src/session.ts
 export class Session {
   private state: DurableObjectState;
-  
+
   constructor(state: DurableObjectState) {
     this.state = state;
   }
-  
+
   async fetch(request: Request): Promise<Response> {
     const url = new URL(request.url);
-    
+
     switch (url.pathname) {
       case '/get':
         const data = await this.state.storage.get('session');
         return jsonResponse(data);
-        
+
       case '/set':
         const body = await request.json();
         await this.state.storage.put('session', body);
         return jsonResponse({ success: true });
-        
+
       case '/delete':
         await this.state.storage.delete('session');
         return jsonResponse({ success: true });
-        
+
       default:
         return new Response('Not found', { status: 404 });
     }
@@ -127,26 +129,26 @@ export interface Env {
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
-    
+
     // CORS headers
     const corsHeaders = {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     };
-    
+
     if (request.method === 'OPTIONS') {
       return new Response(null, { headers: corsHeaders });
     }
-    
+
     // Route requests
     switch (url.pathname) {
       case '/api/generate':
         return handleGenerate(request, env, corsHeaders);
-        
+
       case '/health':
         return new Response('OK', { headers: corsHeaders });
-        
+
       default:
         return new Response('Not found', { status: 404, headers: corsHeaders });
     }
@@ -158,14 +160,12 @@ async function handleGenerate(
   env: Env,
   corsHeaders: Record<string, string>
 ): Promise<Response> {
-  const body = await request.json() as GenerateRequest;
-  
+  const body = (await request.json()) as GenerateRequest;
+
   // Get or create session
   const sessionId = body.sessionId || crypto.randomUUID();
-  const sessionStub = env.SESSIONS.get(
-    env.SESSIONS.idFromName(sessionId)
-  );
-  
+  const sessionStub = env.SESSIONS.get(env.SESSIONS.idFromName(sessionId));
+
   // Check cache
   const cacheKey = generateCacheKey(body);
   const cached = await env.CACHE.get(cacheKey);
@@ -178,15 +178,15 @@ async function handleGenerate(
       },
     });
   }
-  
+
   // Generate layout
   const layout = await generateLayout(body, env);
-  
+
   // Cache result
   await env.CACHE.put(cacheKey, JSON.stringify(layout), {
     expirationTtl: 300, // 5 minutes
   });
-  
+
   return new Response(JSON.stringify(layout), {
     headers: {
       ...corsHeaders,
@@ -234,11 +234,11 @@ curl https://alloy-edge.your-subdomain.workers.dev/health
 
 ### 5.1 Cold Start Reduction
 
-| Technique | Implementation |
-|-----------|----------------|
-| Lazy imports | Import heavy modules on first use |
-| Module caching | Reuse connections across requests |
-| Minimize dependencies | Smaller bundle = faster startup |
+| Technique             | Implementation                    |
+| --------------------- | --------------------------------- |
+| Lazy imports          | Import heavy modules on first use |
+| Module caching        | Reuse connections across requests |
+| Minimize dependencies | Smaller bundle = faster startup   |
 
 ### 5.2 Caching Strategy
 
@@ -252,7 +252,7 @@ async function getCachedOrGenerate(
   if (memoryCache.has(key)) {
     return memoryCache.get(key)!;
   }
-  
+
   // L2: KV (edge)
   const kvCached = await env.CACHE.get(key);
   if (kvCached) {
@@ -260,7 +260,7 @@ async function getCachedOrGenerate(
     memoryCache.set(key, layout);
     return layout;
   }
-  
+
   // Generate and cache
   const layout = await generateLayout(key);
   await env.CACHE.put(key, JSON.stringify(layout));
@@ -276,6 +276,7 @@ async function getCachedOrGenerate(
 ### 6.1 Cloudflare Analytics
 
 Monitor in Cloudflare Dashboard:
+
 - Request volume
 - Error rates
 - CPU time
@@ -302,12 +303,12 @@ async function recordMetric(name: string, value: number) {
 
 ## 7. Troubleshooting
 
-| Issue | Cause | Solution |
-|-------|-------|----------|
-| Cold start >50ms | Large bundle | Reduce dependencies |
-| KV timeout | High latency | Use cache API for hot data |
-| DO errors | State conflicts | Use atomic operations |
-| Rate limited | Too many requests | Implement client backoff |
+| Issue            | Cause             | Solution                   |
+| ---------------- | ----------------- | -------------------------- |
+| Cold start >50ms | Large bundle      | Reduce dependencies        |
+| KV timeout       | High latency      | Use cache API for hot data |
+| DO errors        | State conflicts   | Use atomic operations      |
+| Rate limited     | Too many requests | Implement client backoff   |
 
 ---
 
@@ -321,6 +322,6 @@ async function recordMetric(name: string, value: number) {
 
 ## 9. Document History
 
-| Version | Date | Author | Changes |
-|---------|------|--------|---------|
-| 1.0 | 2025-04-10 | Platform Team | Initial release |
+| Version | Date       | Author        | Changes         |
+| ------- | ---------- | ------------- | --------------- |
+| 1.0     | 2025-04-10 | Platform Team | Initial release |

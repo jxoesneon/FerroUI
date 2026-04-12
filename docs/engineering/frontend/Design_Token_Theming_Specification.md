@@ -2,15 +2,18 @@
 
 **Version:** 1.0  
 **Last Updated:** 2025-04-10  
-**Owner:** Design Systems Team  
+**Owner:** Design Systems Team
 
 ---
 
 ## 1. Overview
 
-Design tokens are the visual design atoms of the Alloy UI design system. They are platform-agnostic variables that represent the visual properties of our components — colors, typography, spacing, borders, shadows, and more.
+Design tokens are the visual design atoms of the Alloy UI design system. They
+are platform-agnostic variables that represent the visual properties of our
+components — colors, typography, spacing, borders, shadows, and more.
 
-This specification defines the token structure, naming conventions, and theming capabilities for Alloy UI.
+This specification defines the token structure, naming conventions, and theming
+capabilities for Alloy UI.
 
 ---
 
@@ -82,9 +85,15 @@ tokens/
       "800": { "$value": "#1f2937", "$type": "color" },
       "900": { "$value": "#111827", "$type": "color" }
     },
-    "red": { /* ... */ },
-    "green": { /* ... */ },
-    "yellow": { /* ... */ }
+    "red": {
+      /* ... */
+    },
+    "green": {
+      /* ... */
+    },
+    "yellow": {
+      /* ... */
+    }
   }
 }
 ```
@@ -95,13 +104,13 @@ tokens/
 {
   "font": {
     "family": {
-      "sans": { 
-        "$value": ["Inter", "system-ui", "sans-serif"], 
-        "$type": "fontFamily" 
+      "sans": {
+        "$value": ["Inter", "system-ui", "sans-serif"],
+        "$type": "fontFamily"
       },
-      "mono": { 
-        "$value": ["JetBrains Mono", "monospace"], 
-        "$type": "fontFamily" 
+      "mono": {
+        "$value": ["JetBrains Mono", "monospace"],
+        "$type": "fontFamily"
       }
     },
     "size": {
@@ -173,25 +182,25 @@ tokens/
 ```json
 {
   "shadow": {
-    "sm": { 
-      "$value": "0 1px 2px 0 rgb(0 0 0 / 0.05)", 
-      "$type": "shadow" 
+    "sm": {
+      "$value": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+      "$type": "shadow"
     },
-    "base": { 
-      "$value": "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)", 
-      "$type": "shadow" 
+    "base": {
+      "$value": "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
+      "$type": "shadow"
     },
-    "md": { 
-      "$value": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)", 
-      "$type": "shadow" 
+    "md": {
+      "$value": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+      "$type": "shadow"
     },
-    "lg": { 
-      "$value": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)", 
-      "$type": "shadow" 
+    "lg": {
+      "$value": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
+      "$type": "shadow"
     },
-    "xl": { 
-      "$value": "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)", 
-      "$type": "shadow" 
+    "xl": {
+      "$value": "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+      "$type": "shadow"
     }
   }
 }
@@ -307,12 +316,12 @@ interface Theme {
 
 ### 6.2 Built-in Themes
 
-| Theme | Description | Use Case |
-|-------|-------------|----------|
-| `light` | Default light theme | Most applications |
-| `dark` | Dark mode | Low-light environments |
-| `high-contrast` | Enhanced contrast | Accessibility needs |
-| `enterprise` | Subdued colors | Corporate applications |
+| Theme           | Description         | Use Case               |
+| --------------- | ------------------- | ---------------------- |
+| `light`         | Default light theme | Most applications      |
+| `dark`          | Dark mode           | Low-light environments |
+| `high-contrast` | Enhanced contrast   | Accessibility needs    |
+| `enterprise`    | Subdued colors      | Corporate applications |
 
 ### 6.3 Theme Switching
 
@@ -331,7 +340,7 @@ function App() {
 // Dynamic theme switching
 function ThemeToggle() {
   const { theme, setTheme } = useTheme();
-  
+
   return (
     <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
       Toggle Theme
@@ -400,7 +409,7 @@ alloy tokens build --format typescript --output tokens.ts
   /* ... */
 }
 
-[data-theme="dark"] {
+[data-theme='dark'] {
   --color-primary-default: var(--color-blue-400);
   --color-text-primary: var(--color-gray-100);
   --color-background-default: var(--color-gray-900);
@@ -452,19 +461,19 @@ const rtlTokens = transformTokensForRTL(tokens);
 
 ### 9.1 Do's and Don'ts
 
-| ✅ Do | ❌ Don't |
-|-------|----------|
-| Use semantic tokens in components | Use primitive tokens directly |
-| Provide fallbacks for custom themes | Hardcode color values |
-| Test themes in all states | Assume light theme only |
-| Document theme requirements | Create one-off color values |
+| ✅ Do                               | ❌ Don't                      |
+| ----------------------------------- | ----------------------------- |
+| Use semantic tokens in components   | Use primitive tokens directly |
+| Provide fallbacks for custom themes | Hardcode color values         |
+| Test themes in all states           | Assume light theme only       |
+| Document theme requirements         | Create one-off color values   |
 
 ### 9.2 Token Naming
 
-| Type | Pattern | Example |
-|------|---------|---------|
-| Primitive | `category.scale` | `color.blue.500` |
-| Semantic | `context.modifier` | `color.primary.hover` |
+| Type      | Pattern                    | Example                          |
+| --------- | -------------------------- | -------------------------------- |
+| Primitive | `category.scale`           | `color.blue.500`                 |
+| Semantic  | `context.modifier`         | `color.primary.hover`            |
 | Component | `component.property.state` | `button.primary.hoverBackground` |
 
 ---
@@ -479,6 +488,6 @@ const rtlTokens = transformTokensForRTL(tokens);
 
 ## 11. Document History
 
-| Version | Date | Author | Changes |
-|---------|------|--------|---------|
-| 1.0 | 2025-04-10 | Design Systems Team | Initial release |
+| Version | Date       | Author              | Changes         |
+| ------- | ---------- | ------------------- | --------------- |
+| 1.0     | 2025-04-10 | Design Systems Team | Initial release |

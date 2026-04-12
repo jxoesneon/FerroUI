@@ -2,30 +2,37 @@
 
 **Version:** 1.0  
 **Last Updated:** 2025-04-10  
-**Owner:** Frontend Engineering Team  
+**Owner:** Frontend Engineering Team
 
 ---
 
 ## 1. Overview
 
-This document provides comprehensive guidelines for developing components in the Alloy UI framework. Components are the building blocks of AI-generated layouts and must adhere to strict standards for type safety, accessibility, and performance.
+This document provides comprehensive guidelines for developing components in the
+Alloy UI framework. Components are the building blocks of AI-generated layouts
+and must adhere to strict standards for type safety, accessibility, and
+performance.
 
 ---
 
 ## 2. Atomic Design Hierarchy
 
-Alloy UI follows the three-tier Atomic Design hierarchy. Every component must be classified into one of these tiers.
+Alloy UI follows the three-tier Atomic Design hierarchy. Every component must be
+classified into one of these tiers.
 
 ### 2.1 Tier 1 — Atoms
 
-Atoms are irreducible UI primitives. They hold the design token system baked in at compile time.
+Atoms are irreducible UI primitives. They hold the design token system baked in
+at compile time.
 
 **Characteristics:**
+
 - Cannot contain other components as children
 - Design tokens (colors, typography, spacing) are fixed
 - AI can only supply content and select from named variants
 
 **Examples:**
+
 - `Text` — Typography component
 - `Icon` — SVG icon wrapper
 - `Badge` — Status indicator
@@ -93,11 +100,13 @@ Text.displayName = 'Text';
 Molecules compose two or more Atoms into reusable, named patterns.
 
 **Characteristics:**
+
 - Can contain Atoms and other Molecules
 - Cannot contain Organisms
 - AI orchestrates Molecules as black boxes
 
 **Examples:**
+
 - `StatBadge` — Metric with label
 - `UserAvatar` — Avatar with name
 - `MetricRow` — Row of metrics
@@ -156,14 +165,17 @@ StatBadge.displayName = 'StatBadge';
 
 ### 2.3 Tier 3 — Organisms
 
-Organisms are fully functional, data-rich UI sections. They are the primary currency the AI spends when constructing layouts.
+Organisms are fully functional, data-rich UI sections. They are the primary
+currency the AI spends when constructing layouts.
 
 **Characteristics:**
+
 - Can contain Atoms, Molecules, and other Organisms
 - Primary building blocks for AI-generated layouts
 - May include actions and interactive behavior
 
 **Examples:**
+
 - `DataTable` — Sortable, filterable table
 - `KPIBoard` — Grid of KPI cards
 - `ActivityFeed` — Timeline of events
@@ -242,7 +254,8 @@ KPIBoard.displayName = 'KPIBoard';
 
 ### 3.1 Registration API
 
-Components are registered in the Component Registry using the `registerComponent` function:
+Components are registered in the Component Registry using the
+`registerComponent` function:
 
 ```typescript
 // packages/registry/src/index.ts
@@ -285,16 +298,16 @@ registerComponent({
 
 ### 3.2 Registration Options
 
-| Option | Type | Required | Description |
-|--------|------|----------|-------------|
-| `name` | `string` | Yes | Unique component name |
-| `version` | `number` | Yes | Component version |
-| `tier` | `'atom' \| 'molecule' \| 'organism'` | Yes | Atomic tier |
-| `component` | `React.ComponentType` | Yes | React component |
-| `schema` | `ZodSchema` | Yes | Zod validation schema |
-| `defaultProps` | `object` | No | Default prop values |
-| `deprecated` | `boolean` | No | Deprecation flag |
-| `replacement` | `string` | No | Replacement component name |
+| Option         | Type                                 | Required | Description                |
+| -------------- | ------------------------------------ | -------- | -------------------------- |
+| `name`         | `string`                             | Yes      | Unique component name      |
+| `version`      | `number`                             | Yes      | Component version          |
+| `tier`         | `'atom' \| 'molecule' \| 'organism'` | Yes      | Atomic tier                |
+| `component`    | `React.ComponentType`                | Yes      | React component            |
+| `schema`       | `ZodSchema`                          | Yes      | Zod validation schema      |
+| `defaultProps` | `object`                             | No       | Default prop values        |
+| `deprecated`   | `boolean`                            | No       | Deprecation flag           |
+| `replacement`  | `string`                             | No       | Replacement component name |
 
 ---
 
@@ -309,13 +322,13 @@ const ComponentSchema = z.object({
   // Component-specific props
   title: z.string(),
   data: z.array(DataItemSchema),
-  
+
   // Optional configuration
   variant: z.enum(['default', 'compact']).default('default'),
-  
+
   // Action (for interactive components)
   action: ActionSchema.optional(),
-  
+
   // Required ARIA configuration
   aria: z.object({
     label: z.string().optional(),
@@ -329,14 +342,14 @@ const ComponentSchema = z.object({
 
 ### 4.2 Prop Naming Conventions
 
-| Type | Convention | Example |
-|------|------------|---------|
-| Content | `content` or `title` | `title: "Dashboard"` |
-| Data arrays | Plural noun | `items`, `rows`, `columns` |
-| Booleans | `is` or `has` prefix | `isLoading`, `hasError` |
-| Callbacks | `on` prefix | `onClick`, `onChange` |
-| Variants | `variant` | `variant: "primary"` |
-| Actions | `action` | `action: { type: "NAVIGATE" }` |
+| Type        | Convention           | Example                        |
+| ----------- | -------------------- | ------------------------------ |
+| Content     | `content` or `title` | `title: "Dashboard"`           |
+| Data arrays | Plural noun          | `items`, `rows`, `columns`     |
+| Booleans    | `is` or `has` prefix | `isLoading`, `hasError`        |
+| Callbacks   | `on` prefix          | `onClick`, `onChange`          |
+| Variants    | `variant`            | `variant: "primary"`           |
+| Actions     | `action`             | `action: { type: "NAVIGATE" }` |
 
 ### 4.3 Default Values
 
@@ -409,6 +422,7 @@ export const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(
 ### 5.3 Screen Reader Testing
 
 Test all components with:
+
 - NVDA (Windows)
 - VoiceOver (macOS)
 - JAWS (Enterprise)
@@ -444,11 +458,11 @@ const ChartPanel = lazy(() => import('./organisms/ChartPanel'));
 
 Monitor bundle size impact:
 
-| Tier | Max Bundle Size |
-|------|-----------------|
-| Atom | 5 KB |
-| Molecule | 15 KB |
-| Organism | 50 KB |
+| Tier     | Max Bundle Size |
+| -------- | --------------- |
+| Atom     | 5 KB            |
+| Molecule | 15 KB           |
+| Organism | 50 KB           |
 
 ---
 
@@ -542,6 +556,6 @@ export const Body: Story = {
 
 ## 9. Document History
 
-| Version | Date | Author | Changes |
-|---------|------|--------|---------|
-| 1.0 | 2025-04-10 | Frontend Team | Initial release |
+| Version | Date       | Author        | Changes         |
+| ------- | ---------- | ------------- | --------------- |
+| 1.0     | 2025-04-10 | Frontend Team | Initial release |

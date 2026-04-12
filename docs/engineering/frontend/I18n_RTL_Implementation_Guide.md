@@ -2,13 +2,16 @@
 
 **Version:** 1.0  
 **Last Updated:** 2025-04-10  
-**Owner:** Internationalization Team  
+**Owner:** Internationalization Team
 
 ---
 
 ## 1. Overview
 
-Alloy UI layouts must be locale-aware. Because the AI generates layouts at runtime, internationalization cannot rely on static string extraction workflows. This guide covers the implementation of internationalization (i18n) and right-to-left (RTL) language support in Alloy UI.
+Alloy UI layouts must be locale-aware. Because the AI generates layouts at
+runtime, internationalization cannot rely on static string extraction workflows.
+This guide covers the implementation of internationalization (i18n) and
+right-to-left (RTL) language support in Alloy UI.
 
 ---
 
@@ -16,26 +19,26 @@ Alloy UI layouts must be locale-aware. Because the AI generates layouts at runti
 
 ### 2.1 Tier 1 (Fully Supported)
 
-| Locale | Language | Script | Direction |
-|--------|----------|--------|-----------|
-| en-US | English (US) | Latin | LTR |
-| en-GB | English (UK) | Latin | LTR |
-| es-ES | Spanish | Latin | LTR |
-| fr-FR | French | Latin | LTR |
-| de-DE | German | Latin | LTR |
-| ja-JP | Japanese | Japanese | LTR |
-| ko-KR | Korean | Korean | LTR |
-| zh-CN | Chinese (Simplified) | Han | LTR |
-| zh-TW | Chinese (Traditional) | Han | LTR |
+| Locale | Language              | Script   | Direction |
+| ------ | --------------------- | -------- | --------- |
+| en-US  | English (US)          | Latin    | LTR       |
+| en-GB  | English (UK)          | Latin    | LTR       |
+| es-ES  | Spanish               | Latin    | LTR       |
+| fr-FR  | French                | Latin    | LTR       |
+| de-DE  | German                | Latin    | LTR       |
+| ja-JP  | Japanese              | Japanese | LTR       |
+| ko-KR  | Korean                | Korean   | LTR       |
+| zh-CN  | Chinese (Simplified)  | Han      | LTR       |
+| zh-TW  | Chinese (Traditional) | Han      | LTR       |
 
 ### 2.2 Tier 2 (RTL Support)
 
-| Locale | Language | Script | Direction |
-|--------|----------|--------|-----------|
-| ar-SA | Arabic | Arabic | RTL |
-| he-IL | Hebrew | Hebrew | RTL |
-| fa-IR | Persian (Farsi) | Arabic | RTL |
-| ur-PK | Urdu | Arabic | RTL |
+| Locale | Language        | Script | Direction |
+| ------ | --------------- | ------ | --------- |
+| ar-SA  | Arabic          | Arabic | RTL       |
+| he-IL  | Hebrew          | Hebrew | RTL       |
+| fa-IR  | Persian (Farsi) | Arabic | RTL       |
+| ur-PK  | Urdu            | Arabic | RTL       |
 
 ---
 
@@ -138,7 +141,7 @@ import { useTranslation } from '@alloy/i18n';
 
 function SubmitButton() {
   const { t } = useTranslation('components');
-  
+
   return <button>{t('button.submit')}</button>;
   // Renders: "Submit" (en-US) or "إرسال" (ar-SA)
 }
@@ -146,7 +149,7 @@ function SubmitButton() {
 // With interpolation
 function Pagination({ current, total }: { current: number; total: number }) {
   const { t } = useTranslation('components');
-  
+
   return <span>{t('dataTable.pageOf', { current, total })}</span>;
   // Renders: "Page 1 of 10"
 }
@@ -154,7 +157,8 @@ function Pagination({ current, total }: { current: number; total: number }) {
 
 ### 4.4 AI-Generated Content
 
-The AI populates data-driven props with real values from tool results. Template strings are resolved by the renderer from the locale bundle.
+The AI populates data-driven props with real values from tool results. Template
+strings are resolved by the renderer from the locale bundle.
 
 ```typescript
 // AI generates layout with data
@@ -202,16 +206,16 @@ document.documentElement.lang = locale;
 
 Use logical properties instead of physical properties:
 
-| Physical | Logical |
-|----------|---------|
-| `margin-left` | `margin-inline-start` |
-| `margin-right` | `margin-inline-end` |
-| `padding-left` | `padding-inline-start` |
-| `padding-right` | `padding-inline-end` |
-| `border-left` | `border-inline-start` |
-| `border-right` | `border-inline-end` |
-| `text-align: left` | `text-align: start` |
-| `text-align: right` | `text-align: end` |
+| Physical            | Logical                |
+| ------------------- | ---------------------- |
+| `margin-left`       | `margin-inline-start`  |
+| `margin-right`      | `margin-inline-end`    |
+| `padding-left`      | `padding-inline-start` |
+| `padding-right`     | `padding-inline-end`   |
+| `border-left`       | `border-inline-start`  |
+| `border-right`      | `border-inline-end`    |
+| `text-align: left`  | `text-align: start`    |
+| `text-align: right` | `text-align: end`      |
 
 ```css
 /* ✅ Good - Logical properties */
@@ -243,9 +247,7 @@ module.exports = {
   corePlugins: {
     textAlign: false, // Disable physical text-align
   },
-  plugins: [
-    require('tailwindcss-logical'),
-  ],
+  plugins: [require('tailwindcss-logical')],
 };
 ```
 
@@ -262,7 +264,7 @@ interface CardProps {
 
 export function Card({ children, className }: CardProps) {
   return (
-    <div 
+    <div
       className={cn(
         // Logical padding
         'pis-4 pie-4 pbs-4 pbe-4', // padding-inline-start, etc.
@@ -281,14 +283,14 @@ export function Card({ children, className }: CardProps) {
 
 Some icons need to be mirrored in RTL:
 
-| Icon | LTR | RTL |
-|------|-----|-----|
-| Arrow left | ← | → (mirrored) |
-| Arrow right | → | ← (mirrored) |
-| Chevron left | ‹ | › (mirrored) |
-| Chevron right | › | ‹ (mirrored) |
-| Home | 🏠 | 🏠 (no change) |
-| Search | 🔍 | 🔍 (no change) |
+| Icon          | LTR | RTL            |
+| ------------- | --- | -------------- |
+| Arrow left    | ←   | → (mirrored)   |
+| Arrow right   | →   | ← (mirrored)   |
+| Chevron left  | ‹   | › (mirrored)   |
+| Chevron right | ›   | ‹ (mirrored)   |
+| Home          | 🏠  | 🏠 (no change) |
+| Search        | 🔍  | 🔍 (no change) |
 
 ```typescript
 // Icon component with RTL support
@@ -302,7 +304,7 @@ interface IconProps {
 export function Icon({ name, mirrorInRtl = false }: IconProps) {
   const { direction } = useLocale();
   const shouldMirror = mirrorInRtl && direction === 'rtl';
-  
+
   return (
     <svg
       className={cn(shouldMirror && 'scale-x-[-1]')}
@@ -357,7 +359,11 @@ function formatNumber(num: number, locale: string): string {
 ### 6.3 Currency Formatting
 
 ```typescript
-function formatCurrency(amount: number, currency: string, locale: string): string {
+function formatCurrency(
+  amount: number,
+  currency: string,
+  locale: string
+): string {
   return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency,
@@ -398,12 +404,12 @@ Locale: ar-SA
 
 ### 7.2 Translation Tools
 
-| Tool | Purpose |
-|------|---------|
-| i18next-parser | Extract strings from code |
-| Crowdin | Translation management platform |
-| DeepL API | Machine translation |
-| GitHub Actions | Automated translation PRs |
+| Tool           | Purpose                         |
+| -------------- | ------------------------------- |
+| i18next-parser | Extract strings from code       |
+| Crowdin        | Translation management platform |
+| DeepL API      | Machine translation             |
+| GitHub Actions | Automated translation PRs       |
 
 ### 7.3 Translation Keys
 
@@ -458,7 +464,7 @@ describe('Card RTL', () => {
         <Card>Content</Card>
       </LocaleProvider>
     );
-    
+
     expect(container.firstChild).toHaveAttribute('dir', 'rtl');
   });
 });
@@ -484,6 +490,6 @@ describe('Card RTL', () => {
 
 ## 11. Document History
 
-| Version | Date | Author | Changes |
-|---------|------|--------|---------|
-| 1.0 | 2025-04-10 | i18n Team | Initial release |
+| Version | Date       | Author    | Changes         |
+| ------- | ---------- | --------- | --------------- |
+| 1.0     | 2025-04-10 | i18n Team | Initial release |

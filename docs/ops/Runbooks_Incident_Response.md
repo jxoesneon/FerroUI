@@ -2,18 +2,18 @@
 
 **Version:** 1.0  
 **Last Updated:** 2025-04-10  
-**Owner:** Site Reliability Engineering Team  
+**Owner:** Site Reliability Engineering Team
 
 ---
 
 ## 1. Incident Severity Levels
 
-| Level | Description | Response Time | Examples |
-|-------|-------------|---------------|----------|
-| SEV1 | Critical - Service down | 15 min | Complete outage, data loss |
-| SEV2 | High - Major degradation | 1 hour | High error rate, slow responses |
-| SEV3 | Medium - Minor impact | 4 hours | Partial feature failure |
-| SEV4 | Low - Minimal impact | 24 hours | Cosmetic issues, monitoring gaps |
+| Level | Description              | Response Time | Examples                         |
+| ----- | ------------------------ | ------------- | -------------------------------- |
+| SEV1  | Critical - Service down  | 15 min        | Complete outage, data loss       |
+| SEV2  | High - Major degradation | 1 hour        | High error rate, slow responses  |
+| SEV3  | Medium - Minor impact    | 4 hours       | Partial feature failure          |
+| SEV4  | Low - Minimal impact     | 24 hours      | Cosmetic issues, monitoring gaps |
 
 ---
 
@@ -46,6 +46,7 @@
 ### 3.1 SEV1: Complete Service Outage
 
 **Symptoms:**
+
 - 0% success rate
 - Health checks failing
 - Users cannot access service
@@ -86,6 +87,7 @@ kubectl rollout undo deployment/alloy-ui -n alloy-ui
 ```
 
 **Communication:**
+
 - Status page: Investigating
 - Slack #incidents: Updates every 15 min
 - Stakeholders: Email when identified
@@ -95,6 +97,7 @@ kubectl rollout undo deployment/alloy-ui -n alloy-ui
 ### 3.2 SEV2: High Error Rate
 
 **Symptoms:**
+
 - Error rate > 5%
 - Latency p95 > 5s
 - Multiple user complaints
@@ -134,6 +137,7 @@ kubectl set env deployment/alloy-ui ALLOY_CACHE_TTL=600
 ### 3.3 SEV2: High Latency
 
 **Symptoms:**
+
 - p95 latency > 5s
 - User complaints about slowness
 
@@ -168,6 +172,7 @@ kubectl scale deployment/alloy-ui --replicas=10 -n alloy-ui
 ### 3.4 SEV3: LLM Provider Issues
 
 **Symptoms:**
+
 - Provider-specific errors
 - Timeout errors
 
@@ -191,6 +196,7 @@ kubectl set env deployment/alloy-ui ALLOY_DEFAULT_PROVIDER=ollama
 ### 3.5 SEV3: Cache Issues
 
 **Symptoms:**
+
 - High cache miss rate
 - Redis connection errors
 
@@ -269,41 +275,49 @@ Post-mortem will be scheduled within 48 hours.
 # Post-Mortem: [Incident Title]
 
 ## Summary
+
 - Date: [Date]
 - Duration: [Duration]
 - Severity: [SEV level]
 - Impact: [Users affected, data lost, etc.]
 
 ## Timeline
-| Time | Event |
-|------|-------|
-| 09:00 | Incident detected |
-| 09:05 | On-call paged |
-| 09:15 | War room opened |
+
+| Time  | Event                 |
+| ----- | --------------------- |
+| 09:00 | Incident detected     |
+| 09:05 | On-call paged         |
+| 09:15 | War room opened       |
 | 09:30 | Root cause identified |
-| 10:00 | Mitigation applied |
-| 10:30 | Service restored |
+| 10:00 | Mitigation applied    |
+| 10:30 | Service restored      |
 
 ## Root Cause
+
 [Detailed explanation]
 
 ## Impact
+
 - Users affected: [Number]
 - Data loss: [Yes/No, details]
 - Revenue impact: [If applicable]
 
 ## What Went Well
+
 - [List]
 
 ## What Went Poorly
+
 - [List]
 
 ## Action Items
-| ID | Action | Owner | Due Date |
-|----|--------|-------|----------|
-| 1 | [Action] | [Name] | [Date] |
+
+| ID  | Action   | Owner  | Due Date |
+| --- | -------- | ------ | -------- |
+| 1   | [Action] | [Name] | [Date]   |
 
 ## Lessons Learned
+
 [Key takeaways]
 ```
 
@@ -319,6 +333,6 @@ Post-mortem will be scheduled within 48 hours.
 
 ## 7. Document History
 
-| Version | Date | Author | Changes |
-|---------|------|--------|---------|
-| 1.0 | 2025-04-10 | SRE Team | Initial release |
+| Version | Date       | Author   | Changes         |
+| ------- | ---------- | -------- | --------------- |
+| 1.0     | 2025-04-10 | SRE Team | Initial release |

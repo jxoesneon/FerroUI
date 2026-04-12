@@ -2,13 +2,15 @@
 
 **Version:** 1.0  
 **Last Updated:** 2025-04-10  
-**Platforms:** macOS, Windows, Linux  
+**Platforms:** macOS, Windows, Linux
 
 ---
 
 ## 1. Overview
 
-This guide covers packaging Alloy UI as a desktop application using Tauri. Tauri provides:
+This guide covers packaging Alloy UI as a desktop application using Tauri. Tauri
+provides:
+
 - Native performance with WebKit rendering
 - Small bundle size (~5MB)
 - Native OS integrations
@@ -20,11 +22,11 @@ This guide covers packaging Alloy UI as a desktop application using Tauri. Tauri
 
 ### 2.1 System Requirements
 
-| Platform | Requirements |
-|----------|--------------|
-| macOS | macOS 10.13+, Xcode |
-| Windows | Windows 10+, MSVC |
-| Linux | GTK 3, WebKit2GTK |
+| Platform | Requirements        |
+| -------- | ------------------- |
+| macOS    | macOS 10.13+, Xcode |
+| Windows  | Windows 10+, MSVC   |
+| Linux    | GTK 3, WebKit2GTK   |
 
 ### 2.2 Install Rust
 
@@ -193,7 +195,7 @@ fn main() {
             // Initialize local LLM
             let engine = alloy_engine::Engine::new_local();
             app.manage(engine);
-            
+
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
@@ -244,12 +246,12 @@ impl OllamaProvider {
             model: "llama2".to_string(),
         }
     }
-    
+
     pub async fn generate(&self, prompt: &str) -> Result<String, Box<dyn std::error::Error>> {
         let response = self.client
             .generate(self.model.clone(), prompt.to_string())
             .await?;
-            
+
         Ok(response.response)
     }
 }
@@ -353,12 +355,12 @@ The Tauri updater automatically checks for updates on app launch.
 
 ## 9. Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
-| Build fails | Check Rust version, update with `rustup update` |
-| Large bundle size | Enable LTO in Cargo.toml |
-| Slow startup | Preload critical resources |
-| Code signing fails | Verify certificate validity |
+| Issue              | Solution                                        |
+| ------------------ | ----------------------------------------------- |
+| Build fails        | Check Rust version, update with `rustup update` |
+| Large bundle size  | Enable LTO in Cargo.toml                        |
+| Slow startup       | Preload critical resources                      |
+| Code signing fails | Verify certificate validity                     |
 
 ---
 
@@ -372,6 +374,6 @@ The Tauri updater automatically checks for updates on app launch.
 
 ## 11. Document History
 
-| Version | Date | Author | Changes |
-|---------|------|--------|---------|
-| 1.0 | 2025-04-10 | Platform Team | Initial release |
+| Version | Date       | Author        | Changes         |
+| ------- | ---------- | ------------- | --------------- |
+| 1.0     | 2025-04-10 | Platform Team | Initial release |
