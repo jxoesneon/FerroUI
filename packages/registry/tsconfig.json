@@ -5,7 +5,8 @@
     "rootDir": "src",
     "types": ["node"],
     "composite": true,
-    "declaration": true
+    "declaration": true,
+    "ignoreDeprecations": "6.0"
   },
   "references": [{ "path": "../schema" }],
   "include": ["src/**/*"],

@@ -11,8 +11,8 @@
     "dev": "tsc --watch"
   },
   "dependencies": {
-    "@alloy/schema": "0.1.0",
-    "@alloy/telemetry": "0.1.0",
+    "@alloy/schema": "workspace:*",
+    "@alloy/telemetry": "workspace:*",
     "zod": "^4.3.6",
     "zod-to-json-schema": "^3.23.2"
   },

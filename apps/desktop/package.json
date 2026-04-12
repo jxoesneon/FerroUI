@@ -10,8 +10,8 @@
     "tauri": "tauri"
   },
   "dependencies": {
-    "@alloy/registry": "*",
-    "@alloy/schema": "*",
+    "@alloy/registry": "workspace:*",
+    "@alloy/schema": "workspace:*",
     "@tauri-apps/api": "^1.5.3",
     "clsx": "^2.1.0",
     "framer-motion": "^11.0.8",

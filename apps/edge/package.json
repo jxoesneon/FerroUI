@@ -10,7 +10,7 @@
     "build": "wrangler build"
   },
   "dependencies": {
-    "@alloy/engine": "*"
+    "@alloy/engine": "workspace:*"
   },
   "devDependencies": {
     "wrangler": "^3.111.0",

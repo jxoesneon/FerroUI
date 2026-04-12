@@ -9,8 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@alloy/registry": "*",
-    "@alloy/schema": "*",
+    "@alloy/registry": "workspace:*",
+    "@alloy/schema": "workspace:*",
     "clsx": "^2.1.0",
     "eventsource-parser": "^1.1.1",
     "framer-motion": "^11.0.8",

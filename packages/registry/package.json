@@ -12,7 +12,7 @@
     "start:inspector": "node dist/inspector.js"
   },
   "dependencies": {
-    "@alloy/schema": "*",
+    "@alloy/schema": "workspace:*",
     "react": "^18.2.0",
     "zod": "^3.22.0"
   },
