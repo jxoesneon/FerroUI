@@ -1,4 +1,4 @@
-import { Action } from '@alloy/schema';
+import type { Action } from '@alloy/schema';
 
 export interface ActionRouterContext {
   refresh: () => void;

@@ -7,6 +7,8 @@ import { doctorCommand } from './commands/doctor';
 import { createCommand } from './commands/create';
 import { buildCommand } from './commands/build';
 import { deployCommand } from './commands/deploy';
+import { registryCommand } from './commands/registry';
+import { updateCommand } from './commands/update';
 
 const program = new Command();
 
@@ -16,13 +18,15 @@ program
   .version('1.0.0');
 
 // Register commands
+program.addCommand(createCommand);
 program.addCommand(devCommand);
 program.addCommand(generateCommand);
-program.addCommand(evalCommand);
-program.addCommand(doctorCommand);
-program.addCommand(createCommand);
 program.addCommand(buildCommand);
 program.addCommand(deployCommand);
+program.addCommand(registryCommand);
+program.addCommand(evalCommand);
+program.addCommand(doctorCommand);
+program.addCommand(updateCommand);
 
 program.on('command:*', () => {
   console.error(chalk.red('Invalid command: %s\nSee --help for a list of available commands.'), program.args.join(' '));

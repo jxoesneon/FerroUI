@@ -1,0 +1,110 @@
+import { Command } from 'commander';
+import chalk from 'chalk';
+import ora from 'ora';
+import prompts from 'prompts';
+import { execSync } from 'child_process';
+
+/**
+ * `alloy update`
+ * Checks for the latest version of the alloy CLI package and upgrades it.
+ * Implements PRD-002 §3.5 — Utility Commands.
+ */
+export const updateCommand = new Command('update')
+  .description('Update Alloy UI CLI to the latest version.')
+  .option('--yes', 'Skip confirmation prompt')
+  .option('--pkg-manager <manager>', 'Package manager to use: pnpm | npm | yarn', 'pnpm')
+  .action(async (options) => {
+    const spinner = ora('Checking for updates...').start();
+
+    let currentVersion = 'unknown';
+    let latestVersion = 'unknown';
+
+    try {
+      // Current version comes from this package's own package.json
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        const pkg = require('../../package.json');
+        currentVersion = pkg.version ?? 'unknown';
+      } catch {
+        // Running from source — keep 'unknown'
+      }
+
+      // Query npm registry for the latest published version
+      const raw = execSync('npm view alloy version --json 2>/dev/null || echo "null"', {
+        encoding: 'utf-8',
+        stdio: ['ignore', 'pipe', 'ignore'],
+      }).trim();
+
+      latestVersion = raw.replace(/"/g, '') || 'unknown';
+      spinner.stop();
+    } catch {
+      spinner.stop();
+      // Network unavailable — still allow forced reinstall
+      latestVersion = 'unknown';
+    }
+
+    console.log(`\n  ${chalk.dim('Current version:')} ${chalk.bold(currentVersion)}`);
+    console.log(`  ${chalk.dim('Latest version: ')} ${chalk.bold(latestVersion)}\n`);
+
+    if (currentVersion !== 'unknown' && latestVersion !== 'unknown' && currentVersion === latestVersion) {
+      console.log(chalk.green('✔ Already up to date.'));
+      return;
+    }
+
+    if (!options.yes) {
+      const { confirmed } = await prompts(
+        {
+          type: 'confirm',
+          name: 'confirmed',
+          message: latestVersion !== 'unknown'
+            ? `Update alloy from ${chalk.bold(currentVersion)} → ${chalk.bold(latestVersion)}?`
+            : 'Reinstall the latest version of alloy?',
+          initial: true,
+        },
+        { onCancel: () => { console.log(chalk.yellow('\nCancelled.')); process.exit(0); } }
+      );
+
+      if (!confirmed) {
+        console.log(chalk.yellow('Update cancelled.'));
+        return;
+      }
+    }
+
+    const mgr: string = options.pkgManager;
+    let installCmd: string;
+
+    switch (mgr) {
+      case 'yarn':
+        installCmd = 'yarn global add alloy@latest';
+        break;
+      case 'npm':
+        installCmd = 'npm install -g alloy@latest';
+        break;
+      case 'pnpm':
+      default:
+        installCmd = 'pnpm add -g alloy@latest';
+        break;
+    }
+
+    const installSpinner = ora(`Running: ${chalk.dim(installCmd)}`).start();
+
+    try {
+      execSync(installCmd, { stdio: 'ignore' });
+      installSpinner.succeed(chalk.green('Alloy CLI updated successfully!'));
+
+      // Verify new version
+      try {
+        const newVersion = execSync('alloy --version', { encoding: 'utf-8' }).trim();
+        console.log(chalk.dim(`  Installed version: ${newVersion}`));
+      } catch {
+        // Version check is best-effort
+      }
+
+      console.log(chalk.dim('\n  Run `alloy --help` to see what\'s new.\n'));
+    } catch (error: any) {
+      installSpinner.fail(chalk.red('Update failed.'));
+      console.error(chalk.dim(error.message));
+      console.log(chalk.yellow(`\n  Try running manually:\n  ${chalk.bold(installCmd)}\n`));
+      process.exit(1);
+    }
+  });

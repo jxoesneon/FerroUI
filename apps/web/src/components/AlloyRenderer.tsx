@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AlloyComponent } from '@alloy/schema';
+import type { AlloyComponent } from '@alloy/schema';
 import { registry } from '@alloy/registry';
 import { AlloyErrorBoundary } from './ErrorBoundary';
 import { actionRouter } from '../services/ActionRouter';

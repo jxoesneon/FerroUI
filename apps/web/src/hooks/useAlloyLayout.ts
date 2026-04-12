@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createParser, ParsedEvent, ReconnectInterval } from 'eventsource-parser';
+import { createParser } from 'eventsource-parser';
+import type { ParsedEvent, ReconnectInterval } from 'eventsource-parser';
 import parsePartialJson from 'partial-json-parser';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { AlloyLayout, AlloyLayoutSchema } from '@alloy/schema';
+import type { AlloyLayout } from '@alloy/schema';
 
 interface UseAlloyLayoutOptions {
   url: string;
