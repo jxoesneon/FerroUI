@@ -71,3 +71,10 @@ yarn.lock
 *~
 .vscode/settings.json
 .idea/workspace.xml
+
+# Agent rules
+.agent/
+superpowers/
+
+# Audit reports
+AUDIT_REPORT.md
