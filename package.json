@@ -3,17 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "description": "Alloy UI: AI-powered, server-driven UI meta-framework",
-  "workspaces": [
-    "apps/web",
-    "apps/desktop",
-    "apps/edge",
-    "packages/*"
-  ],
   "scripts": {
-    "build": "tsc --build packages/engine/tsconfig.json && npm run build --workspaces --if-present",
-    "test": "npm test --workspaces --if-present",
+    "build": "pnpm run -r build",
+    "test": "pnpm run -r test",
     "lint": "eslint .",
-    "dev": "npm run dev --workspaces --if-present"
+    "dev": "pnpm run -r dev",
+    "typecheck": "tsc --build packages/engine/tsconfig.json"
   },
   "keywords": [
     "ai",

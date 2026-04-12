@@ -49,6 +49,7 @@ mempalace.yaml
 
 # Runtime and Local Artifacts
 .npm-cache/
+.pnpm-store/
 .project_root
 .logs.json
 logs.json
@@ -56,6 +57,17 @@ checkpoint-*.json
 npm-debug.log*
 .vitest/
 
+# Lock files (only pnpm allowed)
+package-lock.json
+yarn.lock
+
 # OS specific files
 .DS_Store
 *.log
+
+# IDE specific
+*.swp
+*.swo
+*~
+.vscode/settings.json
+.idea/workspace.xml
