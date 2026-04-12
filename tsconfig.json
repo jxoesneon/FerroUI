@@ -11,9 +11,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "incremental": true,
-    "ignoreDeprecations": "6.0",
     "jsx": "react-jsx",
-    "baseUrl": ".",
     "paths": {
       "@alloy/engine": ["./packages/engine/dist"],
       "@alloy/registry": ["./packages/registry/dist"],

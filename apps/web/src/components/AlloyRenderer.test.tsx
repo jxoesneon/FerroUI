@@ -2,10 +2,12 @@
 import React from 'react';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import '@testing-library/jest-dom';
+import * as matchers from '@testing-library/jest-dom/matchers';
 import { AlloyRenderer } from './AlloyRenderer';
 import { registry } from '@alloy/registry';
 import { actionRouter } from '../services/ActionRouter';
+
+expect.extend(matchers);
 
 // Mock actionRouter
 vi.mock('../services/ActionRouter', () => ({

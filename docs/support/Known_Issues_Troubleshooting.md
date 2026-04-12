@@ -12,16 +12,16 @@
 
 | Issue | Status | Workaround | ETA Fix |
 |-------|--------|------------|---------|
-| Large registries (>500 components) experience slower fuzzy matching | Investigating | Limit registry size or disable fuzzy matching | Q2 2025 |
-| Partial layout updates not yet implemented | Planned | Use full layout refresh | Q3 2025 |
-| Shared cache across users not implemented | Planned | Use per-session cache | Q3 2025 |
+| Large registries (>500 components) experience slower fuzzy matching | Investigating | Limit registry size or disable fuzzy matching | Q2 2026 |
+| Partial layout updates not yet implemented | Planned | Use full layout refresh | Q3 2026 |
+| Shared cache across users not implemented | Planned | Use per-session cache | Q3 2026 |
 
 ### 1.2 Medium Priority
 
 | Issue | Status | Workaround | ETA Fix |
 |-------|--------|------------|---------|
-| Streaming updates always full-layout replacement | By design | N/A | Q3 2025 (RFC-003) |
-| Repair loop fuzzy matching adds latency for large registries | Investigating | Use vector-indexed lookup | Q2 2025 |
+| Streaming updates always full-layout replacement | By design | N/A | Q3 2026 (RFC-003) |
+| Repair loop fuzzy matching adds latency for large registries | Investigating | Use vector-indexed lookup | Q2 2026 |
 
 ---
 

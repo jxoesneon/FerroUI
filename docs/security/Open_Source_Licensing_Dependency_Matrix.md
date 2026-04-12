@@ -118,7 +118,7 @@ Required in source files:
 
 ```typescript
 /**
- * Copyright (c) 2025 Alloy UI Contributors
+ * Copyright (c) 2026 Alloy UI Contributors
  * SPDX-License-Identifier: MIT
  * 
  * This file may contain portions of third-party code.

@@ -1,44 +1,83 @@
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { LlmProvider } from './base';
 import { LlmRequest, LlmResponse } from '../types';
 
+export interface GoogleProviderOptions {
+  apiKey?: string;
+  model?: string;
+}
+
 export class GoogleProvider implements LlmProvider {
   readonly id = 'google';
-  readonly contextWindowTokens = 1000000; // Gemini Pro 1.5 context window
+  readonly contextWindowTokens = 1000000;
+  private client: GoogleGenerativeAI;
+  private model: string;
+
+  constructor(options: GoogleProviderOptions = {}) {
+    this.client = new GoogleGenerativeAI(options.apiKey ?? process.env.GOOGLE_API_KEY ?? '');
+    this.model = options.model ?? process.env.GOOGLE_MODEL ?? 'gemini-1.5-pro';
+  }
 
   async *processPrompt(req: LlmRequest): AsyncGenerator<string, LlmResponse, undefined> {
-    // In a real implementation, this would call the Google Generative AI API (e.g., via @google/generative-ai)
-    // and yield stream chunks.
-    
-    // Simulating streaming for the purpose of this task
-    const mockResponse = `This is a simulated response from Google Gemini for: ${req.userPrompt}`;
-    const chunks = mockResponse.split(' ');
-    
-    for (const chunk of chunks) {
-      yield chunk + ' ';
-      await new Promise(resolve => setTimeout(resolve, 50)); // Artificial delay
+    const genModel = this.client.getGenerativeModel({
+      model: this.model,
+      systemInstruction: req.systemPrompt,
+    });
+
+    const result = await genModel.generateContentStream({
+      contents: [{ role: 'user', parts: [{ text: req.userPrompt }] }],
+      generationConfig: {
+        temperature: req.temperature ?? 0.2,
+        maxOutputTokens: req.maxTokens,
+      },
+    });
+
+    let fullContent = '';
+    for await (const chunk of result.stream) {
+      const text = chunk.text();
+      fullContent += text;
+      yield text;
     }
 
+    const finalResponse = await result.response;
+    const usage = finalResponse.usageMetadata;
     return {
-      content: mockResponse,
+      content: fullContent,
       tokens: {
-        input: this.estimateTokens(req.userPrompt),
-        output: this.estimateTokens(mockResponse),
-        total: this.estimateTokens(req.userPrompt) + this.estimateTokens(mockResponse),
-      }
+        input: usage?.promptTokenCount ?? this.estimateTokens(req.userPrompt),
+        output: usage?.candidatesTokenCount ?? this.estimateTokens(fullContent),
+        total: usage?.totalTokenCount ?? this.estimateTokens(req.userPrompt + fullContent),
+      },
     };
   }
 
   async completePrompt(req: LlmRequest): Promise<LlmResponse> {
-    const generator = this.processPrompt(req);
-    let result = await generator.next();
-    while (!result.done) {
-      result = await generator.next();
-    }
-    return result.value;
+    const genModel = this.client.getGenerativeModel({
+      model: this.model,
+      systemInstruction: req.systemPrompt,
+    });
+
+    const result = await genModel.generateContent({
+      contents: [{ role: 'user', parts: [{ text: req.userPrompt }] }],
+      generationConfig: {
+        temperature: req.temperature ?? 0,
+        maxOutputTokens: req.maxTokens,
+      },
+    });
+
+    const content = result.response.text();
+    const usage = result.response.usageMetadata;
+    return {
+      content,
+      tokens: {
+        input: usage?.promptTokenCount ?? this.estimateTokens(req.userPrompt),
+        output: usage?.candidatesTokenCount ?? this.estimateTokens(content),
+        total: usage?.totalTokenCount ?? this.estimateTokens(req.userPrompt + content),
+      },
+    };
   }
 
   estimateTokens(text: string): number {
-    // Simple heuristic: 1 token per 4 characters
     return Math.ceil(text.length / 4);
   }
 }

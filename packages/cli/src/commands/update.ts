@@ -3,6 +3,7 @@ import chalk from 'chalk';
 import ora from 'ora';
 import prompts from 'prompts';
 import { execSync } from 'child_process';
+import { createRequire } from 'module';
 
 /**
  * `alloy update`
@@ -22,8 +23,8 @@ export const updateCommand = new Command('update')
     try {
       // Current version comes from this package's own package.json
       try {
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        const pkg = require('../../package.json');
+        const _require = createRequire(import.meta.url);
+        const pkg = _require('../../package.json') as { version?: string };
         currentVersion = pkg.version ?? 'unknown';
       } catch {
         // Running from source — keep 'unknown'
@@ -39,8 +40,7 @@ export const updateCommand = new Command('update')
       spinner.stop();
     } catch {
       spinner.stop();
-      // Network unavailable — still allow forced reinstall
-      latestVersion = 'unknown';
+      // Network unavailable — latestVersion stays 'unknown'
     }
 
     console.log(`\n  ${chalk.dim('Current version:')} ${chalk.bold(currentVersion)}`);

@@ -1,11 +1,9 @@
 import { AlloyEngine, AnthropicProvider } from '@alloy/engine';
 
-export interface Env {
-  // Bindings for Cloudflare Workers
-}
+export type Env = Record<string, string>;
 
 export default {
-  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+  async fetch(_request: Request, _env: Env, _ctx: ExecutionContext): Promise<Response> {
     const provider = new AnthropicProvider();
     const engine = new AlloyEngine(provider);
 

@@ -22,18 +22,20 @@ describe('useAlloyLayout', () => {
       .mockResolvedValueOnce({ done: false, value: new TextEncoder().encode('data: [DONE]\n\n') })
       .mockResolvedValueOnce({ done: true, value: undefined });
 
-    global.fetch = vi.fn().mockResolvedValue({
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
       ok: true,
       body: {
         getReader: () => ({ read: mockRead })
       }
-    });
+    }));
 
     const { result, unmount } = renderHook(() => useAlloyLayout({ url: '/test' }));
     
     expect(result.current.loading).toBe(true);
 
-    await new Promise(resolve => setTimeout(resolve, 0));
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 0));
+    });
 
     expect(result.current.loading).toBe(false);
     expect(result.current.layout).toEqual({ type: 'Dashboard' });
@@ -48,18 +50,20 @@ describe('useAlloyLayout', () => {
       .mockResolvedValueOnce({ done: false, value: new TextEncoder().encode('data: [DONE]\n\n') })
       .mockResolvedValueOnce({ done: true, value: undefined });
 
-    global.fetch = vi.fn().mockResolvedValue({
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
       ok: true,
       body: {
         getReader: () => ({ read: mockRead })
       }
-    });
+    }));
 
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     const { result } = renderHook(() => useAlloyLayout({ url: '/test' }));
     
-    await new Promise(resolve => setTimeout(resolve, 0));
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 0));
+    });
 
     expect(consoleSpy).toHaveBeenCalledWith('Error parsing partial JSON:', expect.any(Error));
     expect(result.current.loading).toBe(false);
@@ -68,14 +72,16 @@ describe('useAlloyLayout', () => {
   });
 
   it('handles fetch error', async () => {
-    global.fetch = vi.fn().mockResolvedValue({
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
       ok: false,
       statusText: 'Not Found'
-    });
+    }));
 
     const { result } = renderHook(() => useAlloyLayout({ url: '/test' }));
 
-    await new Promise(resolve => setTimeout(resolve, 0));
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 0));
+    });
 
     expect(result.current.loading).toBe(false);
     expect(result.current.error).toBeInstanceOf(Error);
@@ -85,11 +91,13 @@ describe('useAlloyLayout', () => {
   it('handles abort error during fetch', async () => {
     const abortError = new Error('Aborted');
     abortError.name = 'AbortError';
-    global.fetch = vi.fn().mockRejectedValue(abortError);
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(abortError));
 
     const { result, unmount } = renderHook(() => useAlloyLayout({ url: '/test' }));
     
-    await new Promise(resolve => setTimeout(resolve, 0));
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 0));
+    });
     
     // Abort errors are caught and ignored, leaving loading true or depending on state.
     // In our code: if err is AbortError, it just returns.
@@ -99,59 +107,70 @@ describe('useAlloyLayout', () => {
   });
   
   it('handles unknown error during fetch', async () => {
-    global.fetch = vi.fn().mockRejectedValue(new Error('Network failure'));
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('Network failure')));
 
     const { result } = renderHook(() => useAlloyLayout({ url: '/test' }));
     
-    await new Promise(resolve => setTimeout(resolve, 0));
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 0));
+    });
     
     expect(result.current.error?.message).toBe('Network failure');
     expect(result.current.loading).toBe(false);
   });
   
   it('handles non-Error thrown during fetch', async () => {
-    global.fetch = vi.fn().mockRejectedValue('String Error');
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue('String Error'));
 
     const { result } = renderHook(() => useAlloyLayout({ url: '/test' }));
     
-    await new Promise(resolve => setTimeout(resolve, 0));
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 0));
+    });
     
     expect(result.current.error?.message).toBe('Unknown error occurred');
     expect(result.current.loading).toBe(false);
   });
   
   it('handles missing reader in response', async () => {
-    global.fetch = vi.fn().mockResolvedValue({
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
       ok: true,
       body: null
-    });
+    }));
 
     const { result } = renderHook(() => useAlloyLayout({ url: '/test' }));
     
-    await new Promise(resolve => setTimeout(resolve, 0));
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 0));
+    });
     
     expect(result.current.error?.message).toBe('Response body is not readable');
     expect(result.current.loading).toBe(false);
   });
 
   it('handles refresh', async () => {
-    global.fetch = vi.fn().mockResolvedValue({
+    const mockFetch = vi.fn().mockResolvedValue({
       ok: true,
       body: {
         getReader: () => ({ read: vi.fn().mockResolvedValue({ done: true }) })
       }
     });
+    vi.stubGlobal('fetch', mockFetch);
 
     const { result } = renderHook(() => useAlloyLayout({ url: '/test' }));
-    await new Promise(resolve => setTimeout(resolve, 0));
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 0));
+    });
     
-    expect(global.fetch).toHaveBeenCalledTimes(1);
+    expect(mockFetch).toHaveBeenCalledTimes(1);
 
     act(() => {
       result.current.refresh();
     });
 
-    await new Promise(resolve => setTimeout(resolve, 0));
-    expect(global.fetch).toHaveBeenCalledTimes(2);
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 0));
+    });
+    expect(mockFetch).toHaveBeenCalledTimes(2);
   });
 });

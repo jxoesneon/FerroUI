@@ -100,7 +100,7 @@ apps/desktop/
     "bundle": {
       "active": true,
       "category": "DeveloperTool",
-      "copyright": "© 2025 Alloy UI",
+      "copyright": "© 2026 Alloy UI",
       "deb": {
         "depends": []
       },

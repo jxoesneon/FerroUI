@@ -44,7 +44,7 @@ This document lists all data sub-processors used by Alloy UI and the agreements 
 
 ### 3.1 AWS DPA
 
-**Effective Date:** January 1, 2025  
+**Effective Date:** January 1, 2026  
 **Agreement Type:** AWS Data Processing Addendum  
 **Governing Law:** Delaware, USA  
 **Key Terms:**
@@ -55,7 +55,7 @@ This document lists all data sub-processors used by Alloy UI and the agreements 
 
 ### 3.2 OpenAI DPA
 
-**Effective Date:** February 1, 2025  
+**Effective Date:** February 1, 2026  
 **Agreement Type:** OpenAI Business Associate Agreement  
 **Governing Law:** California, USA  
 **Key Terms:**
@@ -66,7 +66,7 @@ This document lists all data sub-processors used by Alloy UI and the agreements 
 
 ### 3.3 Anthropic DPA
 
-**Effective Date:** February 15, 2025  
+**Effective Date:** February 15, 2026  
 **Agreement Type:** Anthropic Data Processing Agreement  
 **Governing Law:** California, USA  
 **Key Terms:**

@@ -2,8 +2,12 @@ import { Command } from 'commander';
 import chalk from 'chalk';
 import ora from 'ora';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import fs from 'fs-extra';
 import { execSync, spawnSync } from 'child_process';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /**
  * Run a command synchronously, streaming output. Returns true on success.

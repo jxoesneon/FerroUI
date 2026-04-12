@@ -132,10 +132,10 @@ The AI will generate state machine definitions in Phase 2 alongside the layout. 
 
 | Phase | Deliverable | Timeline |
 |-------|-------------|----------|
-| 1 | Core state machine runtime | Q2 2025 |
-| 2 | Action registry and validation | Q2 2025 |
-| 3 | AI prompt updates for generation | Q3 2025 |
-| 4 | Developer documentation | Q3 2025 |
+| 1 | Core state machine runtime | Q2 2026 |
+| 2 | Action registry and validation | Q2 2026 |
+| 3 | AI prompt updates for generation | Q3 2026 |
+| 4 | Developer documentation | Q3 2026 |
 
 ## Open Questions
 

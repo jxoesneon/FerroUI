@@ -239,11 +239,11 @@ AI-Powered UI Generation Market
 
 | Gap | Priority | Timeline |
 |-----|----------|----------|
-| Visual component editor | Medium | Q3 2025 |
-| More built-in integrations | High | Q2 2025 |
+| Visual component editor | Medium | Q3 2026 |
+| More built-in integrations | High | Q2 2026 |
 | Marketplace for components | Low | 2026 |
-| Enterprise SSO features | High | Q2 2025 |
-| More deployment examples | Medium | Q2 2025 |
+| Enterprise SSO features | High | Q2 2026 |
+| More deployment examples | Medium | Q2 2026 |
 
 ---
 

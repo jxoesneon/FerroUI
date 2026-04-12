@@ -1,5 +1,6 @@
 import { trace, Tracer, Span, SpanOptions, Context, context } from '@opentelemetry/api';
-import { BasicTracerProvider, ConsoleSpanExporter, SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base';
+import { BasicTracerProvider, ConsoleSpanExporter, SimpleSpanProcessor, BatchSpanProcessor } from '@opentelemetry/sdk-trace-base';
+import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { Resource } from '@opentelemetry/resources';
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
 import { AlloyAttributes } from './types';
@@ -29,10 +30,20 @@ export function initializeTelemetry(serviceName: string = 'alloy-ui') {
     }),
   });
 
-  provider.addSpanProcessor(new SimpleSpanProcessor(new ConsoleSpanExporter()));
-  provider.register();
+  const otlpEndpoint = process.env.OTEL_EXPORTER_OTLP_ENDPOINT;
+  if (otlpEndpoint) {
+    provider.addSpanProcessor(
+      new BatchSpanProcessor(
+        new OTLPTraceExporter({ url: `${otlpEndpoint}/v1/traces` })
+      )
+    );
+    console.log(`[Telemetry] OTLP exporter → ${otlpEndpoint}/v1/traces`);
+  } else {
+    provider.addSpanProcessor(new SimpleSpanProcessor(new ConsoleSpanExporter()));
+    console.log(`[Telemetry] Console exporter active (set OTEL_EXPORTER_OTLP_ENDPOINT for OTLP)`);
+  }
 
-  console.log(`[Telemetry] Initialized for service: ${serviceName}`);
+  provider.register();
   return provider;
 }
 

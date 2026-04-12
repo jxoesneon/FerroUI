@@ -119,10 +119,10 @@ The AI must be instructed to:
 
 | Phase | Deliverable | Timeline |
 |-------|-------------|----------|
-| 1 | Component ID system | Q2 2025 |
-| 2 | Update type implementation | Q2 2025 |
-| 3 | Renderer update handling | Q3 2025 |
-| 4 | AI prompt updates | Q3 2025 |
+| 1 | Component ID system | Q2 2026 |
+| 2 | Update type implementation | Q2 2026 |
+| 3 | Renderer update handling | Q3 2026 |
+| 4 | AI prompt updates | Q3 2026 |
 
 ## Open Questions
 

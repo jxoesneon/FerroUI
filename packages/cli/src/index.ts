@@ -9,6 +9,7 @@ import { buildCommand } from './commands/build';
 import { deployCommand } from './commands/deploy';
 import { registryCommand } from './commands/registry';
 import { updateCommand } from './commands/update';
+import { logsCommand } from './commands/logs';
 
 const program = new Command();
 
@@ -27,6 +28,7 @@ program.addCommand(registryCommand);
 program.addCommand(evalCommand);
 program.addCommand(doctorCommand);
 program.addCommand(updateCommand);
+program.addCommand(logsCommand);
 
 program.on('command:*', () => {
   console.error(chalk.red('Invalid command: %s\nSee --help for a list of available commands.'), program.args.join(' '));

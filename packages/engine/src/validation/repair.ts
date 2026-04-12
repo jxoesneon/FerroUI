@@ -109,7 +109,7 @@ ${JSON.stringify(invalidLayout, null, 2)}
     // Attempt to extract JSON from the response
     const jsonMatch = response.content.match(/\{[\s\S]*\}/);
     fixedJson = JSON.parse(jsonMatch ? jsonMatch[0] : response.content);
-  } catch (err) {
+  } catch {
     // If still not valid JSON, retry repair
     return repairLayout(provider, originalPrompt, response.content, [{
       path: 'root',

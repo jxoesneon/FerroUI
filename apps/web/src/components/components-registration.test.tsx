@@ -2,8 +2,10 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import '@testing-library/jest-dom';
+import * as matchers from '@testing-library/jest-dom/matchers';
 import { Dashboard, Section, Card, Button, Text } from './components-registration';
+
+expect.extend(matchers);
 
 describe('Components Registration', () => {
   it('renders Dashboard correctly', () => {

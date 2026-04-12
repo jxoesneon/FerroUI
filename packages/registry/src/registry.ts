@@ -29,8 +29,7 @@ export class ComponentRegistry {
   /**
    * Registers a component with the registry.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public registerComponent<P = any>(options: RegistrationOptions<any>): void {
+  public registerComponent<_P = any>(options: RegistrationOptions<any>): void {
     const { name, version } = options;
     const id = `${name}@${version}`;
     
@@ -161,7 +160,7 @@ export const registry = ComponentRegistry.getInstance();
 /**
  * Functional registration helper.
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 export const registerComponent = <P = any>(options: RegistrationOptions<any>) => {
   registry.registerComponent<P>(options);
 };

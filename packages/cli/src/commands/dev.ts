@@ -2,8 +2,13 @@ import { Command } from 'commander';
 import chalk from 'chalk';
 import execa from 'execa';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import fs from 'fs-extra';
 import ora from 'ora';
+import { execSync } from 'child_process';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /** Detect the package manager by looking for lock files up from cwd. */
 function detectPkgManager(cwd: string): string {
@@ -21,7 +26,7 @@ function openBrowser(url: string): void {
         : process.platform === 'darwin'
         ? `open ${url}`
         : `xdg-open ${url}`;
-    require('child_process').execSync(cmd, { stdio: 'ignore' });
+    execSync(cmd, { stdio: 'ignore' });
   } catch {
     // best-effort
   }
@@ -50,7 +55,7 @@ export const devCommand = new Command('dev')
     const inspectorPort = options.inspectorPort;
 
     const spinner = ora('Starting development services...').start();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     const processes: any[] = [];
 
     const sharedEnv = { ...process.env, PATH: process.env.PATH };

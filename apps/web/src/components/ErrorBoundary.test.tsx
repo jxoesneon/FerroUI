@@ -2,8 +2,10 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import '@testing-library/jest-dom';
+import * as matchers from '@testing-library/jest-dom/matchers';
 import { AlloyErrorBoundary } from './ErrorBoundary';
+
+expect.extend(matchers);
 
 const ProblemChild = () => {
   throw new Error('Test Error');

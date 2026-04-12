@@ -123,10 +123,10 @@ If shared cache causes data leakage:
 
 | Phase | Deliverable | Timeline |
 |-------|-------------|----------|
-| 1 | Data classification schema | Q2 2025 |
-| 2 | Shared cache implementation | Q2 2025 |
-| 3 | Security audit and testing | Q3 2025 |
-| 4 | Gradual rollout with monitoring | Q3 2025 |
+| 1 | Data classification schema | Q2 2026 |
+| 2 | Shared cache implementation | Q2 2026 |
+| 3 | Security audit and testing | Q3 2026 |
+| 4 | Gradual rollout with monitoring | Q3 2026 |
 
 ## Open Questions
 

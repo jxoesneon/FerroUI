@@ -33,22 +33,22 @@ Alloy UI treats the LLM as a **runtime UI orchestrator** rather than a content g
 ### OKR 1: Developer Adoption
 | Key Result | Target | Timeline |
 |------------|--------|----------|
-| Developer registrations | 1,000 | Q3 2025 |
-| Active projects | 100 | Q4 2025 |
-| GitHub stars | 5,000 | Q4 2025 |
+| Developer registrations | 1,000 | Q3 2026 |
+| Active projects | 100 | Q4 2026 |
+| GitHub stars | 5,000 | Q4 2026 |
 
 ### OKR 2: Developer Experience
 | Key Result | Target | Timeline |
 |------------|--------|----------|
 | Time to first layout | < 10 minutes | Launch |
 | Component registration LOC | < 20 lines | Launch |
-| Documentation NPS | > 50 | Q3 2025 |
+| Documentation NPS | > 50 | Q3 2026 |
 
 ### OKR 3: Performance
 | Key Result | Target | Timeline |
 |------------|--------|----------|
 | p99 layout generation latency | < 3s | Launch |
-| Cache hit rate | > 40% | Q3 2025 |
+| Cache hit rate | > 40% | Q3 2026 |
 | Uptime | 99.9% | Launch |
 
 ---

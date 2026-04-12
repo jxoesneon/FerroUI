@@ -29,7 +29,7 @@ This document summarizes third-party security audits conducted on Alloy UI. Full
 
 ### 3.1 Executive Summary
 
-**Date:** March 1-15, 2025  
+**Date:** March 1-15, 2026  
 **Auditor:** SecureCode Inc.  
 **Scope:** Full application security assessment
 
@@ -158,7 +158,7 @@ const sessionToken = crypto.randomBytes(32).toString('base64');
 
 ### 4.1 Executive Summary
 
-**Date:** February 15-28, 2025  
+**Date:** February 15-28, 2026  
 **Auditor:** PenTest Partners  
 **Scope:** External penetration test
 
@@ -201,7 +201,7 @@ Removed server version headers and customized error pages.
 
 ### 5.1 Executive Summary
 
-**Date:** January 20-31, 2025  
+**Date:** January 20-31, 2026  
 **Auditor:** CloudSec Auditors  
 **Scope:** Cloud infrastructure security
 
@@ -259,8 +259,8 @@ Removed server version headers and customized error pages.
 
 | Certification | Status | Date |
 |---------------|--------|------|
-| SOC 2 Type I | In Progress | Q2 2025 |
-| ISO 27001 | Planned | Q4 2025 |
+| SOC 2 Type I | In Progress | Q2 2026 |
+| ISO 27001 | Planned | Q4 2026 |
 
 ### 7.2 Self-Assessment Questionnaires
 

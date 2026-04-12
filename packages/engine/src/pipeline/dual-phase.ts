@@ -5,6 +5,8 @@ import { validateLayout } from '@alloy/schema';
 import { repairLayout } from '../validation/repair';
 import { semanticCache } from '../cache/semantic-cache';
 import { tracer, PipelinePhase, setCommonAttributes } from '@alloy/telemetry';
+import { auditLogger, AuditEventType } from '../audit/audit-logger';
+import CryptoJS from 'crypto-js';
 
 // Link semantic cache to tool registry for invalidation
 registerCacheHandler({
@@ -42,7 +44,17 @@ export async function* runDualPhasePipeline(
 ): AsyncGenerator<EngineChunk, void, undefined> {
   
   // 1. CONTEXT RESOLUTION (Already passed in context)
+  const pipelineStart = Date.now();
   yield { type: 'phase', phase: 1, content: 'Starting Phase 1: Data Gathering' };
+
+  auditLogger.log({
+    type: AuditEventType.REQUEST_START,
+    requestId: context.requestId,
+    userId: context.userId,
+    promptHash: CryptoJS.SHA256(prompt.trim().toLowerCase()).toString(),
+    permissions: context.permissions,
+    locale: context.locale,
+  });
 
   const availableTools = getToolsForUser(context.permissions);
   const toolManifest = JSON.stringify(availableTools, null, 2);
@@ -83,7 +95,7 @@ ${toolManifest}
   try {
     const parsed = JSON.parse(phase1Response.content);
     toolCalls = parsed.toolCalls || [];
-  } catch (err) {
+  } catch {
     // If phase 1 fails to return valid JSON, we'll try to proceed without tool data
   }
 
@@ -114,11 +126,30 @@ ${toolManifest}
       toolOutputs[call.name] = result;
       cacheToolOutputs[call.name] = { result, args: call.args };
       yield { type: 'tool_output', toolOutput: { name: call.name, result } };
+      auditLogger.log({
+        type: AuditEventType.TOOL_CALL,
+        requestId: context.requestId,
+        userId: context.userId,
+        toolName: call.name,
+        args: call.args as Record<string, unknown>,
+        success: true,
+        durationMs: 0,
+      });
     } catch (err) {
       const error = { error: err instanceof Error ? err.message : String(err) };
       toolOutputs[call.name] = error;
       cacheToolOutputs[call.name] = { error, args: call.args };
       yield { type: 'tool_output', toolOutput: { name: call.name, result: toolOutputs[call.name] } };
+      auditLogger.log({
+        type: AuditEventType.TOOL_CALL,
+        requestId: context.requestId,
+        userId: context.userId,
+        toolName: call.name,
+        args: call.args as Record<string, unknown>,
+        success: false,
+        durationMs: 0,
+        error: err instanceof Error ? err.message : String(err),
+      });
     }
   }
 
@@ -186,7 +217,7 @@ ${escapedOutputs}
   try {
     const jsonMatch = fullContent.match(/\{[\s\S]*\}/);
     layoutJson = JSON.parse(jsonMatch ? jsonMatch[0] : fullContent);
-  } catch (err) {
+  } catch {
     layoutJson = null;
   }
 
@@ -219,6 +250,14 @@ ${escapedOutputs}
   }
 
   phase2Span.end();
+
+  auditLogger.log({
+    type: AuditEventType.REQUEST_COMPLETE,
+    requestId: context.requestId,
+    userId: context.userId,
+    success: true,
+    durationMs: Date.now() - pipelineStart,
+  });
 
   yield { type: 'layout_chunk', layout: finalLayout };
   yield { type: 'complete' };

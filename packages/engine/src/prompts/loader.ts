@@ -28,7 +28,7 @@ export class PromptLoader {
     try {
       content = await fs.readFile(filePath, 'utf-8');
     } catch (err) {
-      throw new Error(`Failed to load prompt "${name}" from ${filePath}: ${err instanceof Error ? err.message : String(err)}`);
+      throw new Error(`Failed to load prompt "${name}" from ${filePath}`, { cause: err });
     }
 
     // Replace all placeholders like {{variableName}}

@@ -2,13 +2,15 @@
   "name": "alloy-monorepo",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "Alloy UI: AI-powered, server-driven UI meta-framework",
   "scripts": {
     "build": "pnpm run -r build",
     "test": "pnpm run -r test",
     "lint": "eslint .",
     "dev": "pnpm run -r dev",
-    "typecheck": "tsc --build packages/engine/tsconfig.json"
+    "typecheck": "tsc --build packages/engine/tsconfig.json",
+    "tokens:build": "node --experimental-strip-types tokens/build.ts"
   },
   "keywords": [
     "ai",
@@ -24,12 +26,12 @@
     "esbuild": "0.18.11"
   },
   "devDependencies": {
-    "@eslint/js": "^8.57.1",
-    "@types/node": "^22.15.3",
+    "@eslint/js": "^10.0.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
+    "@types/node": "^22.15.3",
     "@vitest/coverage-v8": "^4.1.4",
-    "eslint": "^8.57.0",
+    "eslint": "^10.2.0",
     "eventsource-parser": "^3.0.6",
     "jsdom": "^29.0.2",
     "partial-json-parser": "^1.2.2",
@@ -37,7 +39,7 @@
     "rimraf": "^5.0.0",
     "ts-node": "^10.9.2",
     "typescript": "6.0.2",
-    "typescript-eslint": "^7.18.0",
+    "typescript-eslint": "^8.58.1",
     "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^4.1.4",
     "zod": "^4.3.6"

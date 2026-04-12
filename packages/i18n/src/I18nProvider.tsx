@@ -73,7 +73,7 @@ export const I18nProvider: React.FC<I18nProviderProps> = ({
     t,
     formatDate: (date: Date, options?: Intl.DateTimeFormatOptions) => formatDate(date, locale, options),
     formatNumber: (num: number, options?: Intl.NumberFormatOptions) => formatNumber(num, locale, options),
-    formatCurrency: (amount: number, currency: string, options?: Intl.NumberFormatOptions) => formatCurrency(amount, currency, locale, options),
+    formatCurrency: (amount: number, currency: string, options?: Intl.NumberFormatOptions) => formatCurrency(amount, locale, currency, options),
     setLocale,
     loadBundle,
   }), [locale, direction, t, setLocale, loadBundle]);

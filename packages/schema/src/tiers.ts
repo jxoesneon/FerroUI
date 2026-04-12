@@ -1,6 +1,21 @@
 import { ComponentTier, AlloyComponent } from './types';
 
 /**
+ * Inline components — can appear inside block components but cannot contain block children.
+ * Based on Section 8.2 of the specification (Rule R010).
+ */
+export const INLINE_COMPONENTS = new Set(['Text', 'Badge', 'Tag', 'Icon']);
+
+/**
+ * Block-level components — provide layout structure.
+ * Based on Section 8.2 of the specification (Rule R010).
+ */
+export const BLOCK_COMPONENTS = new Set(['Divider', 'Skeleton', 'Dashboard', 'KPIBoard',
+  'DataTable', 'ActivityFeed', 'ProfileHeader', 'TicketCard', 'ChartPanel',
+  'FormGroup', 'StatusBanner', 'StatBadge', 'UserAvatar', 'MetricRow',
+  'ActionButton', 'FormField', 'SearchBar', 'Avatar']);
+
+/**
  * Registry of component tier classifications.
  * This should eventually be populated from the @alloy/registry package.
  */
@@ -72,6 +87,19 @@ export function validateTiers(
           path,
           message: `Molecule component '${component.type}' must not contain Organism '${child.type}'.`,
           rule: 'R009',
+        });
+      }
+    }
+  }
+
+  // Rule R010: Inline components must not contain Block-level children
+  if (INLINE_COMPONENTS.has(component.type) && component.children) {
+    for (const child of component.children) {
+      if (BLOCK_COMPONENTS.has(child.type)) {
+        errors.push({
+          path,
+          message: `Inline component '${component.type}' must not contain Block component '${child.type}'.`,
+          rule: 'R010',
         });
       }
     }

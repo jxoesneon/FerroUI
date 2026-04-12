@@ -2,6 +2,7 @@ export * from './types';
 export * from './layout';
 export * from './tiers';
 export * from './config';
+export * from './engine-chunk';
 
 // Explicit named exports to satisfy some bundlers
 export type { Action, AlloyComponent, AriaProps, LayoutMetadata, ValidationIssue, ValidationResult } from './types';

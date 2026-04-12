@@ -3,6 +3,11 @@ import chalk from 'chalk';
 import ora from 'ora';
 import { execSync } from 'child_process';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import { createRequire } from 'module';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export const registryCommand = new Command('registry')
   .description('Manage and inspect the component registry.');
@@ -21,7 +26,8 @@ registryCommand
       // Resolve inspector entry from installed package
       let inspectorEntry: string;
       try {
-        inspectorEntry = require.resolve('@alloy/registry/dist/inspector.js');
+        const _require = createRequire(import.meta.url);
+        inspectorEntry = _require.resolve('@alloy/registry/dist/inspector.js');
       } catch {
         // Fallback: relative path from monorepo
         inspectorEntry = path.resolve(__dirname, '../../../registry/dist/inspector.js');

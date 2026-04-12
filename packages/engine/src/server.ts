@@ -1,11 +1,15 @@
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import { rateLimit } from 'express-rate-limit';
 import { AlloyEngine } from './engine';
 import { RequestContext, EngineChunk } from './types';
 import { AnthropicProvider } from './providers/anthropic';
 import { OpenAIProvider } from './providers/openai';
 import { LlmProvider } from './providers/base';
+import { auditLogger, AuditEventType } from './audit/audit-logger';
+import { sessionStore } from './session/session-store';
+import { createAuthMiddleware } from './auth/jwt';
 
 /**
  * Alloy Engine Server
@@ -67,6 +71,7 @@ export function createServer(options: { provider?: LlmProvider; port?: number } 
 
   app.use(cors());
   app.use(express.json({ limit: '64kb' }));  // Limit payload size
+  app.use(cookieParser());
   app.use(securityHeaders);
 
   // Apply rate limiting to all requests
@@ -78,6 +83,11 @@ export function createServer(options: { provider?: LlmProvider; port?: number } 
     message: { error: 'Too many requests from this IP, please try again after 15 minutes' }
   });
   app.use(limiter);
+
+  // JWT auth — skip health/admin probes, enforce on API routes
+  app.use(createAuthMiddleware({
+    skipPaths: ['/healthz', '/readyz', '/health', '/admin'],
+  }));
 
   /**
    * Liveness probe (k8s: is the process alive?)  — F-023
@@ -118,7 +128,23 @@ export function createServer(options: { provider?: LlmProvider; port?: number } 
     consecutiveFailures = 0;
     circuitOpen = false;
     serverReady = true;
+    auditLogger.log({
+      type: AuditEventType.CIRCUIT_RESET,
+      requestId: 'admin',
+      userId: 'admin',
+      consecutiveFailures: 0,
+    });
     res.status(200).json({ status: 'reset', timestamp: new Date().toISOString() });
+  });
+
+  app.get('/admin/logs', (req: Request, res: Response) => {
+    const lines = parseInt((req.query.lines as string) ?? '50', 10);
+    const events = auditLogger.getEvents(lines);
+    res.status(200).json({ events, total: auditLogger.getEvents().length });
+  });
+
+  app.get('/admin/sessions', async (_req: Request, res: Response) => {
+    res.status(200).json({ status: 'active', store: sessionStore.constructor.name });
   });
 
   /**
@@ -154,7 +180,8 @@ export function createServer(options: { provider?: LlmProvider; port?: number } 
       return;
     }
 
-    let { prompt, context } = req.body as { prompt: string; context: RequestContext };
+    const { context } = req.body as { prompt: string; context: RequestContext };
+    let { prompt } = req.body as { prompt: string; context: RequestContext };
 
     if (!prompt) {
       return res.status(400).json({ error: 'Missing prompt' });
@@ -171,7 +198,7 @@ export function createServer(options: { provider?: LlmProvider; port?: number } 
     prompt = prompt
       .trim()
       .replace(/<script\b[^>]*>([\s\S]*?)<\/script>/gmi, "")
-      .replace(/[\{\}\[\]]/g, " "); // Neutralize JSON-like structures that might confuse the pipeline
+      .replace(/[{}[\]]/g, " "); // Neutralize JSON-like structures that might confuse the pipeline
 
     // Set up SSE headers
     res.setHeader('Content-Type', 'text/event-stream');

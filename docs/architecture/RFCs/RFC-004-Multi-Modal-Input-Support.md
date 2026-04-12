@@ -131,10 +131,10 @@ If provider doesn't support multi-modal:
 
 | Phase | Deliverable | Timeline |
 |-------|-------------|----------|
-| 1 | Attachment schema and validation | Q3 2025 |
-| 2 | Pre-processing services | Q3 2025 |
-| 3 | Provider capability detection | Q4 2025 |
-| 4 | Frontend attachment upload | Q4 2025 |
+| 1 | Attachment schema and validation | Q3 2026 |
+| 2 | Pre-processing services | Q3 2026 |
+| 3 | Provider capability detection | Q4 2026 |
+| 4 | Frontend attachment upload | Q4 2026 |
 
 ## Open Questions
 
