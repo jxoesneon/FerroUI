@@ -15,7 +15,7 @@ import { LlmProvider } from './providers/base';
  * UI generation based on user prompts and tool calls.
  */
 
-export function createServer(options: { provider?: LlmProvider; port?: number } = {}) {
+export function createServer(options: { provider?: LlmProvider; port?: number } = {}): { app: express.Express; server: ReturnType<express.Express['listen']> } {
   const app = express();
   const port = options.port || process.env.PORT || 4000;
   const provider = options.provider || new AnthropicProvider(); // Default to Anthropic

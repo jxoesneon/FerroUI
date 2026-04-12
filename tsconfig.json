@@ -11,15 +11,16 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "incremental": true,
-    "baseUrl": ".",
+    "ignoreDeprecations": "6.0",
     "jsx": "react-jsx",
+    "baseUrl": ".",
     "paths": {
-      "@alloy/engine": ["packages/engine/dist"],
-      "@alloy/registry": ["packages/registry/dist"],
-      "@alloy/schema": ["packages/schema/dist"],
-      "@alloy/tools": ["packages/tools/dist"],
-      "@alloy/telemetry": ["packages/telemetry/dist"],
-      "@alloy/i18n": ["packages/i18n/dist"]
+      "@alloy/engine": ["./packages/engine/dist"],
+      "@alloy/registry": ["./packages/registry/dist"],
+      "@alloy/schema": ["./packages/schema/dist"],
+      "@alloy/tools": ["./packages/tools/dist"],
+      "@alloy/telemetry": ["./packages/telemetry/dist"],
+      "@alloy/i18n": ["./packages/i18n/dist"]
     }
   },
   "files": [],
