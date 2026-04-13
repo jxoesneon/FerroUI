@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { registry } from './registry';
 import { ComponentTier } from '@alloy/schema';
+import { z } from 'zod';
 
 describe('ComponentRegistry', () => {
   beforeEach(() => {
@@ -15,7 +16,7 @@ describe('ComponentRegistry', () => {
       version: 1,
       tier: ComponentTier.ATOM,
       component: mockComponent,
-      propsSchema: {} as any
+      schema: z.object({})
     });
     
     const entry = registry.getComponentEntry('TestAtom');
@@ -30,7 +31,7 @@ describe('ComponentRegistry', () => {
       version: 1,
       tier: ComponentTier.ATOM,
       component: () => null,
-      propsSchema: {} as any
+      schema: z.object({})
     });
 
     const invalidAtom = {
