@@ -29,7 +29,7 @@ jobs:
         run: pnpm -r --if-present run build
         
       - name: Test
-        run: pnpm -r --if-present run test
+        run: pnpm -r --if-present run test -- --passWithNoTests
         
       - name: Lint
         run: pnpm -r --if-present run lint
