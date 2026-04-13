@@ -8,18 +8,27 @@ const OUTPUT_DIR = path.join(ROOT, 'docs/site');
 const API_DIR = path.join(OUTPUT_DIR, 'api');
 
 /**
- * High-fidelity Markdown to HTML converter.
- * Handles headers, tables, lists, and code blocks with Liquid Mercury styling.
+ * Robust Markdown to HTML converter.
+ * Handles code blocks first to prevent nested parsing.
  */
 function mdToHtml(md: string): string {
-  let html = md
-    // Headers
+  const codeBlocks: string[] = [];
+  
+  // 1. Extract and protect code blocks
+  let html = md.replace(/```(\w+)?\n([\s\S]*?)```/g, (_match, _lang, code) => {
+    const placeholder = `__CODE_BLOCK_${codeBlocks.length}__`;
+    codeBlocks.push(`<pre><code>${code.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>`);
+    return placeholder;
+  });
+
+  html = html
+    // Headers (only at start of line)
     .replace(/^# (.*$)/gm, '<h1>$1</h1>')
     .replace(/^## (.*$)/gm, '<h2>$1</h2>')
     .replace(/^### (.*$)/gm, '<h3>$1</h3>')
     // Tables
     .replace(/\|(.*)\|/g, (match) => {
-      if (match.includes('---')) return ''; // Skip separator
+      if (match.includes('---')) return ''; 
       const cells = match.split('|').filter(c => c.trim().length > 0);
       const isHeader = match.includes('**') || md.split('\n')[md.split('\n').indexOf(match) + 1]?.includes('---');
       const tag = isHeader ? 'th' : 'td';
@@ -27,8 +36,6 @@ function mdToHtml(md: string): string {
     })
     // Wrap tables
     .replace(/(<tr>.*<\/tr>)+/gs, (match) => `<table class="api-table">${match}</table>`)
-    // Code blocks
-    .replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
     // Inline code
     .replace(/`([^`]+)`/g, '<code>$1</code>')
     // Bold
@@ -36,8 +43,17 @@ function mdToHtml(md: string): string {
     // Lists
     .replace(/^- (.*$)/gm, '<li>$1</li>')
     .replace(/(<li>.*<\/li>)+/gs, (match) => `<ul class="doc-list">${match}</ul>`)
-    // Paragraphs
-    .replace(/^(?!<[h|t|u|l|p|pre])(.*$)/gm, (match) => match.trim() ? `<p>${match}</p>` : '');
+    // Paragraphs (careful with existing tags)
+    .split('\n').map(line => {
+      if (line.trim().length === 0) return '';
+      if (line.startsWith('<') || line.startsWith('__CODE_')) return line;
+      return `<p>${line}</p>`;
+    }).join('\n');
+
+  // 2. Restore protected code blocks
+  codeBlocks.forEach((block, i) => {
+    html = html.replace(`__CODE_BLOCK_${i}__`, block);
+  });
 
   return html;
 }

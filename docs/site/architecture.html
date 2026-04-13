@@ -44,18 +44,18 @@
         <div class="glass-card" style="padding: 4rem; border-radius: 32px;">
             <h1>Alloy UI System Architecture Document</h1>
 
-<p><strong>Version:</strong> 1.0  </p>
-<p><strong>Last Updated:</strong> 2025-04-10  </p>
-<p><strong>Status:</strong> Approved  </p>
-<p><strong>Owner:</strong> Architecture Team</p>
+<strong>Version:</strong> 1.0  
+<strong>Last Updated:</strong> 2025-04-10  
+<strong>Status:</strong> Approved  
+<strong>Owner:</strong> Architecture Team
 
-<p>---</p>
+<p>---</p>
 
 <h2>1. Executive Summary</h2>
 
-<p>Alloy UI is a production-grade, open meta-framework for building AI-driven applications where the user interface is synthesized at runtime in response to natural language intent. This document formalizes the complete architecture covering the dual-phase orchestration pipeline, atomic component model, LLM strategy layer, schema governance, security, observability, accessibility, internationalization, and developer ergonomics.</p>
+<p>Alloy UI is a production-grade, open meta-framework for building AI-driven applications where the user interface is synthesized at runtime in response to natural language intent. This document formalizes the complete architecture covering the dual-phase orchestration pipeline, atomic component model, LLM strategy layer, schema governance, security, observability, accessibility, internationalization, and developer ergonomics.</p>
 
-<p>---</p>
+<p>---</p>
 
 <h2>2. Architectural Principles</h2>
 
@@ -78,55 +78,55 @@
 <li><strong>Not a design system</strong> — Alloy UI consumes a design system through its component registry</li>
 <li><strong>Not a no-code platform</strong> — Developers write typed components and tool functions in real code</li>
 
-<p>---</p>
+<p>---</p>
 
 <h2>3. Four-Layer Runtime Architecture</h2>
 
-<p>Alloy UI is organized into four distinct runtime layers. Each layer has a single responsibility and communicates with adjacent layers through versioned, typed contracts.</p>
+<p>Alloy UI is organized into four distinct runtime layers. Each layer has a single responsibility and communicates with adjacent layers through versioned, typed contracts.</p>
 
-<p>``<code></p>
-<p>┌─────────────────────────────────────────────────────────────┐</p>
-<p>│                    LAYER 1: CLIENT RENDERER                  │</p>
-<p>│         React / TypeScript — Dumb Rendering Engine           │</p>
-<p>├─────────────────────────────────────────────────────────────┤</p>
-<p>│                  LAYER 2: ORCHESTRATION ENGINE               │</p>
-<p>│    TypeScript (Node) or Rust — Prompt Assembly, Tool Dispatch│</p>
-<p>├─────────────────────────────────────────────────────────────┤</p>
-<p>│                    LAYER 3: LLM STRATEGY                     │</p>
-<p>│         Pluggable Provider Interface — Cloud or Local        │</p>
-<p>├─────────────────────────────────────────────────────────────┤</p>
-<p>│                  LAYER 4: DATA & TOOL LAYER                  │</p>
-<p>│         Developer-Registered Functions — Databases, APIs     │</p>
-<p>└─────────────────────────────────────────────────────────────┘</p>
-<p></code>`<code></p>
+<p>``<code></p>
+<p>┌─────────────────────────────────────────────────────────────┐</p>
+<p>│                    LAYER 1: CLIENT RENDERER                  │</p>
+<p>│         React / TypeScript — Dumb Rendering Engine           │</p>
+<p>├─────────────────────────────────────────────────────────────┤</p>
+<p>│                  LAYER 2: ORCHESTRATION ENGINE               │</p>
+<p>│    TypeScript (Node) or Rust — Prompt Assembly, Tool Dispatch│</p>
+<p>├─────────────────────────────────────────────────────────────┤</p>
+<p>│                    LAYER 3: LLM STRATEGY                     │</p>
+<p>│         Pluggable Provider Interface — Cloud or Local        │</p>
+<p>├─────────────────────────────────────────────────────────────┤</p>
+<p>│                  LAYER 4: DATA & TOOL LAYER                  │</p>
+<p>│         Developer-Registered Functions — Databases, APIs     │</p>
+<p>└─────────────────────────────────────────────────────────────┘</p>
+</code>`<code>
 
-<p>---</p>
+<p>---</p>
 
 <h2>4. Layer 1 — Client Renderer</h2>
 
-<p>The renderer is intentionally "dumb." It knows nothing about data, users, or business logic. It receives a fully validated AlloyLayout JSON tree and paints it using the component registry.</p>
+<p>The renderer is intentionally "dumb." It knows nothing about data, users, or business logic. It receives a fully validated AlloyLayout JSON tree and paints it using the component registry.</p>
 
 <h3>4.1 Component Registry</h3>
 
-<p>The registry is a compile-time dictionary mapping string identifiers to React components:</p>
+<p>The registry is a compile-time dictionary mapping string identifiers to React components:</p>
 
-<p></code>`<code>typescript</p>
-<p>type ComponentRegistry = Record<string, React.ComponentType<AlloyComponentProps>>;</p>
-<p></code>`<code></p>
+</code>`<code>typescript
+<p>type ComponentRegistry = Record<string, React.ComponentType<AlloyComponentProps>>;</p>
+</code>`<code>
 
-<p>Registry entries are versioned. A component registered as </code>DataCard<code> and later breaking-changed becomes </code>DataCard@2<code>. The renderer resolves the correct version from the schema's </code>schemaVersion<code> field.</p>
+<p>Registry entries are versioned. A component registered as </code>DataCard<code> and later breaking-changed becomes </code>DataCard@2<code>. The renderer resolves the correct version from the schema's </code>schemaVersion<code> field.</p>
 
 <h3>4.2 Progressive Rendering Pipeline</h3>
 
-<p>1. The renderer subscribes to a Server-Sent Event (SSE) stream or Tauri event channel</p>
-<p>2. Incoming chunks are fed to a partial-JSON parser that attempts incremental tree construction</p>
-<p>3. Each successfully parsed subtree is mounted immediately for perceived instant response</p>
-<p>4. A React Error Boundary wraps every dynamically mounted component</p>
-<p>5. Framer Motion's layout animation prop is baked into all Organism and Molecule wrappers</p>
+<p>1. The renderer subscribes to a Server-Sent Event (SSE) stream or Tauri event channel</p>
+<p>2. Incoming chunks are fed to a partial-JSON parser that attempts incremental tree construction</p>
+<p>3. Each successfully parsed subtree is mounted immediately for perceived instant response</p>
+<p>4. A React Error Boundary wraps every dynamically mounted component</p>
+<p>5. Framer Motion's layout animation prop is baked into all Organism and Molecule wrappers</p>
 
 <h3>4.3 Action Router</h3>
 
-<p>The router handles four canonical action types:</p>
+<p>The router handles four canonical action types:</p>
 
 <tr><td>Action Type</td><td>Description</td><td>Payload</td></tr>
 
@@ -135,44 +135,44 @@
 <tr><td>REFRESH</td><td>Re-run the current orchestration pipeline</td><td>Same original prompt</td></tr>
 <tr><td>TOOL_CALL</td><td>Invoke a registered backend tool directly</td><td></code>{ tool: string, args: object }<code></td></tr>
 
-<p><strong>Convention:</strong> Direct </code>fetch()<code> calls from component code are forbidden — enforced via ESLint rule </code>alloy/no-direct-fetch<code>.</p>
+<strong>Convention:</strong> Direct </code>fetch()<code> calls from component code are forbidden — enforced via ESLint rule </code>alloy/no-direct-fetch<code>.
 
-<p>---</p>
+<p>---</p>
 
 <h2>5. Layer 2 — Orchestration Engine</h2>
 
-<p>The orchestration engine is the heart of Alloy UI. It can be deployed as:</p>
+<p>The orchestration engine is the heart of Alloy UI. It can be deployed as:</p>
 <li>TypeScript (Node.js / Bun) service</li>
 <li>Embedded in a Tauri Rust binary</li>
 <li>Edge deployment on Cloudflare Workers with Durable Objects</li>
 
 <h3>5.1 The Dual-Phase Pipeline</h3>
 
-<p>The pipeline enforces strict separation between data gathering and UI generation.</p>
+<p>The pipeline enforces strict separation between data gathering and UI generation.</p>
 
-<p></code>`<code></p>
-<p>┌─────────────┐    ┌──────────────────┐    ┌─────────────────┐</p>
-<p>│   REQUEST   │───▶│ CONTEXT RESOLVE  │───▶│  PHASE 1: DATA  │</p>
-<p>│  (User NL)  │    │ (User/Perms/Env) │    │    GATHERING    │</p>
-<p>└─────────────┘    └──────────────────┘    └────────┬────────┘</p>
-<p>                                                    │</p>
-<p>                              ┌─────────────────────┘</p>
-<p>                              ▼</p>
-<p>┌─────────────┐    ┌──────────────────┐    ┌─────────────────┐</p>
-<p>│   STREAM    │◀───│ VALIDATION &     │◀───│  PHASE 2: UI    │</p>
-<p>│  DELIVERY   │    │  SELF-HEALING    │    │   GENERATION    │</p>
-<p>└─────────────┘    └──────────────────┘    └─────────────────┘</p>
-<p></code>`<code></p>
+</code>`<code>
+<p>┌─────────────┐    ┌──────────────────┐    ┌─────────────────┐</p>
+<p>│   REQUEST   │───▶│ CONTEXT RESOLVE  │───▶│  PHASE 1: DATA  │</p>
+<p>│  (User NL)  │    │ (User/Perms/Env) │    │    GATHERING    │</p>
+<p>└─────────────┘    └──────────────────┘    └────────┬────────┘</p>
+<p>                                                    │</p>
+<p>                              ┌─────────────────────┘</p>
+<p>                              ▼</p>
+<p>┌─────────────┐    ┌──────────────────┐    ┌─────────────────┐</p>
+<p>│   STREAM    │◀───│ VALIDATION &     │◀───│  PHASE 2: UI    │</p>
+<p>│  DELIVERY   │    │  SELF-HEALING    │    │   GENERATION    │</p>
+<p>└─────────────┘    └──────────────────┘    └─────────────────┘</p>
+</code>`<code>
 
-<p><strong>Pipeline Stages:</strong></p>
+<strong>Pipeline Stages:</strong>
 
-<p>1. <strong>REQUEST</strong> — User submits natural language prompt with optional conversation context</p>
-<p>2. <strong>CONTEXT RESOLUTION</strong> — Resolve user identity, permissions, ambient state</p>
-<p>3. <strong>PHASE 1: DATA GATHERING</strong> — LLM makes tool calls; engine executes against Tool Registry</p>
-<p>4. <strong>LOADING SIGNAL</strong> — Stream skeleton loading layout immediately</p>
-<p>5. <strong>PHASE 2: UI GENERATION</strong> — LLM produces ONLY valid AlloyLayout JSON</p>
-<p>6. <strong>VALIDATION & SELF-HEALING</strong> — Full validation suite runs; repair loop fires on failure</p>
-<p>7. <strong>STREAMING DELIVERY</strong> — Validated JSON streamed chunk-by-chunk to renderer</p>
+<p>1. <strong>REQUEST</strong> — User submits natural language prompt with optional conversation context</p>
+<p>2. <strong>CONTEXT RESOLUTION</strong> — Resolve user identity, permissions, ambient state</p>
+<p>3. <strong>PHASE 1: DATA GATHERING</strong> — LLM makes tool calls; engine executes against Tool Registry</p>
+<p>4. <strong>LOADING SIGNAL</strong> — Stream skeleton loading layout immediately</p>
+<p>5. <strong>PHASE 2: UI GENERATION</strong> — LLM produces ONLY valid AlloyLayout JSON</p>
+<p>6. <strong>VALIDATION & SELF-HEALING</strong> — Full validation suite runs; repair loop fires on failure</p>
+<p>7. <strong>STREAMING DELIVERY</strong> — Validated JSON streamed chunk-by-chunk to renderer</p>
 
 <h3>5.2 Concurrency & Request Lifecycle</h3>
 
@@ -185,31 +185,31 @@
 
 <h3>5.3 Caching Strategy</h3>
 
-<p>The engine maintains a semantic cache keyed on:</p>
-<p></code>`<code></p>
-<p>hash(normalized_prompt + resolved_permissions + tool_output_fingerprints)</p>
-<p></code>`<code></p>
+<p>The engine maintains a semantic cache keyed on:</p>
+</code>`<code>
+<p>hash(normalized_prompt + resolved_permissions + tool_output_fingerprints)</p>
+</code>`<code>
 
 <li>Cache hits skip both LLM calls</li>
 <li>Per-tool TTL: volatile tools (TTL=0), reference tools (TTL=300s)</li>
 <li>Scoped per user session to prevent cross-contamination</li>
 
-<p>---</p>
+<p>---</p>
 
 <h2>6. Layer 3 — LLM Strategy Layer</h2>
 
 <h3>6.1 The LlmProvider Interface</h3>
 
-<p></code>`<code>typescript</p>
-<p>interface LlmProvider {</p>
-<p>  readonly id: string;</p>
-<p>  processPrompt(req: LlmRequest): AsyncGenerator<string>;</p>
-<p>  estimateTokens(text: string): number;</p>
-<p>  readonly contextWindowTokens: number;</p>
-<p>}</p>
-<p></code>`<code></p>
+</code>`<code>typescript
+<p>interface LlmProvider {</p>
+<p>  readonly id: string;</p>
+<p>  processPrompt(req: LlmRequest): AsyncGenerator<string>;</p>
+<p>  estimateTokens(text: string): number;</p>
+<p>  readonly contextWindowTokens: number;</p>
+<p>}</p>
+</code>`<code>
 
-<p><strong>Key Requirement:</strong> </code>AsyncGenerator<code> return type is mandatory — all providers must stream.</p>
+<strong>Key Requirement:</strong> </code>AsyncGenerator<code> return type is mandatory — all providers must stream.
 
 <h3>6.2 Built-in Providers</h3>
 
@@ -222,46 +222,46 @@
 
 <h3>6.3 Hot-Swapping</h3>
 
-<p>The active provider can be changed via privileged </code>TOOL_CALL<code> action (</code>tool: "alloy.setProvider"<code>) without restarting the server. Transition is atomic: in-flight requests complete against old provider; new requests use new provider.</p>
+<p>The active provider can be changed via privileged </code>TOOL_CALL<code> action (</code>tool: "alloy.setProvider"<code>) without restarting the server. Transition is atomic: in-flight requests complete against old provider; new requests use new provider.</p>
 
-<p>---</p>
+<p>---</p>
 
 <h2>7. Layer 4 — Data & Tool Layer</h2>
 
-<p>Tools are the only mechanism through which the LLM accesses real data.</p>
+<p>Tools are the only mechanism through which the LLM accesses real data.</p>
 
 <h3>7.1 Tool Registration</h3>
 
-<p></code>`<code>typescript</p>
-<p>registerTool({</p>
-<p>  name: "getUserProfile",</p>
-<p>  description: "Returns full profile for a given userId.",</p>
-<p>  parameters: z.object({ userId: z.string().uuid() }),</p>
-<p>  returns: UserProfileSchema,</p>
-<p>  ttl: 300,</p>
-<p>  requiredPermissions: ["profile:read"],</p>
-<p>  execute: async ({ userId }) => db.users.findById(userId),</p>
-<p>});</p>
-<p></code>`<code></p>
+</code>`<code>typescript
+<p>registerTool({</p>
+<p>  name: "getUserProfile",</p>
+<p>  description: "Returns full profile for a given userId.",</p>
+<p>  parameters: z.object({ userId: z.string().uuid() }),</p>
+<p>  returns: UserProfileSchema,</p>
+<p>  ttl: 300,</p>
+<p>  requiredPermissions: ["profile:read"],</p>
+<p>  execute: async ({ userId }) => db.users.findById(userId),</p>
+<p>});</p>
+</code>`<code>
 
 <h3>7.2 Permission Model</h3>
 
-<p>Every tool declares </code>requiredPermissions<code>. The engine:</p>
-<p>1. Resolves active user's permission set at request time</p>
-<p>2. Builds filtered tool manifest</p>
-<p>3. Never offers a tool the user is not authorized to invoke</p>
+<p>Every tool declares </code>requiredPermissions<code>. The engine:</p>
+<p>1. Resolves active user's permission set at request time</p>
+<p>2. Builds filtered tool manifest</p>
+<p>3. Never offers a tool the user is not authorized to invoke</p>
 
-<p>This prevents prompt-injection attacks attempting data exfiltration.</p>
+<p>This prevents prompt-injection attacks attempting data exfiltration.</p>
 
-<p>---</p>
+<p>---</p>
 
 <h2>8. The Alloy Component Model</h2>
 
-<p>Alloy UI enforces a three-tier Atomic hierarchy that is machine-validated.</p>
+<p>Alloy UI enforces a three-tier Atomic hierarchy that is machine-validated.</p>
 
 <h3>8.1 Tier Definitions</h3>
 
-<p>#### Tier 1 — Atoms (Foundations)</p>
+<p>#### Tier 1 — Atoms (Foundations)</p>
 <li>Irreducible, unsplittable UI primitives</li>
 <li>Hold design token system baked in at compile time</li>
 <li>AI cannot alter visual properties; only content and named variants</li>
@@ -269,13 +269,13 @@
 <li><strong>Constraint:</strong> Atoms may not contain other components as children</li>
 <li><strong>A11y:</strong> Mandatory </code>aria<code> property in prop schema</li>
 
-<p>#### Tier 2 — Molecules (Compositions)</p>
+<p>#### Tier 2 — Molecules (Compositions)</p>
 <li>Compose two or more Atoms into reusable, named patterns</li>
 <li>AI orchestrates Molecules as black boxes</li>
 <li><strong>Examples:</strong> StatBadge, UserAvatar, MetricRow, ActionButton, FormField, SearchBar</li>
 <li><strong>Constraint:</strong> May contain Atoms and other Molecules, but not Organisms</li>
 
-<p>#### Tier 3 — Organisms (Functional Blocks)</p>
+<p>#### Tier 3 — Organisms (Functional Blocks)</p>
 <li>Fully functional, data-rich UI sections</li>
 <li>Primary currency the AI spends when constructing layouts</li>
 <li><strong>Examples:</strong> DataTable, KPIBoard, ActivityFeed, ProfileHeader, TicketCard, ChartPanel, FormGroup</li>
@@ -294,43 +294,43 @@
 
 <h3>8.3 The AlloyLayout JSON Schema</h3>
 
-<p></code>`<code>json</p>
-<p>{</p>
-<p>  "schemaVersion": "1.0",</p>
-<p>  "requestId": "uuid",</p>
-<p>  "locale": "en-US",</p>
-<p>  "layout": {</p>
-<p>    "type": "Dashboard",</p>
-<p>    "props": { "title": "Customer Overview" },</p>
-<p>    "children": [</p>
-<p>      {</p>
-<p>        "type": "ProfileHeader",</p>
-<p>        "props": { "name": "Jane Doe", "role": "Admin" }</p>
-<p>      },</p>
-<p>      {</p>
-<p>        "type": "DataTable",</p>
-<p>        "props": { "columns": [...], "rows": [...] },</p>
-<p>        "action": { </p>
-<p>          "type": "TOOL_CALL", </p>
-<p>          "payload": { "tool": "exportCsv", "args": {} } </p>
-<p>        }</p>
-<p>      }</p>
-<p>    ]</p>
-<p>  }</p>
-<p>}</p>
-<p></code>`<code></p>
+</code>`<code>json
+<p>{</p>
+<p>  "schemaVersion": "1.0",</p>
+<p>  "requestId": "uuid",</p>
+<p>  "locale": "en-US",</p>
+<p>  "layout": {</p>
+<p>    "type": "Dashboard",</p>
+<p>    "props": { "title": "Customer Overview" },</p>
+<p>    "children": [</p>
+<p>      {</p>
+<p>        "type": "ProfileHeader",</p>
+<p>        "props": { "name": "Jane Doe", "role": "Admin" }</p>
+<p>      },</p>
+<p>      {</p>
+<p>        "type": "DataTable",</p>
+<p>        "props": { "columns": [...], "rows": [...] },</p>
+<p>        "action": { </p>
+<p>          "type": "TOOL_CALL", </p>
+<p>          "payload": { "tool": "exportCsv", "args": {} } </p>
+<p>        }</p>
+<p>      }</p>
+<p>    ]</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code>
 
-<p>---</p>
+<p>---</p>
 
 <h2>9. Validation & Self-Healing Engine</h2>
 
 <h3>9.1 Validation Pipeline</h3>
 
-<p><strong>Streaming Validation:</strong></p>
+<strong>Streaming Validation:</strong>
 <li>Lightweight structural check as chunks arrive</li>
 <li>Failed chunks buffered; complete response awaited before repair</li>
 
-<p><strong>Final Validation:</strong></p>
+<strong>Final Validation:</strong>
 <li>Full Zod schema validation</li>
 <li>Hallucinated component registry check</li>
 <li>Nesting rules verification</li>
@@ -339,33 +339,33 @@
 
 <h3>9.2 Self-Healing Loop</h3>
 
-<p></code>`<code></p>
-<p>Validation Failure</p>
-<p>       │</p>
-<p>       ▼</p>
-<p>┌──────────────┐</p>
-<p>│ Format Repair │</p>
-<p>│    Prompt     │</p>
-<p>└──────┬───────┘</p>
-<p>       │</p>
-<p>       ▼</p>
-<p>┌──────────────┐</p>
-<p>│  LLM Repair   │</p>
-<p>│ (temp=0.1)   │</p>
-<p>└──────┬───────┘</p>
-<p>       │</p>
-<p>       ▼</p>
-<p>┌──────────────┐     ┌──────────────┐</p>
-<p>│   Validate    │────▶│  Max Attempts │</p>
-<p>│    (Retry)    │     │   Exceeded?   │</p>
-<p>└──────────────┘     └──────┬───────┘</p>
-<p>                            │ Yes</p>
-<p>                            ▼</p>
-<p>                    ┌──────────────┐</p>
-<p>                    │  ErrorLayout  │</p>
-<p>                    │  (Safe Mode)  │</p>
-<p>                    └──────────────┘</p>
-<p></code>`<code></p>
+</code>`<code>
+<p>Validation Failure</p>
+<p>       │</p>
+<p>       ▼</p>
+<p>┌──────────────┐</p>
+<p>│ Format Repair │</p>
+<p>│    Prompt     │</p>
+<p>└──────┬───────┘</p>
+<p>       │</p>
+<p>       ▼</p>
+<p>┌──────────────┐</p>
+<p>│  LLM Repair   │</p>
+<p>│ (temp=0.1)   │</p>
+<p>└──────┬───────┘</p>
+<p>       │</p>
+<p>       ▼</p>
+<p>┌──────────────┐     ┌──────────────┐</p>
+<p>│   Validate    │────▶│  Max Attempts │</p>
+<p>│    (Retry)    │     │   Exceeded?   │</p>
+<p>└──────────────┘     └──────┬───────┘</p>
+<p>                            │ Yes</p>
+<p>                            ▼</p>
+<p>                    ┌──────────────┐</p>
+<p>                    │  ErrorLayout  │</p>
+<p>                    │  (Safe Mode)  │</p>
+<p>                    └──────────────┘</p>
+</code>`<code>
 
 <li>MAX_REPAIR_ATTEMPTS: 3 (default, configurable)</li>
 <li>Repair temperature: 0.1 (reduced creative deviation)</li>
@@ -379,7 +379,7 @@
 <tr><td>Layer 2</td><td>Registry Verification — O(1) lookup for every component type</td></tr>
 <tr><td>Layer 3</td><td>Fuzzy Matching for Repair — Edit distance suggestions in repair prompt</td></tr>
 
-<p>---</p>
+<p>---</p>
 
 <h2>10. Deployment Models</h2>
 
@@ -392,24 +392,24 @@
 
 <h3>10.1 Monorepo Structure</h3>
 
-<p></code>`<code></p>
-<p>apps/</p>
-<p>  web/           — React renderer application</p>
-<p>  desktop/       — Tauri shell</p>
-<p>  edge/          — Cloudflare Worker entry point</p>
-<p>packages/</p>
-<p>  engine/        — Core orchestration engine</p>
-<p>  registry/      — Component registry and Atomic library</p>
-<p>  schema/        — AlloyLayout Zod schemas</p>
-<p>  tools/         — Tool registration helpers</p>
-<p>  telemetry/     — OTel instrumentation</p>
-<p>  i18n/          — Locale bundles</p>
-<p>alloy/</p>
-<p>  prompts/       — Versioned system prompt files</p>
-<p>  evals/         — Automated prompt evaluation suite</p>
-<p></code>``</p>
+</code>`<code>
+<p>apps/</p>
+<p>  web/           — React renderer application</p>
+<p>  desktop/       — Tauri shell</p>
+<p>  edge/          — Cloudflare Worker entry point</p>
+<p>packages/</p>
+<p>  engine/        — Core orchestration engine</p>
+<p>  registry/      — Component registry and Atomic library</p>
+<p>  schema/        — AlloyLayout Zod schemas</p>
+<p>  tools/         — Tool registration helpers</p>
+<p>  telemetry/     — OTel instrumentation</p>
+<p>  i18n/          — Locale bundles</p>
+<p>alloy/</p>
+<p>  prompts/       — Versioned system prompt files</p>
+<p>  evals/         — Automated prompt evaluation suite</p>
+</code>``
 
-<p>---</p>
+<p>---</p>
 
 <h2>11. Related Documents</h2>
 
@@ -421,7 +421,7 @@
 <li>[Security Threat Model](../security/Security_Threat_Model.md)</li>
 <li>[Observability & Telemetry Dictionary](../ops/Observability_Telemetry_Dictionary.md)</li></ul>
 
-<p>---</p>
+<p>---</p>
 
 <h2>12. Document History</h2>
 

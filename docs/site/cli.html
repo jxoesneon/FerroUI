@@ -44,48 +44,48 @@
         <div class="glass-card" style="padding: 4rem; border-radius: 32px;">
             <h1>CLI Usage Guide</h1>
 
-<p><strong>Version:</strong> 1.0  </p>
-<p><strong>Last Updated:</strong> 2025-04-10  </p>
-<p><strong>CLI Version:</strong> 1.0.0  </p>
+<strong>Version:</strong> 1.0  
+<strong>Last Updated:</strong> 2025-04-10  
+<strong>CLI Version:</strong> 1.0.0  
 
-<p>---</p>
+<p>---</p>
 
 <h2>1. Installation</h2>
 
 <h3>Global Installation</h3>
 
-<p>``<code>bash</p>
-<p>npm install -g @alloy/cli</p>
-<p></code>`<code></p>
+<p>``<code>bash</p>
+<p>npm install -g @alloy/cli</p>
+</code>`<code>
 
 <h3>Project-local Installation</h3>
 
-<p></code>`<code>bash</p>
-<p>npm install --save-dev @alloy/cli</p>
-<p></code>`<code></p>
+</code>`<code>bash
+<p>npm install --save-dev @alloy/cli</p>
+</code>`<code>
 
 <h3>Verify Installation</h3>
 
-<p></code>`<code>bash</p>
-<p>alloy --version</p>
+</code>`<code>bash
+<p>alloy --version</p>
 <h1>Output: 1.0.0</h1>
-<p></code>`<code></p>
+</code>`<code>
 
-<p>---</p>
+<p>---</p>
 
 <h2>2. Command Reference</h2>
 
 <h3>2.1 Project Commands</h3>
 
-<p>#### </code>alloy create <project-name><code></p>
+<p>#### </code>alloy create <project-name><code></p>
 
-<p>Create a new Alloy UI project.</p>
+<p>Create a new Alloy UI project.</p>
 
-<p></code>`<code>bash</p>
-<p>alloy create my-app</p>
-<p></code>`<code></p>
+</code>`<code>bash
+<p>alloy create my-app</p>
+</code>`<code>
 
-<p><strong>Options:</strong></p>
+<strong>Options:</strong>
 
 <table class="api-table"><tr><td>Option</td><td>Description</td><td>Default</td></tr>
 
@@ -93,28 +93,28 @@
 <tr><td></code>--pm<code></td><td>Package manager</td><td></code>pnpm<code></td></tr>
 <tr><td></code>--skip-install<code></td><td>Skip dependency installation</td><td></code>false<code></td></tr>
 
-<p><strong>Templates:</strong></p>
+<strong>Templates:</strong>
 <ul class="doc-list"><li></code>default<code> — React + TypeScript + Node.js</li>
 <li></code>minimal<code> — Core framework only</li>
 <li></code>full<code> — With examples and documentation</li>
 
-<p><strong>Example:</strong></p>
+<strong>Example:</strong>
 
-<p></code>`<code>bash</p>
-<p>alloy create my-app --template full --pm npm</p>
-<p></code>`<code></p>
+</code>`<code>bash
+<p>alloy create my-app --template full --pm npm</p>
+</code>`<code>
 
-<p>---</p>
+<p>---</p>
 
-<p>#### </code>alloy dev<code></p>
+<p>#### </code>alloy dev<code></p>
 
-<p>Start the development environment.</p>
+<p>Start the development environment.</p>
 
-<p></code>`<code>bash</p>
-<p>alloy dev</p>
-<p></code>`<code></p>
+</code>`<code>bash
+<p>alloy dev</p>
+</code>`<code>
 
-<p><strong>Options:</strong></p>
+<strong>Options:</strong>
 
 <tr><td>Option</td><td>Description</td><td>Default</td></tr>
 
@@ -123,32 +123,32 @@
 <tr><td></code>--inspector-port<code></td><td>Registry inspector port</td><td></code>3002<code></td></tr>
 <tr><td></code>--no-open<code></td><td>Don't open browser</td><td></code>false<code></td></tr>
 
-<p><strong>Example:</strong></p>
+<strong>Example:</strong>
 
-<p></code>`<code>bash</p>
-<p>alloy dev --port 8080 --no-open</p>
-<p></code>`<code></p>
+</code>`<code>bash
+<p>alloy dev --port 8080 --no-open</p>
+</code>`<code>
 
-<p><strong>What it starts:</strong></p>
+<strong>What it starts:</strong>
 <li>Orchestration engine (API server)</li>
 <li>Layout playground (web UI)</li>
 <li>Registry inspector (component browser)</li>
 <li>Hot reload watcher</li>
 <li>OpenTelemetry exporter (optional)</li>
 
-<p>---</p>
+<p>---</p>
 
 <h3>2.2 Code Generation Commands</h3>
 
-<p>#### </code>alloy generate component <name><code></p>
+<p>#### </code>alloy generate component <name><code></p>
 
-<p>Generate a new component with boilerplate.</p>
+<p>Generate a new component with boilerplate.</p>
 
-<p></code>`<code>bash</p>
-<p>alloy generate component UserCard</p>
-<p></code>`<code></p>
+</code>`<code>bash
+<p>alloy generate component UserCard</p>
+</code>`<code>
 
-<p><strong>Options:</strong></p>
+<strong>Options:</strong>
 
 <tr><td>Option</td><td>Description</td><td>Default</td></tr>
 
@@ -157,40 +157,40 @@
 <tr><td></code>--tests<code></td><td>Include tests</td><td></code>true<code></td></tr>
 <tr><td></code>--dir<code></td><td>Output directory</td><td></code>src/components<code></td></tr>
 
-<p><strong>Tiers:</strong></p>
+<strong>Tiers:</strong>
 <li></code>atom<code> — Irreducible primitive</li>
 <li></code>molecule<code> — Composition of atoms</li>
 <li></code>organism<code> — Functional block</li>
 
-<p><strong>Example:</strong></p>
+<strong>Example:</strong>
 
-<p></code>`<code>bash</p>
-<p>alloy generate component Button --tier atom --stories --tests</p>
-<p></code>`<code></p>
+</code>`<code>bash
+<p>alloy generate component Button --tier atom --stories --tests</p>
+</code>`<code>
 
-<p><strong>Generated files:</strong></p>
+<strong>Generated files:</strong>
 
-<p></code>`<code></p>
-<p>src/components/Button/</p>
-<p>├── index.tsx</p>
-<p>├── schema.ts</p>
-<p>├── types.ts</p>
-<p>├── Button.stories.tsx</p>
-<p>├── Button.test.tsx</p>
-<p>└── README.md</p>
-<p></code>`<code></p>
+</code>`<code>
+<p>src/components/Button/</p>
+<p>├── index.tsx</p>
+<p>├── schema.ts</p>
+<p>├── types.ts</p>
+<p>├── Button.stories.tsx</p>
+<p>├── Button.test.tsx</p>
+<p>└── README.md</p>
+</code>`<code>
 
-<p>---</p>
+<p>---</p>
 
-<p>#### </code>alloy generate tool <name><code></p>
+<p>#### </code>alloy generate tool <name><code></p>
 
-<p>Generate a new data tool.</p>
+<p>Generate a new data tool.</p>
 
-<p></code>`<code>bash</p>
-<p>alloy generate tool getUserData</p>
-<p></code>`<code></p>
+</code>`<code>bash
+<p>alloy generate tool getUserData</p>
+</code>`<code>
 
-<p><strong>Options:</strong></p>
+<strong>Options:</strong>
 
 <tr><td>Option</td><td>Description</td><td>Default</td></tr>
 
@@ -198,46 +198,46 @@
 <tr><td></code>--mock<code></td><td>Include mock implementation</td><td></code>true<code></td></tr>
 <tr><td></code>--dir<code></td><td>Output directory</td><td></code>src/tools<code></td></tr>
 
-<p><strong>Categories:</strong></p>
+<strong>Categories:</strong>
 <li></code>data-fetch<code> — Database/API queries</li>
 <li></code>computation<code> — Data processing</li>
 <li></code>external-api<code> — Third-party integrations</li>
 
-<p><strong>Example:</strong></p>
+<strong>Example:</strong>
 
-<p></code>`<code>bash</p>
-<p>alloy generate tool calculateMetrics --category computation --mock</p>
-<p></code>`<code></p>
+</code>`<code>bash
+<p>alloy generate tool calculateMetrics --category computation --mock</p>
+</code>`<code>
 
-<p>---</p>
+<p>---</p>
 
 <h3>2.3 Development Commands</h3>
 
-<p>#### </code>alloy registry inspect<code></p>
+<p>#### </code>alloy registry inspect<code></p>
 
-<p>Open the registry inspector in browser.</p>
+<p>Open the registry inspector in browser.</p>
 
-<p></code>`<code>bash</p>
-<p>alloy registry inspect</p>
-<p></code>`<code></p>
+</code>`<code>bash
+<p>alloy registry inspect</p>
+</code>`<code>
 
-<p><strong>Features:</strong></p>
+<strong>Features:</strong>
 <li>Browse all registered components</li>
 <li>View prop schemas</li>
 <li>See live previews</li>
 <li>Search and filter</li>
 
-<p>---</p>
+<p>---</p>
 
-<p>#### </code>alloy eval<code></p>
+<p>#### </code>alloy eval<code></p>
 
-<p>Run the prompt evaluation suite.</p>
+<p>Run the prompt evaluation suite.</p>
 
-<p></code>`<code>bash</p>
-<p>alloy eval</p>
-<p></code>`<code></p>
+</code>`<code>bash
+<p>alloy eval</p>
+</code>`<code>
 
-<p><strong>Options:</strong></p>
+<strong>Options:</strong>
 
 <tr><td>Option</td><td>Description</td><td>Default</td></tr>
 
@@ -248,79 +248,79 @@
 <tr><td></code>--format<code></td><td>Output format</td><td></code>console<code></td></tr>
 <tr><td></code>--output<code></td><td>Output file</td><td>-</td></tr>
 
-<p><strong>Formats:</strong></p>
+<strong>Formats:</strong>
 <li></code>console<code> — Terminal output</li>
 <li></code>json<code> — JSON report</li>
 <li></code>html<code> — HTML report</li>
 
-<p><strong>Example:</strong></p>
+<strong>Example:</strong>
 
-<p></code>`<code>bash</p>
-<p>alloy eval --provider openai --model gpt-4 --format html --output report.html</p>
-<p></code>`<code></p>
+</code>`<code>bash
+<p>alloy eval --provider openai --model gpt-4 --format html --output report.html</p>
+</code>`<code>
 
-<p>---</p>
+<p>---</p>
 
 <h3>2.4 Build & Deploy Commands</h3>
 
-<p>#### </code>alloy build<code></p>
+<p>#### </code>alloy build<code></p>
 
-<p>Build the project for production.</p>
+<p>Build the project for production.</p>
 
-<p></code>`<code>bash</p>
-<p>alloy build</p>
-<p></code>`<code></p>
+</code>`<code>bash
+<p>alloy build</p>
+</code>`<code>
 
-<p><strong>Options:</strong></p>
+<strong>Options:</strong>
 
 <tr><td>Option</td><td>Description</td><td>Default</td></tr>
 
 <tr><td></code>--target<code></td><td>Build target</td><td></code>all<code></td></tr>
 <tr><td></code>--analyze<code></td><td>Analyze bundle size</td><td></code>false<code></td></tr>
 
-<p><strong>Targets:</strong></p>
+<strong>Targets:</strong>
 <li></code>web<code> — Static web build</li>
 <li></code>server<code> — Server bundle</li>
 <li></code>edge<code> — Edge worker bundle</li>
 <li></code>all<code> — All targets</li>
 
-<p>---</p>
+<p>---</p>
 
-<p>#### </code>alloy deploy<code></p>
+<p>#### </code>alloy deploy<code></p>
 
-<p>Deploy to configured target.</p>
+<p>Deploy to configured target.</p>
 
-<p></code>`<code>bash</p>
-<p>alloy deploy</p>
-<p></code>`<code></p>
+</code>`<code>bash
+<p>alloy deploy</p>
+</code>`<code>
 
-<p><strong>Options:</strong></p>
+<strong>Options:</strong>
 
 <tr><td>Option</td><td>Description</td><td>Default</td></tr>
 
 <tr><td></code>--target<code></td><td>Deployment target</td><td></code>vercel<code></td></tr>
 <tr><td></code>--preview<code></td><td>Deploy as preview</td><td></code>false<code></td></tr>
 
-<p><strong>Targets:</strong></p>
+<strong>Targets:</strong>
 <li></code>vercel<code> — Vercel deployment</li>
 <li></code>netlify<code> — Netlify deployment</li>
 <li></code>aws<code> — AWS deployment</li>
 <li></code>cloudflare<code> — Cloudflare Workers</li>
 <li></code>docker<code> — Docker image build</li>
 
-<p>---</p>
+<p>---</p>
 
 <h3>2.5 Utility Commands</h3>
 
-<p>#### </code>alloy doctor<code></p>
+<p>#### </code>alloy doctor<code></p>
 
-<p>Diagnose common issues.</p>
+<p>Diagnose common issues.</p>
 
-<p></code>`<code>bash</p>
-<p>alloy doctor</p>
-<p></code>`<code></p>
+</code>`<code>bash
+<p>alloy doctor</p>
+</code>`<code>
 
-<p><strong>Checks:</strong></p>
+<strong>Checks:</strong>
 <li>Node.js version</li>
 <li>Package manager version</li>
 <li>Git repository</li>
@@ -329,34 +329,34 @@
 <li>Environment variables</li>
 <li>API key validity</li>
 
-<p>---</p>
+<p>---</p>
 
-<p>#### </code>alloy update<code></p>
+<p>#### </code>alloy update<code></p>
 
-<p>Update Alloy UI to latest version.</p>
+<p>Update Alloy UI to latest version.</p>
 
-<p></code>`<code>bash</p>
-<p>alloy update</p>
-<p></code>`<code></p>
+</code>`<code>bash
+<p>alloy update</p>
+</code>`<code>
 
-<p><strong>Options:</strong></p>
+<strong>Options:</strong>
 
 <tr><td>Option</td><td>Description</td><td>Default</td></tr>
 
 <tr><td></code>--check<code></td><td>Check for updates only</td><td></code>false<code></td></tr>
 <tr><td></code>--to<code></td><td>Specific version</td><td></code>latest<code></td></tr>
 
-<p>---</p>
+<p>---</p>
 
-<p>#### </code>alloy logs<code></p>
+<p>#### </code>alloy logs<code></p>
 
-<p>View application logs.</p>
+<p>View application logs.</p>
 
-<p></code>`<code>bash</p>
-<p>alloy logs</p>
-<p></code>`<code></p>
+</code>`<code>bash
+<p>alloy logs</p>
+</code>`<code>
 
-<p><strong>Options:</strong></p>
+<strong>Options:</strong>
 
 <tr><td>Option</td><td>Description</td><td>Default</td></tr>
 
@@ -364,74 +364,74 @@
 <tr><td></code>--since<code></td><td>Show logs since time</td><td></code>1h<code></td></tr>
 <tr><td></code>--level<code></td><td>Filter by log level</td><td></code>all<code></td></tr>
 
-<p>---</p>
+<p>---</p>
 
 <h2>3. Configuration</h2>
 
 <h3>3.1 alloy.config.js</h3>
 
-<p>Create </code>alloy.config.js<code> in your project root:</p>
+<p>Create </code>alloy.config.js<code> in your project root:</p>
 
-<p></code>`<code>javascript</p>
-<p>module.exports = {</p>
-<p>  // Framework configuration</p>
-<p>  framework: {</p>
-<p>    schemaVersion: '1.0',</p>
-<p>    defaultProvider: 'openai',</p>
-<p>  },</p>
+</code>`<code>javascript
+<p>module.exports = {</p>
+<p>  // Framework configuration</p>
+<p>  framework: {</p>
+<p>    schemaVersion: '1.0',</p>
+<p>    defaultProvider: 'openai',</p>
+<p>  },</p>
 
-<p>  // Development server</p>
-<p>  dev: {</p>
-<p>    port: 3000,</p>
-<p>    enginePort: 3001,</p>
-<p>    inspectorPort: 3002,</p>
-<p>    hotReload: true,</p>
-<p>  },</p>
+<p>  // Development server</p>
+<p>  dev: {</p>
+<p>    port: 3000,</p>
+<p>    enginePort: 3001,</p>
+<p>    inspectorPort: 3002,</p>
+<p>    hotReload: true,</p>
+<p>  },</p>
 
-<p>  // LLM providers</p>
-<p>  providers: {</p>
-<p>    openai: {</p>
-<p>      apiKey: process.env.OPENAI_API_KEY,</p>
-<p>      model: 'gpt-4',</p>
-<p>    },</p>
-<p>    anthropic: {</p>
-<p>      apiKey: process.env.ANTHROPIC_API_KEY,</p>
-<p>      model: 'claude-3-opus-20240229',</p>
-<p>    },</p>
-<p>    ollama: {</p>
-<p>      baseUrl: 'http://localhost:11434',</p>
-<p>      model: 'llama2',</p>
-<p>    },</p>
-<p>  },</p>
+<p>  // LLM providers</p>
+<p>  providers: {</p>
+<p>    openai: {</p>
+<p>      apiKey: process.env.OPENAI_API_KEY,</p>
+<p>      model: 'gpt-4',</p>
+<p>    },</p>
+<p>    anthropic: {</p>
+<p>      apiKey: process.env.ANTHROPIC_API_KEY,</p>
+<p>      model: 'claude-3-opus-20240229',</p>
+<p>    },</p>
+<p>    ollama: {</p>
+<p>      baseUrl: 'http://localhost:11434',</p>
+<p>      model: 'llama2',</p>
+<p>    },</p>
+<p>  },</p>
 
-<p>  // Component registry</p>
-<p>  registry: {</p>
-<p>    paths: ['./src/components'],</p>
-<p>    exclude: ['**/*.test.tsx', '**/*.stories.tsx'],</p>
-<p>  },</p>
+<p>  // Component registry</p>
+<p>  registry: {</p>
+<p>    paths: ['./src/components'],</p>
+<p>    exclude: ['**/*.test.tsx', '**/*.stories.tsx'],</p>
+<p>  },</p>
 
-<p>  // Tool registry</p>
-<p>  tools: {</p>
-<p>    paths: ['./src/tools'],</p>
-<p>    timeout: 5000,</p>
-<p>  },</p>
+<p>  // Tool registry</p>
+<p>  tools: {</p>
+<p>    paths: ['./src/tools'],</p>
+<p>    timeout: 5000,</p>
+<p>  },</p>
 
-<p>  // Validation</p>
-<p>  validation: {</p>
-<p>    strict: true,</p>
-<p>    maxRepairAttempts: 3,</p>
-<p>  },</p>
+<p>  // Validation</p>
+<p>  validation: {</p>
+<p>    strict: true,</p>
+<p>    maxRepairAttempts: 3,</p>
+<p>  },</p>
 
-<p>  // Telemetry</p>
-<p>  telemetry: {</p>
-<p>    enabled: true,</p>
-<p>    exporter: 'jaeger',</p>
-<p>    jaegerUrl: 'http://localhost:14268',</p>
-<p>  },</p>
-<p>};</p>
-<p></code>`<code></p>
+<p>  // Telemetry</p>
+<p>  telemetry: {</p>
+<p>    enabled: true,</p>
+<p>    exporter: 'jaeger',</p>
+<p>    jaegerUrl: 'http://localhost:14268',</p>
+<p>  },</p>
+<p>};</p>
+</code>`<code>
 
-<p>---</p>
+<p>---</p>
 
 <h2>4. Environment Variables</h2>
 
@@ -452,46 +452,46 @@
 <tr><td></code>ALLOY_CACHE_ENABLED<code></td><td>Enable semantic cache</td><td></code>true<code></td></tr>
 <tr><td></code>ALLOY_TELEMETRY_ENABLED<code></td><td>Enable telemetry</td><td></code>true<code></td></tr>
 
-<p>---</p>
+<p>---</p>
 
 <h2>5. Tips & Tricks</h2>
 
 <h3>5.1 Aliases</h3>
 
-<p>Add to your </code>.bashrc<code> or </code>.zshrc<code>:</p>
+<p>Add to your </code>.bashrc<code> or </code>.zshrc<code>:</p>
 
-<p></code>`<code>bash</p>
-<p>alias ad='alloy dev'</p>
-<p>alias ab='alloy build'</p>
-<p>alias ae='alloy eval'</p>
-<p>alias adoc='alloy doctor'</p>
-<p></code>`<code></p>
+</code>`<code>bash
+<p>alias ad='alloy dev'</p>
+<p>alias ab='alloy build'</p>
+<p>alias ae='alloy eval'</p>
+<p>alias adoc='alloy doctor'</p>
+</code>`<code>
 
 <h3>5.2 NPM Scripts</h3>
 
-<p>Add to your </code>package.json<code>:</p>
+<p>Add to your </code>package.json<code>:</p>
 
-<p></code>`<code>json</p>
-<p>{</p>
-<p>  "scripts": {</p>
-<p>    "dev": "alloy dev",</p>
-<p>    "build": "alloy build",</p>
-<p>    "eval": "alloy eval",</p>
-<p>    "deploy": "alloy deploy"</p>
-<p>  }</p>
-<p>}</p>
-<p></code>`<code></p>
+</code>`<code>json
+<p>{</p>
+<p>  "scripts": {</p>
+<p>    "dev": "alloy dev",</p>
+<p>    "build": "alloy build",</p>
+<p>    "eval": "alloy eval",</p>
+<p>    "deploy": "alloy deploy"</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code>
 
 <h3>5.3 IDE Integration</h3>
 
-<p><strong>VS Code:</strong></p>
+<strong>VS Code:</strong>
 
-<p>Install the Alloy UI extension for:</p>
+<p>Install the Alloy UI extension for:</p>
 <li>Syntax highlighting</li>
 <li>Auto-completion</li>
 <li>Inline documentation</li>
 
-<p>---</p>
+<p>---</p>
 
 <h2>6. Troubleshooting</h2>
 
@@ -506,11 +506,11 @@
 
 <h3>6.2 Debug Mode</h3>
 
-<p></code>`<code>bash</p>
-<p>DEBUG=alloy* alloy dev</p>
-<p></code>``</p>
+</code>`<code>bash
+<p>DEBUG=alloy* alloy dev</p>
+</code>``
 
-<p>---</p>
+<p>---</p>
 
 <h2>7. Related Documents</h2>
 
@@ -518,7 +518,7 @@
 <li>[Core Framework PRD](../product/PRDs/PRD-001-Core-Framework.md)</li>
 <li>[System Architecture Document](../architecture/System_Architecture_Document.md)</li></ul>
 
-<p>---</p>
+<p>---</p>
 
 <h2>8. Document History</h2>
 
