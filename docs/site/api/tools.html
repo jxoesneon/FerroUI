@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tools — Alloy UI Docs</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        .content-area { max-width: 900px; margin: 100px auto; padding: 0 2rem; }
+        .api-table { width: 100%; border-collapse: collapse; margin: 2rem 0; background: rgba(255,255,255,0.02); border-radius: 12px; overflow: hidden; }
+        .api-table th, .api-table td { padding: 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .api-table th { background: rgba(255,255,255,0.05); color: var(--accent-primary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        code { font-family: 'JetBrains Mono', monospace; background: rgba(56, 189, 248, 0.1); color: var(--accent-primary); padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.9em; }
+        h2 { margin-top: 3rem; color: var(--accent-secondary); }
+        h3 { margin-top: 2rem; border-left: 4px solid var(--accent-primary); padding-left: 1rem; }
+        .back-link { display: inline-block; margin-bottom: 2rem; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; }
+        .back-link:hover { color: var(--text-primary); }
+    </style>
+</head>
+<body class="dark-theme">
+    <div class="background-glow"></div>
+    <nav class="glass-nav">
+        <div class="nav-content">
+            <a href="../index.html" class="logo">ALLOY<span>UI</span></a>
+            <div class="nav-links">
+                <a href="../index.html" class="nav-link">Home</a>
+                <a href="https://github.com/jxoesneon/Alloy" class="nav-link">GitHub</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="content-area">
+        <a href="../index.html" class="back-link">&larr; Back to Overview</a>
+        <div class="glass-card" style="padding: 3rem; border-radius: 24px;">
+            <h1>Tool API Reference</h1><p>Documentation for all registered backend tools.</p><h3>getSalesMetrics</h3><p>Returns revenue, orders, and conversion data.</p><strong>Parameters:</strong><pre><code>{ "type": "object", "properties": { ... } }</code></pre><h3>listUsers</h3><p>Retrieves a list of users with optional filtering.</p><strong>Parameters:</strong><pre><code>{ "type": "object", "properties": { ... } }</code></pre><h3>getUserProfile</h3><p>Returns detailed information for a specific user.</p><strong>Parameters:</strong><pre><code>{ "type": "object", "properties": { ... } }</code></pre><h3>updateTicket</h3><p>Updates the status or priority of a support ticket.</p><strong>Parameters:</strong><pre><code>{ "type": "object", "properties": { ... } }</code></pre>
+        </div>
+    </main>
+
+    <footer class="glass-footer">
+        <p>&copy; 2026 Alloy Project Team. Built with Liquid Mercury standards.</p>
+    </footer>
+</body>
+</html>
