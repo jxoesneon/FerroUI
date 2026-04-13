@@ -14,8 +14,12 @@ export const TextSchema = z.object({
   }).optional(),
 }).describe('Renders text content with variant and color.');
 
+const HEADING_MAP: Record<string, keyof React.JSX.IntrinsicElements> = {
+  heading1: 'h1', heading2: 'h2', heading3: 'h3',
+};
+
 export const Text: React.FC<z.infer<typeof TextSchema>> = ({ content, variant = 'body', color = 'default' }) => {
-  const Tag = variant.startsWith('heading') ? (`h${variant.replace('heading', '')}` as keyof JSX.IntrinsicElements) : 'p';
+  const Tag = HEADING_MAP[variant] ?? 'p';
   return React.createElement(Tag, { className: `alloy-text alloy-text--${variant} alloy-text--${color}` }, content);
 };
 

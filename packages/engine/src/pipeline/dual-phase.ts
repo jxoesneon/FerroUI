@@ -92,7 +92,10 @@ ${toolManifest}
     temperature: 0,
   };
 
-  const phase1Response = await provider.completePrompt(phase1Request);
+  const phase1Response = await withLlmCall(
+    { providerId: provider.id, model: provider.id },
+    async () => provider.completePrompt(phase1Request),
+  );
   
   let toolCalls: any[] = [];
   try {

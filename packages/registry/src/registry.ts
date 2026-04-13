@@ -40,7 +40,9 @@ export class ComponentRegistry {
     const versions = this.components.get(name)!;
     
     if (versions.has(version)) {
-      throw new Error(`Component '${name}' with version ${version} is already registered.`);
+      // Idempotent: silently skip if same name+version already registered.
+      // App-level overrides should use a higher version number.
+      return;
     }
     
     const entry: RegistryEntry = {

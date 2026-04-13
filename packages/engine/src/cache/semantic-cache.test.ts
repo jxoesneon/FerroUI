@@ -24,7 +24,7 @@ describe('SemanticCache — dataClassification routing', () => {
   it('caches PUBLIC outputs with 300s TTL', async () => {
     const layout = makeLayout('pub-layout');
     const toolOutputs = { weather: { result: 'sunny', classification: 'PUBLIC' } };
-    await cache.set('hello', [], 'u1', toolOutputs, layout);
+    await cache.set('hello', [], 'u1', toolOutputs, layout, 'PUBLIC');
     const hit = await cache.get('hello', [], 'u1', toolOutputs);
     expect(hit?.requestId).toBe('pub-layout');
   });
@@ -32,7 +32,7 @@ describe('SemanticCache — dataClassification routing', () => {
   it('caches INTERNAL outputs with 60s TTL', async () => {
     const layout = makeLayout('int-layout');
     const toolOutputs = { getUserData: { result: 'data', classification: 'INTERNAL' } };
-    await cache.set('hello', [], 'u1', toolOutputs, layout);
+    await cache.set('hello', [], 'u1', toolOutputs, layout, 'INTERNAL');
     const hit = await cache.get('hello', [], 'u1', toolOutputs);
     expect(hit?.requestId).toBe('int-layout');
   });
@@ -40,7 +40,7 @@ describe('SemanticCache — dataClassification routing', () => {
   it('never caches RESTRICTED outputs', async () => {
     const layout = makeLayout('res-layout');
     const toolOutputs = { sensitiveData: { result: 'secret', classification: 'RESTRICTED' } };
-    await cache.set('hello', [], 'u1', toolOutputs, layout);
+    await cache.set('hello', [], 'u1', toolOutputs, layout, 'RESTRICTED');
     const miss = await cache.get('hello', [], 'u1', toolOutputs);
     expect(miss).toBeUndefined();
   });
@@ -48,7 +48,7 @@ describe('SemanticCache — dataClassification routing', () => {
   it('PUBLIC cache is shared across users (same key)', async () => {
     const layout = makeLayout('shared-layout');
     const toolOutputs = { news: { result: 'headline', classification: 'PUBLIC' } };
-    await cache.set('latest news', [], 'user-a', toolOutputs, layout);
+    await cache.set('latest news', [], 'user-a', toolOutputs, layout, 'PUBLIC');
     const hit = await cache.get('latest news', [], 'user-b', toolOutputs);
     expect(hit?.requestId).toBe('shared-layout');
   });
@@ -56,7 +56,7 @@ describe('SemanticCache — dataClassification routing', () => {
   it('INTERNAL cache is user-scoped (different key per user)', async () => {
     const layout = makeLayout('internal-layout');
     const toolOutputs = { profile: { result: 'private', classification: 'INTERNAL' } };
-    await cache.set('my profile', [], 'user-a', toolOutputs, layout);
+    await cache.set('my profile', [], 'user-a', toolOutputs, layout, 'INTERNAL');
     const miss = await cache.get('my profile', [], 'user-b', toolOutputs);
     expect(miss).toBeUndefined();
   });
@@ -67,7 +67,7 @@ describe('SemanticCache — dataClassification routing', () => {
       news: { result: 'headline', classification: 'PUBLIC' },
       ssn: { result: '***-**-1234', classification: 'RESTRICTED' },
     };
-    await cache.set('mixed', [], 'u1', toolOutputs, layout);
+    await cache.set('mixed', [], 'u1', toolOutputs, layout, 'RESTRICTED');
     const miss = await cache.get('mixed', [], 'u1', toolOutputs);
     expect(miss).toBeUndefined();
   });
