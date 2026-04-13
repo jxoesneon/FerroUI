@@ -14,8 +14,8 @@
     "@alloy/engine": "workspace:*"
   },
   "devDependencies": {
-    "wrangler": "^4.0.0",
-    "@cloudflare/workers-types": "^4.20250403.0",
-    "typescript": "^6.0.0"
+    "@cloudflare/workers-types": "^4.20260413.1",
+    "typescript": "^6.0.2",
+    "wrangler": "^4.82.0"
   }
 }
