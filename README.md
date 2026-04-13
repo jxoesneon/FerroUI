@@ -21,9 +21,13 @@ Core libraries and shared logic:
 - `engine/`: The central Alloy orchestration engine.
 - `registry/`: Component registry and atomic UI primitives.
 - `schema/`: Zod-based AlloyLayout schemas.
+- `cli/`: Alloy command-line development tools.
 - `tools/`: Tool registration and execution helpers.
 - `telemetry/`: OpenTelemetry instrumentation.
 - `i18n/`: Internationalization and locale bundles.
+- `config/`: Shared linting and TypeScript configurations.
+- `shared/`: Common internal utilities.
+- `tokens/`: Design token logic and style-engine.
 
 ### Applications (`apps/`)
 Deployment-specific entry points:

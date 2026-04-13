@@ -1,0 +1,22 @@
+[
+  {
+    "prompt": "Show me a dashboard with KPIs for revenue and churn",
+    "description": "KPI Dashboard (Revenue/Churn)",
+    "latencyThresholdMs": 5000
+  },
+  {
+    "prompt": "Display user analytics for the last week with a chart",
+    "description": "User Analytics Chart",
+    "latencyThresholdMs": 5000
+  },
+  {
+    "prompt": "Create a sales overview for North America",
+    "description": "Sales Overview (Regional)",
+    "latencyThresholdMs": 5000
+  },
+  {
+    "prompt": "Show a summary of all pending support tickets",
+    "description": "Support Tickets Summary",
+    "latencyThresholdMs": 3000
+  }
+]

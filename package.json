@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "dev": "pnpm run -r dev",
     "typecheck": "tsc --build packages/engine/tsconfig.json",
-    "tokens:build": "node --experimental-strip-types tokens/build.ts"
+    "tokens:build": "node --experimental-strip-types scripts/build-tokens.ts"
   },
   "keywords": [
     "ai",
