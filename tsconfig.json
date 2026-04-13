@@ -18,7 +18,8 @@
       "@alloy/schema": ["./packages/schema/dist"],
       "@alloy/tools": ["./packages/tools/dist"],
       "@alloy/telemetry": ["./packages/telemetry/dist"],
-      "@alloy/i18n": ["./packages/i18n/dist"]
+      "@alloy/i18n": ["./packages/i18n/dist"],
+      "@alloy/renderer": ["./packages/renderer/dist"]
     }
   },
   "files": [],
@@ -28,6 +29,7 @@
     { "path": "packages/registry" },
     { "path": "packages/tools" },
     { "path": "packages/i18n" },
+    { "path": "packages/renderer" },
     { "path": "packages/engine" }
   ],
   "exclude": ["node_modules", "dist"]
