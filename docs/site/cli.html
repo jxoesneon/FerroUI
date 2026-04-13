@@ -11,24 +11,28 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <style>
         .content-area { max-width: 1100px; margin: 100px auto; padding: 0 2rem; }
-        .api-table { width: 100%; border-collapse: collapse; margin: 2.5rem 0; background: rgba(255,255,255,0.02); border-radius: 16px; overflow: hidden; border: 1px solid var(--card-border); table-layout: fixed; }
-        .api-table th, .api-table td { padding: 1.25rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); word-wrap: break-word; vertical-align: top; }
+        .table-wrapper { overflow-x: auto; margin: 2.5rem 0; border-radius: 16px; border: 1px solid var(--card-border); background: rgba(255,255,255,0.02); }
+        .api-table { width: 100%; border-collapse: collapse; table-layout: auto; }
+        .api-table th, .api-table td { padding: 1.25rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .api-table th { background: rgba(255,255,255,0.05); color: var(--accent-primary); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; }
         .api-table tr:last-child td { border-bottom: none; }
         code { font-family: 'JetBrains Mono', monospace; background: rgba(56, 189, 248, 0.1); color: var(--accent-primary); padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.85em; }
         pre { background: #0f172a; padding: 2rem; border-radius: 16px; overflow-x: auto; margin: 2rem 0; border: 1px solid var(--card-border); box-shadow: inset 0 2px 4px rgba(0,0,0,0.3); }
         pre code { background: none; color: #cbd5e1; padding: 0; font-size: 0.9rem; line-height: 1.5; white-space: pre; }
-        h1 { font-size: 3rem; margin-bottom: 2rem; }
+        h1 { font-size: 3rem; margin-bottom: 2rem; letter-spacing: -0.02em; }
         h2 { margin-top: 5rem; color: var(--text-primary); border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.75rem; font-size: 1.75rem; }
         h3 { margin-top: 3rem; color: var(--accent-primary); font-size: 1.25rem; }
         .doc-list { margin: 1.5rem 0; padding-left: 1.5rem; list-style-type: none; }
         .doc-list li { margin-bottom: 0.75rem; color: var(--text-secondary); position: relative; padding-left: 1.5rem; }
         .doc-list li::before { content: "→"; position: absolute; left: 0; color: var(--accent-primary); font-weight: bold; }
+        .doc-hr { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 4rem 0; }
+        .quote-wrapper { border-left: 4px solid var(--accent-secondary); background: rgba(129, 140, 248, 0.05); padding: 1rem 2rem; margin: 2rem 0; border-radius: 0 12px 12px 0; }
+        blockquote { color: var(--text-secondary); font-style: italic; font-size: 1.1rem; }
         .back-link { display: inline-block; margin-bottom: 3rem; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
         .back-link:hover { color: var(--accent-primary); }
         .doc-inline-link { color: var(--accent-primary); text-decoration: none; border-bottom: 1px solid rgba(56, 189, 248, 0.2); transition: all 0.2s; }
         .doc-inline-link:hover { border-bottom-color: var(--accent-primary); background: rgba(56, 189, 248, 0.05); }
-        p { margin: 1.5rem 0; color: var(--text-secondary); font-size: 1.05rem; line-height: 1.7; }
+        p { margin: 1.2rem 0; color: var(--text-secondary); font-size: 1.05rem; line-height: 1.7; }
         strong { color: var(--text-primary); font-weight: 600; }
     </style>
 </head>
@@ -54,7 +58,7 @@
 <strong>Last Updated:</strong> 2025-04-10  
 <strong>CLI Version:</strong> 1.0.0  
 
-<p>---</p>
+<hr class="doc-hr">
 
 <h2>1. Installation</h2>
 
@@ -77,7 +81,7 @@
 <h1>Output: 1.0.0</h1>
 </code>`<code>
 
-<p>---</p>
+<hr class="doc-hr">
 
 <h2>2. Command Reference</h2>
 
@@ -93,7 +97,7 @@
 
 <strong>Options:</strong>
 
-<table class="api-table"><tr><th>Option</th><th>Description</th><th>Default</th></tr><tr><td></code>--template<code></td><td>Project template</td><td></code>default<code></td></tr><tr><td></code>--pm<code></td><td>Package manager</td><td></code>pnpm<code></td></tr><tr><td></code>--skip-install<code></td><td>Skip dependency installation</td><td></code>false<code></td></tr></table>
+<div class="table-wrapper"><table class="api-table"><tr><th>Option</th><th>Description</th><th>Default</th></tr><tr><td></code>--template<code></td><td>Project template</td><td></code>default<code></td></tr><tr><td></code>--pm<code></td><td>Package manager</td><td></code>pnpm<code></td></tr><tr><td></code>--skip-install<code></td><td>Skip dependency installation</td><td></code>false<code></td></tr></table></div>
 
 <strong>Templates:</strong><ul class="doc-list"><li></code>default<code> — React + TypeScript + Node.js</li></ul><ul class="doc-list"><li></code>minimal<code> — Core framework only</li></ul><ul class="doc-list"><li></code>full<code> — With examples and documentation</li></ul>
 
@@ -103,7 +107,7 @@
 <p>alloy create my-app --template full --pm npm</p>
 </code>`<code>
 
-<p>---</p>
+<hr class="doc-hr">
 
 <p>#### </code>alloy dev<code></p>
 
@@ -115,7 +119,7 @@
 
 <strong>Options:</strong>
 
-<table class="api-table"><tr><th>Option</th><th>Description</th><th>Default</th></tr><tr><td></code>--port<code></td><td>Playground port</td><td></code>3000<code></td></tr><tr><td></code>--engine-port<code></td><td>Engine port</td><td></code>3001<code></td></tr><tr><td></code>--inspector-port<code></td><td>Registry inspector port</td><td></code>3002<code></td></tr><tr><td></code>--no-open<code></td><td>Don't open browser</td><td></code>false<code></td></tr></table>
+<div class="table-wrapper"><table class="api-table"><tr><th>Option</th><th>Description</th><th>Default</th></tr><tr><td></code>--port<code></td><td>Playground port</td><td></code>3000<code></td></tr><tr><td></code>--engine-port<code></td><td>Engine port</td><td></code>3001<code></td></tr><tr><td></code>--inspector-port<code></td><td>Registry inspector port</td><td></code>3002<code></td></tr><tr><td></code>--no-open<code></td><td>Don't open browser</td><td></code>false<code></td></tr></table></div>
 
 <strong>Example:</strong>
 
@@ -125,7 +129,7 @@
 
 <strong>What it starts:</strong><ul class="doc-list"><li>Orchestration engine (API server)</li></ul><ul class="doc-list"><li>Layout playground (web UI)</li></ul><ul class="doc-list"><li>Registry inspector (component browser)</li></ul><ul class="doc-list"><li>Hot reload watcher</li></ul><ul class="doc-list"><li>OpenTelemetry exporter (optional)</li></ul>
 
-<p>---</p>
+<hr class="doc-hr">
 
 <h3>2.2 Code Generation Commands</h3>
 
@@ -139,7 +143,7 @@
 
 <strong>Options:</strong>
 
-<table class="api-table"><tr><th>Option</th><th>Description</th><th>Default</th></tr><tr><td></code>--tier<code></td><td>Atomic tier</td><td></code>molecule<code></td></tr><tr><td></code>--stories<code></td><td>Include Storybook stories</td><td></code>true<code></td></tr><tr><td></code>--tests<code></td><td>Include tests</td><td></code>true<code></td></tr><tr><td></code>--dir<code></td><td>Output directory</td><td></code>src/components<code></td></tr></table>
+<div class="table-wrapper"><table class="api-table"><tr><th>Option</th><th>Description</th><th>Default</th></tr><tr><td></code>--tier<code></td><td>Atomic tier</td><td></code>molecule<code></td></tr><tr><td></code>--stories<code></td><td>Include Storybook stories</td><td></code>true<code></td></tr><tr><td></code>--tests<code></td><td>Include tests</td><td></code>true<code></td></tr><tr><td></code>--dir<code></td><td>Output directory</td><td></code>src/components<code></td></tr></table></div>
 
 <strong>Tiers:</strong><ul class="doc-list"><li></code>atom<code> — Irreducible primitive</li></ul><ul class="doc-list"><li></code>molecule<code> — Composition of atoms</li></ul><ul class="doc-list"><li></code>organism<code> — Functional block</li></ul>
 
@@ -161,7 +165,7 @@
 <p>└── README.md</p>
 </code>`<code>
 
-<p>---</p>
+<hr class="doc-hr">
 
 <p>#### </code>alloy generate tool <name><code></p>
 
@@ -173,7 +177,7 @@
 
 <strong>Options:</strong>
 
-<table class="api-table"><tr><th>Option</th><th>Description</th><th>Default</th></tr><tr><td></code>--category<code></td><td>Tool category</td><td></code>data-fetch<code></td></tr><tr><td></code>--mock<code></td><td>Include mock implementation</td><td></code>true<code></td></tr><tr><td></code>--dir<code></td><td>Output directory</td><td></code>src/tools<code></td></tr></table>
+<div class="table-wrapper"><table class="api-table"><tr><th>Option</th><th>Description</th><th>Default</th></tr><tr><td></code>--category<code></td><td>Tool category</td><td></code>data-fetch<code></td></tr><tr><td></code>--mock<code></td><td>Include mock implementation</td><td></code>true<code></td></tr><tr><td></code>--dir<code></td><td>Output directory</td><td></code>src/tools<code></td></tr></table></div>
 
 <strong>Categories:</strong><ul class="doc-list"><li></code>data-fetch<code> — Database/API queries</li></ul><ul class="doc-list"><li></code>computation<code> — Data processing</li></ul><ul class="doc-list"><li></code>external-api<code> — Third-party integrations</li></ul>
 
@@ -183,7 +187,7 @@
 <p>alloy generate tool calculateMetrics --category computation --mock</p>
 </code>`<code>
 
-<p>---</p>
+<hr class="doc-hr">
 
 <h3>2.3 Development Commands</h3>
 
@@ -197,7 +201,7 @@
 
 <strong>Features:</strong><ul class="doc-list"><li>Browse all registered components</li></ul><ul class="doc-list"><li>View prop schemas</li></ul><ul class="doc-list"><li>See live previews</li></ul><ul class="doc-list"><li>Search and filter</li></ul>
 
-<p>---</p>
+<hr class="doc-hr">
 
 <p>#### </code>alloy eval<code></p>
 
@@ -209,7 +213,7 @@
 
 <strong>Options:</strong>
 
-<table class="api-table"><tr><th>Option</th><th>Description</th><th>Default</th></tr><tr><td></code>--prompt-version<code></td><td>Prompt version to test</td><td></code>current<code></td></tr><tr><td></code>--provider<code></td><td>LLM provider</td><td></code>config default<code></td></tr><tr><td></code>--model<code></td><td>LLM model</td><td></code>provider default<code></td></tr><tr><td></code>--category<code></td><td>Test category</td><td></code>all<code></td></tr><tr><td></code>--format<code></td><td>Output format</td><td></code>console<code></td></tr><tr><td></code>--output<code></td><td>Output file</td><td>-</td></tr></table>
+<div class="table-wrapper"><table class="api-table"><tr><th>Option</th><th>Description</th><th>Default</th></tr><tr><td></code>--prompt-version<code></td><td>Prompt version to test</td><td></code>current<code></td></tr><tr><td></code>--provider<code></td><td>LLM provider</td><td></code>config default<code></td></tr><tr><td></code>--model<code></td><td>LLM model</td><td></code>provider default<code></td></tr><tr><td></code>--category<code></td><td>Test category</td><td></code>all<code></td></tr><tr><td></code>--format<code></td><td>Output format</td><td></code>console<code></td></tr><tr><td></code>--output<code></td><td>Output file</td><td>-</td></tr></table></div>
 
 <strong>Formats:</strong><ul class="doc-list"><li></code>console<code> — Terminal output</li></ul><ul class="doc-list"><li></code>json<code> — JSON report</li></ul><ul class="doc-list"><li></code>html<code> — HTML report</li></ul>
 
@@ -219,7 +223,7 @@
 <p>alloy eval --provider openai --model gpt-4 --format html --output report.html</p>
 </code>`<code>
 
-<p>---</p>
+<hr class="doc-hr">
 
 <h3>2.4 Build & Deploy Commands</h3>
 
@@ -233,11 +237,11 @@
 
 <strong>Options:</strong>
 
-<table class="api-table"><tr><th>Option</th><th>Description</th><th>Default</th></tr><tr><td></code>--target<code></td><td>Build target</td><td></code>all<code></td></tr><tr><td></code>--analyze<code></td><td>Analyze bundle size</td><td></code>false<code></td></tr></table>
+<div class="table-wrapper"><table class="api-table"><tr><th>Option</th><th>Description</th><th>Default</th></tr><tr><td></code>--target<code></td><td>Build target</td><td></code>all<code></td></tr><tr><td></code>--analyze<code></td><td>Analyze bundle size</td><td></code>false<code></td></tr></table></div>
 
 <strong>Targets:</strong><ul class="doc-list"><li></code>web<code> — Static web build</li></ul><ul class="doc-list"><li></code>server<code> — Server bundle</li></ul><ul class="doc-list"><li></code>edge<code> — Edge worker bundle</li></ul><ul class="doc-list"><li></code>all<code> — All targets</li></ul>
 
-<p>---</p>
+<hr class="doc-hr">
 
 <p>#### </code>alloy deploy<code></p>
 
@@ -249,11 +253,11 @@
 
 <strong>Options:</strong>
 
-<table class="api-table"><tr><th>Option</th><th>Description</th><th>Default</th></tr><tr><td></code>--target<code></td><td>Deployment target</td><td></code>vercel<code></td></tr><tr><td></code>--preview<code></td><td>Deploy as preview</td><td></code>false<code></td></tr></table>
+<div class="table-wrapper"><table class="api-table"><tr><th>Option</th><th>Description</th><th>Default</th></tr><tr><td></code>--target<code></td><td>Deployment target</td><td></code>vercel<code></td></tr><tr><td></code>--preview<code></td><td>Deploy as preview</td><td></code>false<code></td></tr></table></div>
 
 <strong>Targets:</strong><ul class="doc-list"><li></code>vercel<code> — Vercel deployment</li></ul><ul class="doc-list"><li></code>netlify<code> — Netlify deployment</li></ul><ul class="doc-list"><li></code>aws<code> — AWS deployment</li></ul><ul class="doc-list"><li></code>cloudflare<code> — Cloudflare Workers</li></ul><ul class="doc-list"><li></code>docker<code> — Docker image build</li></ul>
 
-<p>---</p>
+<hr class="doc-hr">
 
 <h3>2.5 Utility Commands</h3>
 
@@ -267,7 +271,7 @@
 
 <strong>Checks:</strong><ul class="doc-list"><li>Node.js version</li></ul><ul class="doc-list"><li>Package manager version</li></ul><ul class="doc-list"><li>Git repository</li></ul><ul class="doc-list"><li>TypeScript configuration</li></ul><ul class="doc-list"><li>ESLint configuration</li></ul><ul class="doc-list"><li>Environment variables</li></ul><ul class="doc-list"><li>API key validity</li></ul>
 
-<p>---</p>
+<hr class="doc-hr">
 
 <p>#### </code>alloy update<code></p>
 
@@ -279,9 +283,9 @@
 
 <strong>Options:</strong>
 
-<table class="api-table"><tr><th>Option</th><th>Description</th><th>Default</th></tr><tr><td></code>--check<code></td><td>Check for updates only</td><td></code>false<code></td></tr><tr><td></code>--to<code></td><td>Specific version</td><td></code>latest<code></td></tr></table>
+<div class="table-wrapper"><table class="api-table"><tr><th>Option</th><th>Description</th><th>Default</th></tr><tr><td></code>--check<code></td><td>Check for updates only</td><td></code>false<code></td></tr><tr><td></code>--to<code></td><td>Specific version</td><td></code>latest<code></td></tr></table></div>
 
-<p>---</p>
+<hr class="doc-hr">
 
 <p>#### </code>alloy logs<code></p>
 
@@ -293,9 +297,9 @@
 
 <strong>Options:</strong>
 
-<table class="api-table"><tr><th>Option</th><th>Description</th><th>Default</th></tr><tr><td></code>--follow<code></td><td>Follow logs in real-time</td><td></code>false<code></td></tr><tr><td></code>--since<code></td><td>Show logs since time</td><td></code>1h<code></td></tr><tr><td></code>--level<code></td><td>Filter by log level</td><td></code>all<code></td></tr></table>
+<div class="table-wrapper"><table class="api-table"><tr><th>Option</th><th>Description</th><th>Default</th></tr><tr><td></code>--follow<code></td><td>Follow logs in real-time</td><td></code>false<code></td></tr><tr><td></code>--since<code></td><td>Show logs since time</td><td></code>1h<code></td></tr><tr><td></code>--level<code></td><td>Filter by log level</td><td></code>all<code></td></tr></table></div>
 
-<p>---</p>
+<hr class="doc-hr">
 
 <h2>3. Configuration</h2>
 
@@ -338,7 +342,7 @@
 <p>  // Component registry</p>
 <p>  registry: {</p>
 <p>    paths: ['./src/components'],</p>
-<p>    exclude: ['**/*.test.tsx', '**/*.stories.tsx'],</p>
+<p>    exclude: ['*<em>/</em>.test.tsx', '*<em>/</em>.stories.tsx'],</p>
 <p>  },</p>
 
 <p>  // Tool registry</p>
@@ -362,19 +366,19 @@
 <p>};</p>
 </code>`<code>
 
-<p>---</p>
+<hr class="doc-hr">
 
 <h2>4. Environment Variables</h2>
 
 <h3>4.1 Required Variables</h3>
 
-<table class="api-table"><tr><th>Variable</th><th>Description</th><th>Example</th></tr><tr><td></code>OPENAI_API_KEY<code></td><td>OpenAI API key</td><td></code>sk-...<code></td></tr><tr><td></code>ANTHROPIC_API_KEY<code></td><td>Anthropic API key</td><td></code>sk-ant-...<code></td></tr><tr><td></code>GOOGLE_API_KEY<code></td><td>Google API key</td><td></code>...<code></td></tr></table>
+<div class="table-wrapper"><table class="api-table"><tr><th>Variable</th><th>Description</th><th>Example</th></tr><tr><td></code>OPENAI_API_KEY<code></td><td>OpenAI API key</td><td></code>sk-...<code></td></tr><tr><td></code>ANTHROPIC_API_KEY<code></td><td>Anthropic API key</td><td></code>sk-ant-...<code></td></tr><tr><td></code>GOOGLE_API_KEY<code></td><td>Google API key</td><td></code>...<code></td></tr></table></div>
 
 <h3>4.2 Optional Variables</h3>
 
-<table class="api-table"><tr><th>Variable</th><th>Description</th><th>Default</th></tr><tr><td></code>ALLOY_PROMPT_VERSION<code></td><td>System prompt version</td><td></code>1.0<code></td></tr><tr><td></code>ALLOY_LOG_LEVEL<code></td><td>Log level</td><td></code>info<code></td></tr><tr><td></code>ALLOY_CACHE_ENABLED<code></td><td>Enable semantic cache</td><td></code>true<code></td></tr><tr><td></code>ALLOY_TELEMETRY_ENABLED<code></td><td>Enable telemetry</td><td></code>true<code></td></tr></table>
+<div class="table-wrapper"><table class="api-table"><tr><th>Variable</th><th>Description</th><th>Default</th></tr><tr><td></code>ALLOY_PROMPT_VERSION<code></td><td>System prompt version</td><td></code>1.0<code></td></tr><tr><td></code>ALLOY_LOG_LEVEL<code></td><td>Log level</td><td></code>info<code></td></tr><tr><td></code>ALLOY_CACHE_ENABLED<code></td><td>Enable semantic cache</td><td></code>true<code></td></tr><tr><td></code>ALLOY_TELEMETRY_ENABLED<code></td><td>Enable telemetry</td><td></code>true<code></td></tr></table></div>
 
-<p>---</p>
+<hr class="doc-hr">
 
 <h2>5. Tips & Tricks</h2>
 
@@ -410,13 +414,13 @@
 
 <p>Install the Alloy UI extension for:<ul class="doc-list"><li>Syntax highlighting</li></ul><ul class="doc-list"><li>Auto-completion</li></ul><ul class="doc-list"><li>Inline documentation</li></ul></p>
 
-<p>---</p>
+<hr class="doc-hr">
 
 <h2>6. Troubleshooting</h2>
 
 <h3>6.1 Common Errors</h3>
 
-<table class="api-table"><tr><th>Error</th><th>Cause</th><th>Solution</th></tr><tr><td></code>EADDRINUSE<code></td><td>Port already in use</td><td>Change port or kill process</td></tr><tr><td></code>ENOTFOUND<code></td><td>DNS resolution failed</td><td>Check internet connection</td></tr><tr><td></code>ECONNREFUSED<code></td><td>Service not running</td><td>Start required services</td></tr><tr><td></code>UNAUTHORIZED<code></td><td>Invalid API key</td><td>Check environment variables</td></tr></table>
+<div class="table-wrapper"><table class="api-table"><tr><th>Error</th><th>Cause</th><th>Solution</th></tr><tr><td></code>EADDRINUSE<code></td><td>Port already in use</td><td>Change port or kill process</td></tr><tr><td></code>ENOTFOUND<code></td><td>DNS resolution failed</td><td>Check internet connection</td></tr><tr><td></code>ECONNREFUSED<code></td><td>Service not running</td><td>Start required services</td></tr><tr><td></code>UNAUTHORIZED<code></td><td>Invalid API key</td><td>Check environment variables</td></tr></table></div>
 
 <h3>6.2 Debug Mode</h3>
 
@@ -424,15 +428,15 @@
 <p>DEBUG=alloy* alloy dev</p>
 </code>``
 
-<p>---</p>
+<hr class="doc-hr">
 
 <h2>7. Related Documents</h2><ul class="doc-list"><li><a href="./Quickstart_Developer_Onboarding.md" class="doc-inline-link">Quickstart & Developer Onboarding</a></li></ul><ul class="doc-list"><li><a href="../product/PRDs/PRD-001-Core-Framework.md" class="doc-inline-link">Core Framework PRD</a></li></ul><ul class="doc-list"><li><a href="../architecture/System_Architecture_Document.md" class="doc-inline-link">System Architecture Document</a></li></ul>
 
-<p>---</p>
+<hr class="doc-hr">
 
 <h2>8. Document History</h2>
 
-<table class="api-table"><tr><th>Version</th><th>Date</th><th>Author</th><th>Changes</th></tr><tr><td>1.0</td><td>2025-04-10</td><td>DX Team</td><td>Initial release</td></tr></table>
+<div class="table-wrapper"><table class="api-table"><tr><th>Version</th><th>Date</th><th>Author</th><th>Changes</th></tr><tr><td>1.0</td><td>2025-04-10</td><td>DX Team</td><td>Initial release</td></tr></table></div>
 
         </div>
     </main>

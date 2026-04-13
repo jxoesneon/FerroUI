@@ -11,24 +11,28 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <style>
         .content-area { max-width: 1100px; margin: 100px auto; padding: 0 2rem; }
-        .api-table { width: 100%; border-collapse: collapse; margin: 2.5rem 0; background: rgba(255,255,255,0.02); border-radius: 16px; overflow: hidden; border: 1px solid var(--card-border); table-layout: fixed; }
-        .api-table th, .api-table td { padding: 1.25rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); word-wrap: break-word; vertical-align: top; }
+        .table-wrapper { overflow-x: auto; margin: 2.5rem 0; border-radius: 16px; border: 1px solid var(--card-border); background: rgba(255,255,255,0.02); }
+        .api-table { width: 100%; border-collapse: collapse; table-layout: auto; }
+        .api-table th, .api-table td { padding: 1.25rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .api-table th { background: rgba(255,255,255,0.05); color: var(--accent-primary); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; }
         .api-table tr:last-child td { border-bottom: none; }
         code { font-family: 'JetBrains Mono', monospace; background: rgba(56, 189, 248, 0.1); color: var(--accent-primary); padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.85em; }
         pre { background: #0f172a; padding: 2rem; border-radius: 16px; overflow-x: auto; margin: 2rem 0; border: 1px solid var(--card-border); box-shadow: inset 0 2px 4px rgba(0,0,0,0.3); }
         pre code { background: none; color: #cbd5e1; padding: 0; font-size: 0.9rem; line-height: 1.5; white-space: pre; }
-        h1 { font-size: 3rem; margin-bottom: 2rem; }
+        h1 { font-size: 3rem; margin-bottom: 2rem; letter-spacing: -0.02em; }
         h2 { margin-top: 5rem; color: var(--text-primary); border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.75rem; font-size: 1.75rem; }
         h3 { margin-top: 3rem; color: var(--accent-primary); font-size: 1.25rem; }
         .doc-list { margin: 1.5rem 0; padding-left: 1.5rem; list-style-type: none; }
         .doc-list li { margin-bottom: 0.75rem; color: var(--text-secondary); position: relative; padding-left: 1.5rem; }
         .doc-list li::before { content: "→"; position: absolute; left: 0; color: var(--accent-primary); font-weight: bold; }
+        .doc-hr { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 4rem 0; }
+        .quote-wrapper { border-left: 4px solid var(--accent-secondary); background: rgba(129, 140, 248, 0.05); padding: 1rem 2rem; margin: 2rem 0; border-radius: 0 12px 12px 0; }
+        blockquote { color: var(--text-secondary); font-style: italic; font-size: 1.1rem; }
         .back-link { display: inline-block; margin-bottom: 3rem; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
         .back-link:hover { color: var(--accent-primary); }
         .doc-inline-link { color: var(--accent-primary); text-decoration: none; border-bottom: 1px solid rgba(56, 189, 248, 0.2); transition: all 0.2s; }
         .doc-inline-link:hover { border-bottom-color: var(--accent-primary); background: rgba(56, 189, 248, 0.05); }
-        p { margin: 1.5rem 0; color: var(--text-secondary); font-size: 1.05rem; line-height: 1.7; }
+        p { margin: 1.2rem 0; color: var(--text-secondary); font-size: 1.05rem; line-height: 1.7; }
         strong { color: var(--text-primary); font-weight: 600; }
     </style>
 </head>
@@ -55,23 +59,23 @@
 <strong>Status:</strong> Approved  
 <strong>Owner:</strong> Architecture Team
 
-<p>---</p>
+<hr class="doc-hr">
 
 <h2>1. Executive Summary</h2>
 
 <p>Alloy UI is a production-grade, open meta-framework for building AI-driven applications where the user interface is synthesized at runtime in response to natural language intent. This document formalizes the complete architecture covering the dual-phase orchestration pipeline, atomic component model, LLM strategy layer, schema governance, security, observability, accessibility, internationalization, and developer ergonomics.</p>
 
-<p>---</p>
+<hr class="doc-hr">
 
 <h2>2. Architectural Principles</h2>
 
 <h3>2.1 Core Design Goals</h3>
 
-<table class="api-table"><tr><th>Goal</th><th>Description</th></tr><tr><td>Developer-First Ergonomics</td><td>Registering a new component or tool requires fewer than 20 lines of code</td></tr><tr><td>Predictability Over Creativity</td><td>AI is constrained to a typed schema; hallucination surface area is minimized by design</td></tr><tr><td>Platform Agnosticism</td><td>Targets web browsers, Tauri desktop shells, and server-side rendering without code changes</td></tr><tr><td>LLM Agnosticism</td><td>Swapping between OpenAI, Anthropic, Google, or local Ollama requires a single configuration change</td></tr><tr><td>Production-Grade Reliability</td><td>Self-healing loop, circuit breakers, and fallback UIs ensure graceful degradation</td></tr><tr><td>Accessibility by Default</td><td>Every component ships with correct ARIA roles and keyboard navigation</td></tr><tr><td>Observable by Default</td><td>Every pipeline stage emits structured traces compatible with OpenTelemetry</td></tr></table>
+<div class="table-wrapper"><table class="api-table"><tr><th>Goal</th><th>Description</th></tr><tr><td>Developer-First Ergonomics</td><td>Registering a new component or tool requires fewer than 20 lines of code</td></tr><tr><td>Predictability Over Creativity</td><td>AI is constrained to a typed schema; hallucination surface area is minimized by design</td></tr><tr><td>Platform Agnosticism</td><td>Targets web browsers, Tauri desktop shells, and server-side rendering without code changes</td></tr><tr><td>LLM Agnosticism</td><td>Swapping between OpenAI, Anthropic, Google, or local Ollama requires a single configuration change</td></tr><tr><td>Production-Grade Reliability</td><td>Self-healing loop, circuit breakers, and fallback UIs ensure graceful degradation</td></tr><tr><td>Accessibility by Default</td><td>Every component ships with correct ARIA roles and keyboard navigation</td></tr><tr><td>Observable by Default</td><td>Every pipeline stage emits structured traces compatible with OpenTelemetry</td></tr></table></div>
 
 <h3>2.2 What Alloy UI Is NOT</h3><ul class="doc-list"><li><strong>Not a low-code visual editor</strong> — There is no drag-and-drop canvas</li></ul><ul class="doc-list"><li><strong>Not a chatbot framework</strong> — The LLM produces structured JSON, not prose</li></ul><ul class="doc-list"><li><strong>Not a design system</strong> — Alloy UI consumes a design system through its component registry</li></ul><ul class="doc-list"><li><strong>Not a no-code platform</strong> — Developers write typed components and tool functions in real code</li></ul>
 
-<p>---</p>
+<hr class="doc-hr">
 
 <h2>3. Four-Layer Runtime Architecture</h2>
 
@@ -93,7 +97,7 @@
 <p>└─────────────────────────────────────────────────────────────┘</p>
 </code>`<code>
 
-<p>---</p>
+<hr class="doc-hr">
 
 <h2>4. Layer 1 — Client Renderer</h2>
 
@@ -121,11 +125,11 @@
 
 <p>The router handles four canonical action types:</p>
 
-<table class="api-table"><tr><th>Action Type</th><th>Description</th><th>Payload</th></tr><tr><td>NAVIGATE</td><td>Push a route into the application router</td><td></code>{ path: string, params?: object }<code></td></tr><tr><td>SHOW_TOAST</td><td>Display a transient notification</td><td></code>{ message: string, variant: "info"\</td><td>"success"\</td><td>"warning"\</td><td>"error" }<code></td></tr><tr><td>REFRESH</td><td>Re-run the current orchestration pipeline</td><td>Same original prompt</td></tr><tr><td>TOOL_CALL</td><td>Invoke a registered backend tool directly</td><td></code>{ tool: string, args: object }<code></td></tr></table>
+<div class="table-wrapper"><table class="api-table"><tr><th>Action Type</th><th>Description</th><th>Payload</th></tr><tr><td>NAVIGATE</td><td>Push a route into the application router</td><td></code>{ path: string, params?: object }<code></td></tr><tr><td>SHOW_TOAST</td><td>Display a transient notification</td><td></code>{ message: string, variant: "info"\</td><td>"success"\</td><td>"warning"\</td><td>"error" }<code></td></tr><tr><td>REFRESH</td><td>Re-run the current orchestration pipeline</td><td>Same original prompt</td></tr><tr><td>TOOL_CALL</td><td>Invoke a registered backend tool directly</td><td></code>{ tool: string, args: object }<code></td></tr></table></div>
 
 <strong>Convention:</strong> Direct </code>fetch()<code> calls from component code are forbidden — enforced via ESLint rule </code>alloy/no-direct-fetch<code>.
 
-<p>---</p>
+<hr class="doc-hr">
 
 <h2>5. Layer 2 — Orchestration Engine</h2>
 
@@ -161,7 +165,7 @@
 
 <h3>5.2 Concurrency & Request Lifecycle</h3>
 
-<table class="api-table"><tr><th>Mechanism</th><th>Description</th></tr><tr><td>Request ID</td><td>Monotonically increasing ID per pipeline invocation</td></tr><tr><td>Optimistic Cancellation</td><td>Renderer ignores chunks with lower requestId than acknowledged</td></tr><tr><td>Circuit Breaker</td><td>After 3 consecutive unfixable errors, switches to "safe mode"</td></tr><tr><td>Tool Timeout Budget</td><td>Shared 10s budget; individual 3s timeout per tool</td></tr></table>
+<div class="table-wrapper"><table class="api-table"><tr><th>Mechanism</th><th>Description</th></tr><tr><td>Request ID</td><td>Monotonically increasing ID per pipeline invocation</td></tr><tr><td>Optimistic Cancellation</td><td>Renderer ignores chunks with lower requestId than acknowledged</td></tr><tr><td>Circuit Breaker</td><td>After 3 consecutive unfixable errors, switches to "safe mode"</td></tr><tr><td>Tool Timeout Budget</td><td>Shared 10s budget; individual 3s timeout per tool</td></tr></table></div>
 
 <h3>5.3 Caching Strategy</h3>
 
@@ -170,7 +174,7 @@
 <p>hash(normalized_prompt + resolved_permissions + tool_output_fingerprints)</p>
 </code>`<code><ul class="doc-list"><li>Cache hits skip both LLM calls</li></ul><ul class="doc-list"><li>Per-tool TTL: volatile tools (TTL=0), reference tools (TTL=300s)</li></ul><ul class="doc-list"><li>Scoped per user session to prevent cross-contamination</li></ul>
 
-<p>---</p>
+<hr class="doc-hr">
 
 <h2>6. Layer 3 — LLM Strategy Layer</h2>
 
@@ -189,13 +193,13 @@
 
 <h3>6.2 Built-in Providers</h3>
 
-<table class="api-table"><tr><th>Provider</th><th>Target Model</th><th>Transport</th><th>Primary Use Case</th></tr><tr><td>CloudProvider</td><td>OpenAI, Anthropic, Google Gemini</td><td>HTTPS + SSE</td><td>High reasoning quality</td></tr><tr><td>OllamaProvider</td><td>Any GGUF model via Ollama</td><td>Local HTTP</td><td>Zero data egress</td></tr><tr><td>LlamaCppProvider</td><td>llama.cpp via FFI</td><td>In-process</td><td>Lowest latency, fully offline</td></tr><tr><td>EdgeProvider</td><td>Workers AI (Cloudflare)</td><td>Edge HTTP</td><td>Globally distributed</td></tr></table>
+<div class="table-wrapper"><table class="api-table"><tr><th>Provider</th><th>Target Model</th><th>Transport</th><th>Primary Use Case</th></tr><tr><td>CloudProvider</td><td>OpenAI, Anthropic, Google Gemini</td><td>HTTPS + SSE</td><td>High reasoning quality</td></tr><tr><td>OllamaProvider</td><td>Any GGUF model via Ollama</td><td>Local HTTP</td><td>Zero data egress</td></tr><tr><td>LlamaCppProvider</td><td>llama.cpp via FFI</td><td>In-process</td><td>Lowest latency, fully offline</td></tr><tr><td>EdgeProvider</td><td>Workers AI (Cloudflare)</td><td>Edge HTTP</td><td>Globally distributed</td></tr></table></div>
 
 <h3>6.3 Hot-Swapping</h3>
 
 <p>The active provider can be changed via privileged </code>TOOL_CALL<code> action (</code>tool: "alloy.setProvider"<code>) without restarting the server. Transition is atomic: in-flight requests complete against old provider; new requests use new provider.</p>
 
-<p>---</p>
+<hr class="doc-hr">
 
 <h2>7. Layer 4 — Data & Tool Layer</h2>
 
@@ -224,7 +228,7 @@
 
 <p>This prevents prompt-injection attacks attempting data exfiltration.</p>
 
-<p>---</p>
+<hr class="doc-hr">
 
 <h2>8. The Alloy Component Model</h2>
 
@@ -240,7 +244,7 @@
 
 <h3>8.2 Nesting Enforcement Rules</h3>
 
-<table class="api-table"><tr><th>Rule</th><th>Violation Handling</th></tr><tr><td>Block-level components MUST NOT appear as children of inline-level components</td><td>Self-healing loop fires</td></tr><tr><td>Atoms MUST NOT declare children</td><td>Structural error flagged</td></tr><tr><td>Dashboard MUST appear exactly once, as root</td><td>Invalid if multiple or nested</td></tr><tr><td>Unknown component types flagged as hallucinated</td><td>Immediate rejection</td></tr><tr><td>All required props must be present</td><td>Repair triggered, not silent fallback</td></tr></table>
+<div class="table-wrapper"><table class="api-table"><tr><th>Rule</th><th>Violation Handling</th></tr><tr><td>Block-level components MUST NOT appear as children of inline-level components</td><td>Self-healing loop fires</td></tr><tr><td>Atoms MUST NOT declare children</td><td>Structural error flagged</td></tr><tr><td>Dashboard MUST appear exactly once, as root</td><td>Invalid if multiple or nested</td></tr><tr><td>Unknown component types flagged as hallucinated</td><td>Immediate rejection</td></tr><tr><td>All required props must be present</td><td>Repair triggered, not silent fallback</td></tr></table></div>
 
 <h3>8.3 The AlloyLayout JSON Schema</h3>
 
@@ -270,7 +274,7 @@
 <p>}</p>
 </code>`<code>
 
-<p>---</p>
+<hr class="doc-hr">
 
 <h2>9. Validation & Self-Healing Engine</h2>
 
@@ -312,13 +316,13 @@
 
 <h3>9.3 Hallucination Detection</h3>
 
-<table class="api-table"><tr><th>Layer</th><th>Defense Mechanism</th></tr><tr><td>Layer 1</td><td>System Prompt Injection — Full list of valid component names appended</td></tr><tr><td>Layer 2</td><td>Registry Verification — O(1) lookup for every component type</td></tr><tr><td>Layer 3</td><td>Fuzzy Matching for Repair — Edit distance suggestions in repair prompt</td></tr></table>
+<div class="table-wrapper"><table class="api-table"><tr><th>Layer</th><th>Defense Mechanism</th></tr><tr><td>Layer 1</td><td>System Prompt Injection — Full list of valid component names appended</td></tr><tr><td>Layer 2</td><td>Registry Verification — O(1) lookup for every component type</td></tr><tr><td>Layer 3</td><td>Fuzzy Matching for Repair — Edit distance suggestions in repair prompt</td></tr></table></div>
 
-<p>---</p>
+<hr class="doc-hr">
 
 <h2>10. Deployment Models</h2>
 
-<table class="api-table"><tr><th>Model</th><th>Stack</th><th>Best For</th></tr><tr><td>Web SaaS</td><td>Node.js/Bun, SSE, Cloud LLM, Redis cache</td><td>Easiest to scale</td></tr><tr><td>Desktop (Tauri)</td><td>Rust engine, Tauri events, SQLite cache</td><td>Zero network dependency</td></tr><tr><td>Edge (Cloudflare)</td><td>Workers, Durable Objects, KV cache</td><td>Global low latency</td></tr><tr><td>Hybrid</td><td>Edge Phase 1 + Cloud Phase 2, shared Redis</td><td>Best latency + quality trade-off</td></tr></table>
+<div class="table-wrapper"><table class="api-table"><tr><th>Model</th><th>Stack</th><th>Best For</th></tr><tr><td>Web SaaS</td><td>Node.js/Bun, SSE, Cloud LLM, Redis cache</td><td>Easiest to scale</td></tr><tr><td>Desktop (Tauri)</td><td>Rust engine, Tauri events, SQLite cache</td><td>Zero network dependency</td></tr><tr><td>Edge (Cloudflare)</td><td>Workers, Durable Objects, KV cache</td><td>Global low latency</td></tr><tr><td>Hybrid</td><td>Edge Phase 1 + Cloud Phase 2, shared Redis</td><td>Best latency + quality trade-off</td></tr></table></div>
 
 <h3>10.1 Monorepo Structure</h3>
 
@@ -339,15 +343,15 @@
 <p>  evals/         — Automated prompt evaluation suite</p>
 </code>``
 
-<p>---</p>
+<hr class="doc-hr">
 
 <h2>11. Related Documents</h2><ul class="doc-list"><li><a href="./Monorepo_Architecture_Package_Governance.md" class="doc-inline-link">Monorepo Architecture & Package Governance</a></li></ul><ul class="doc-list"><li><a href="../engineering/frontend/Component_Development_Guidelines.md" class="doc-inline-link">Component Development Guidelines</a></li></ul><ul class="doc-list"><li><a href="../engineering/frontend/Design_Token_Theming_Specification.md" class="doc-inline-link">Design Token & Theming Specification</a></li></ul><ul class="doc-list"><li><a href="../engineering/backend/Tool_Registration_API_Reference.md" class="doc-inline-link">Tool Registration API Reference</a></li></ul><ul class="doc-list"><li><a href="../engineering/backend/AlloyLayout_JSON_Schema_Specification.md" class="doc-inline-link">AlloyLayout JSON Schema Specification</a></li></ul><ul class="doc-list"><li><a href="../security/Security_Threat_Model.md" class="doc-inline-link">Security Threat Model</a></li></ul><ul class="doc-list"><li><a href="../ops/Observability_Telemetry_Dictionary.md" class="doc-inline-link">Observability & Telemetry Dictionary</a></li></ul>
 
-<p>---</p>
+<hr class="doc-hr">
 
 <h2>12. Document History</h2>
 
-<table class="api-table"><tr><th>Version</th><th>Date</th><th>Author</th><th>Changes</th></tr><tr><td>1.0</td><td>2025-04-10</td><td>Architecture Team</td><td>Initial release</td></tr></table>
+<div class="table-wrapper"><table class="api-table"><tr><th>Version</th><th>Date</th><th>Author</th><th>Changes</th></tr><tr><td>1.0</td><td>2025-04-10</td><td>Architecture Team</td><td>Initial release</td></tr></table></div>
 
         </div>
     </main>
