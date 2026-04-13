@@ -10,20 +10,26 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <style>
-        .content-area { max-width: 1000px; margin: 100px auto; padding: 0 2rem; }
-        .api-table { width: 100%; border-collapse: collapse; margin: 2rem 0; background: rgba(255,255,255,0.02); border-radius: 12px; overflow: hidden; }
-        .api-table th, .api-table td { padding: 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .api-table th { background: rgba(255,255,255,0.05); color: var(--accent-primary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
-        code { font-family: 'JetBrains Mono', monospace; background: rgba(56, 189, 248, 0.1); color: var(--accent-primary); padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.9em; }
-        pre { background: rgba(0,0,0,0.3); padding: 1.5rem; border-radius: 12px; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--card-border); }
-        pre code { background: none; color: #e2e8f0; padding: 0; }
-        h2 { margin-top: 4rem; color: var(--accent-secondary); border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.5rem; }
-        h3 { margin-top: 2.5rem; border-left: 4px solid var(--accent-primary); padding-left: 1rem; }
-        .doc-list { margin: 1.5rem 0; padding-left: 1.5rem; }
-        .doc-list li { margin-bottom: 0.5rem; color: var(--text-secondary); }
-        .back-link { display: inline-block; margin-bottom: 2rem; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; }
-        .back-link:hover { color: var(--text-primary); }
-        p { margin: 1.2rem 0; color: var(--text-secondary); }
+        .content-area { max-width: 1100px; margin: 100px auto; padding: 0 2rem; }
+        .api-table { width: 100%; border-collapse: collapse; margin: 2.5rem 0; background: rgba(255,255,255,0.02); border-radius: 16px; overflow: hidden; border: 1px solid var(--card-border); table-layout: fixed; }
+        .api-table th, .api-table td { padding: 1.25rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); word-wrap: break-word; vertical-align: top; }
+        .api-table th { background: rgba(255,255,255,0.05); color: var(--accent-primary); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; }
+        .api-table tr:last-child td { border-bottom: none; }
+        code { font-family: 'JetBrains Mono', monospace; background: rgba(56, 189, 248, 0.1); color: var(--accent-primary); padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.85em; }
+        pre { background: #0f172a; padding: 2rem; border-radius: 16px; overflow-x: auto; margin: 2rem 0; border: 1px solid var(--card-border); box-shadow: inset 0 2px 4px rgba(0,0,0,0.3); }
+        pre code { background: none; color: #cbd5e1; padding: 0; font-size: 0.9rem; line-height: 1.5; white-space: pre; }
+        h1 { font-size: 3rem; margin-bottom: 2rem; }
+        h2 { margin-top: 5rem; color: var(--text-primary); border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.75rem; font-size: 1.75rem; }
+        h3 { margin-top: 3rem; color: var(--accent-primary); font-size: 1.25rem; }
+        .doc-list { margin: 1.5rem 0; padding-left: 1.5rem; list-style-type: none; }
+        .doc-list li { margin-bottom: 0.75rem; color: var(--text-secondary); position: relative; padding-left: 1.5rem; }
+        .doc-list li::before { content: "→"; position: absolute; left: 0; color: var(--accent-primary); font-weight: bold; }
+        .back-link { display: inline-block; margin-bottom: 3rem; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+        .back-link:hover { color: var(--accent-primary); }
+        .doc-inline-link { color: var(--accent-primary); text-decoration: none; border-bottom: 1px solid rgba(56, 189, 248, 0.2); transition: all 0.2s; }
+        .doc-inline-link:hover { border-bottom-color: var(--accent-primary); background: rgba(56, 189, 248, 0.05); }
+        p { margin: 1.5rem 0; color: var(--text-secondary); font-size: 1.05rem; line-height: 1.7; }
+        strong { color: var(--text-primary); font-weight: 600; }
     </style>
 </head>
 <body class="dark-theme">
@@ -41,7 +47,7 @@
 
     <main class="content-area">
         <a href="../index.html" class="back-link">&larr; Back to Overview</a>
-        <div class="glass-card" style="padding: 4rem; border-radius: 32px;">
+        <div class="glass-card" style="padding: 5rem; border-radius: 40px; border: 1px solid rgba(255,255,255,0.08);">
             <h1>Component API Reference</h1><p>Welcome to the automated component registry documentation.</p><h2>Organisms</h2><h3>Dashboard</h3><p>The root container for all Alloy layouts.</p>
         <table class="api-table">
           <thead>

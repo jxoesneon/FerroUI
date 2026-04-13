@@ -8,49 +8,76 @@ const OUTPUT_DIR = path.join(ROOT, 'docs/site');
 const API_DIR = path.join(OUTPUT_DIR, 'api');
 
 /**
- * Robust Markdown to HTML converter.
- * Handles code blocks first to prevent nested parsing.
+ * Enhanced Markdown to HTML converter.
+ * Fixes table rendering, preserves ASCII art, and ensures professional spacing.
  */
 function mdToHtml(md: string): string {
   const codeBlocks: string[] = [];
   
-  // 1. Extract and protect code blocks
+  // 1. Extract and protect code blocks (ASCII art & code)
   let html = md.replace(/```(\w+)?\n([\s\S]*?)```/g, (_match, _lang, code) => {
     const placeholder = `__CODE_BLOCK_${codeBlocks.length}__`;
-    codeBlocks.push(`<pre><code>${code.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>`);
+    // Escape HTML inside code blocks
+    const escapedCode = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    codeBlocks.push(`<pre><code>${escapedCode}</code></pre>`);
     return placeholder;
   });
 
+  // 2. Process Tables (more robustly)
+  const lines = html.split('\n');
+  const processedLines = [];
+  let inTable = false;
+  let tableRows = [];
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (line.startsWith('|') && line.endsWith('|')) {
+      if (!inTable) {
+        inTable = true;
+        tableRows = [];
+      }
+      if (!line.includes('---|')) { // Skip separator line
+        const cells = line.split('|').filter((_, idx, arr) => idx > 0 && idx < arr.length - 1);
+        const tag = tableRows.length === 0 ? 'th' : 'td';
+        tableRows.push(`<tr>${cells.map(c => `<${tag}>${c.trim()}</${tag}>`).join('')}</tr>`);
+      }
+    } else {
+      if (inTable) {
+        processedLines.push(`<table class="api-table">${tableRows.join('')}</table>`);
+        inTable = false;
+      }
+      processedLines.push(lines[i]);
+    }
+  }
+  if (inTable) processedLines.push(`<table class="api-table">${tableRows.join('')}</table>`);
+  
+  html = processedLines.join('\n');
+
   html = html
-    // Headers (only at start of line)
+    // Headers
     .replace(/^# (.*$)/gm, '<h1>$1</h1>')
     .replace(/^## (.*$)/gm, '<h2>$1</h2>')
     .replace(/^### (.*$)/gm, '<h3>$1</h3>')
-    // Tables
-    .replace(/\|(.*)\|/g, (match) => {
-      if (match.includes('---')) return ''; 
-      const cells = match.split('|').filter(c => c.trim().length > 0);
-      const isHeader = match.includes('**') || md.split('\n')[md.split('\n').indexOf(match) + 1]?.includes('---');
-      const tag = isHeader ? 'th' : 'td';
-      return `<tr>${cells.map(c => `<${tag}>${c.trim()}</${tag}>`).join('')}</tr>`;
-    })
-    // Wrap tables
-    .replace(/(<tr>.*<\/tr>)+/gs, (match) => `<table class="api-table">${match}</table>`)
     // Inline code
     .replace(/`([^`]+)`/g, '<code>$1</code>')
     // Bold
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    // Links (Simple version)
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="doc-inline-link">$1</a>')
     // Lists
-    .replace(/^- (.*$)/gm, '<li>$1</li>')
-    .replace(/(<li>.*<\/li>)+/gs, (match) => `<ul class="doc-list">${match}</ul>`)
-    // Paragraphs (careful with existing tags)
+    .replace(/^\s*- (.*$)/gm, '<li>$1</li>')
+    // Paragraphs (only for lines that aren't already HTML tags or code block placeholders)
     .split('\n').map(line => {
-      if (line.trim().length === 0) return '';
-      if (line.startsWith('<') || line.startsWith('__CODE_')) return line;
+      const trimmed = line.trim();
+      if (!trimmed) return '';
+      if (trimmed.startsWith('<') || trimmed.startsWith('__CODE_')) return line;
       return `<p>${line}</p>`;
     }).join('\n');
 
-  // 2. Restore protected code blocks
+  // Wrap contiguous <li> elements in <ul>
+  html = html.replace(/(<li>.*<\/li>\n?)+/g, (match) => `<ul class="doc-list">${match}</ul>`);
+
+  // 3. Restore protected code blocks
   codeBlocks.forEach((block, i) => {
     html = html.replace(`__CODE_BLOCK_${i}__`, block);
   });
@@ -72,20 +99,26 @@ const HTML_TEMPLATE = (title: string, content: string, depth = 0) => {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <style>
-        .content-area { max-width: 1000px; margin: 100px auto; padding: 0 2rem; }
-        .api-table { width: 100%; border-collapse: collapse; margin: 2rem 0; background: rgba(255,255,255,0.02); border-radius: 12px; overflow: hidden; }
-        .api-table th, .api-table td { padding: 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .api-table th { background: rgba(255,255,255,0.05); color: var(--accent-primary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
-        code { font-family: 'JetBrains Mono', monospace; background: rgba(56, 189, 248, 0.1); color: var(--accent-primary); padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.9em; }
-        pre { background: rgba(0,0,0,0.3); padding: 1.5rem; border-radius: 12px; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--card-border); }
-        pre code { background: none; color: #e2e8f0; padding: 0; }
-        h2 { margin-top: 4rem; color: var(--accent-secondary); border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.5rem; }
-        h3 { margin-top: 2.5rem; border-left: 4px solid var(--accent-primary); padding-left: 1rem; }
-        .doc-list { margin: 1.5rem 0; padding-left: 1.5rem; }
-        .doc-list li { margin-bottom: 0.5rem; color: var(--text-secondary); }
-        .back-link { display: inline-block; margin-bottom: 2rem; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; }
-        .back-link:hover { color: var(--text-primary); }
-        p { margin: 1.2rem 0; color: var(--text-secondary); }
+        .content-area { max-width: 1100px; margin: 100px auto; padding: 0 2rem; }
+        .api-table { width: 100%; border-collapse: collapse; margin: 2.5rem 0; background: rgba(255,255,255,0.02); border-radius: 16px; overflow: hidden; border: 1px solid var(--card-border); table-layout: fixed; }
+        .api-table th, .api-table td { padding: 1.25rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); word-wrap: break-word; vertical-align: top; }
+        .api-table th { background: rgba(255,255,255,0.05); color: var(--accent-primary); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; }
+        .api-table tr:last-child td { border-bottom: none; }
+        code { font-family: 'JetBrains Mono', monospace; background: rgba(56, 189, 248, 0.1); color: var(--accent-primary); padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.85em; }
+        pre { background: #0f172a; padding: 2rem; border-radius: 16px; overflow-x: auto; margin: 2rem 0; border: 1px solid var(--card-border); box-shadow: inset 0 2px 4px rgba(0,0,0,0.3); }
+        pre code { background: none; color: #cbd5e1; padding: 0; font-size: 0.9rem; line-height: 1.5; white-space: pre; }
+        h1 { font-size: 3rem; margin-bottom: 2rem; }
+        h2 { margin-top: 5rem; color: var(--text-primary); border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.75rem; font-size: 1.75rem; }
+        h3 { margin-top: 3rem; color: var(--accent-primary); font-size: 1.25rem; }
+        .doc-list { margin: 1.5rem 0; padding-left: 1.5rem; list-style-type: none; }
+        .doc-list li { margin-bottom: 0.75rem; color: var(--text-secondary); position: relative; padding-left: 1.5rem; }
+        .doc-list li::before { content: "→"; position: absolute; left: 0; color: var(--accent-primary); font-weight: bold; }
+        .back-link { display: inline-block; margin-bottom: 3rem; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+        .back-link:hover { color: var(--accent-primary); }
+        .doc-inline-link { color: var(--accent-primary); text-decoration: none; border-bottom: 1px solid rgba(56, 189, 248, 0.2); transition: all 0.2s; }
+        .doc-inline-link:hover { border-bottom-color: var(--accent-primary); background: rgba(56, 189, 248, 0.05); }
+        p { margin: 1.5rem 0; color: var(--text-secondary); font-size: 1.05rem; line-height: 1.7; }
+        strong { color: var(--text-primary); font-weight: 600; }
     </style>
 </head>
 <body class="dark-theme">
@@ -103,7 +136,7 @@ const HTML_TEMPLATE = (title: string, content: string, depth = 0) => {
 
     <main class="content-area">
         <a href="${relPath}/index.html" class="back-link">&larr; Back to Overview</a>
-        <div class="glass-card" style="padding: 4rem; border-radius: 32px;">
+        <div class="glass-card" style="padding: 5rem; border-radius: 40px; border: 1px solid rgba(255,255,255,0.08);">
             ${content}
         </div>
     </main>
@@ -117,21 +150,21 @@ const HTML_TEMPLATE = (title: string, content: string, depth = 0) => {
 };
 
 async function generateApiDocs() {
-  console.log('🚀 Starting automated doc-gen (Unified Portal)...');
+  console.log('🚀 Starting high-fidelity portal generation (V2)...');
   
   await fs.mkdir(API_DIR, { recursive: true });
 
   // 1. Generate Architecture Page
-  console.log('📄 Generating System Architecture page...');
+  console.log('📄 Parsing System Architecture...');
   const archMd = await fs.readFile(path.join(ROOT, 'docs/architecture/System_Architecture_Document.md'), 'utf-8');
   await fs.writeFile(path.join(OUTPUT_DIR, 'architecture.html'), HTML_TEMPLATE('System Architecture', mdToHtml(archMd), 0));
 
   // 2. Generate CLI Page
-  console.log('📄 Generating CLI Usage page...');
+  console.log('📄 Parsing CLI Usage Guide...');
   const cliMd = await fs.readFile(path.join(ROOT, 'docs/dev-experience/CLI_Usage_Guide.md'), 'utf-8');
   await fs.writeFile(path.join(OUTPUT_DIR, 'cli.html'), HTML_TEMPLATE('CLI Usage Guide', mdToHtml(cliMd), 0));
 
-  // 3. Generate Component Documentation
+  // 3. Component & Tool API (Manual high-fidelity generation for these specific lists)
   const components = [
     { name: 'Dashboard', tier: 'Organism', description: 'The root container for all Alloy layouts.' },
     { name: 'KPIBoard', tier: 'Organism', description: 'A grid of key performance indicators.' },
@@ -167,7 +200,6 @@ async function generateApiDocs() {
   }
   await fs.writeFile(path.join(API_DIR, 'components.html'), HTML_TEMPLATE('Components', componentsHtml, 1));
 
-  // 4. Generate Tool Documentation
   const tools = [
     { name: 'getSalesMetrics', description: 'Returns revenue, orders, and conversion data.' },
     { name: 'listUsers', description: 'Retrieves a list of users with optional filtering.' },
@@ -182,17 +214,16 @@ async function generateApiDocs() {
   }
   await fs.writeFile(path.join(API_DIR, 'tools.html'), HTML_TEMPLATE('Tools', toolsHtml, 1));
 
-  // 5. Update API Index
   const apiIndexHtml = `
     <h1>API Reference</h1>
     <p>Select a registry to explore the Alloy UI ecosystem capabilities.</p>
     <div class="docs-grid" style="margin-top: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-        <div class="glass-card doc-category" style="padding: 2rem; border-radius: 20px;">
+        <div class="glass-card doc-category" style="padding: 2rem; border-radius: 24px; border: 1px solid rgba(255,255,255,0.05);">
             <h3>Components</h3>
             <p>UI primitives and functional blocks.</p>
             <a href="components.html" class="doc-link">Browse Components &rarr;</a>
         </div>
-        <div class="glass-card doc-category" style="padding: 2rem; border-radius: 20px;">
+        <div class="glass-card doc-category" style="padding: 2rem; border-radius: 24px; border: 1px solid rgba(255,255,255,0.05);">
             <h3>Tools</h3>
             <p>Backend integrations and data providers.</p>
             <a href="tools.html" class="doc-link">Explore Tools &rarr;</a>
@@ -201,7 +232,7 @@ async function generateApiDocs() {
   `;
   await fs.writeFile(path.join(API_DIR, 'index.html'), HTML_TEMPLATE('API Index', apiIndexHtml, 1));
 
-  console.log('✨ Automated documentation complete.');
+  console.log('✨ Unified high-fidelity portal complete.');
 }
 
 generateApiDocs().catch(console.error);
