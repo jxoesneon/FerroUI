@@ -1,0 +1,20 @@
+# Alloy UI Documentation
+
+Welcome to the machine-readable documentation index for Alloy UI. This file is designed for LLMs and AI coding assistants to understand the ecosystem structure.
+
+## Core Framework
+- [System Architecture](https://github.com/jxoesneon/Alloy/blob/main/docs/architecture/System_Architecture_Document.md): The foundational design of Alloy's dual-phase pipeline.
+- [Component Hierarchy](https://github.com/jxoesneon/Alloy/blob/main/docs/architecture/ADRs/ADR-003-Atomic-Component-Hierarchy.md): Atoms, Molecules, and Organisms.
+- [Schema Specification](https://github.com/jxoesneon/Alloy/blob/main/docs/engineering/backend/AlloyLayout_JSON_Schema_Specification.md): The Zod-based AlloyLayout definition.
+
+## API Reference (Auto-generated)
+- [Component Registry](https://jxoesneon.github.io/Alloy/api/components.md): Full list of registered UI components and their props.
+- [Tool Registry](https://jxoesneon.github.io/Alloy/api/tools.md): Backend tools and data providers available to the LLM.
+
+## Developer Experience
+- [Quickstart Guide](https://github.com/jxoesneon/Alloy/blob/main/docs/dev-experience/Quickstart_Developer_Onboarding.md): 10-minute setup for new projects.
+- [CLI Reference](https://github.com/jxoesneon/Alloy/blob/main/docs/dev-experience/CLI_Usage_Guide.md): Detailed documentation for the `alloy` command-line tool.
+
+## Engineering Standards
+- [Component Development](https://github.com/jxoesneon/Alloy/blob/main/docs/engineering/frontend/Component_Development_Guidelines.md): Best practices for building new UI primitives.
+- [Tool Registration](https://github.com/jxoesneon/Alloy/blob/main/docs/engineering/backend/Tool_Registration_API_Reference.md): How to expose backend logic to AI.
