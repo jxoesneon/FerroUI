@@ -3,7 +3,7 @@ import chalk from 'chalk';
 import ora from 'ora';
 import path from 'path';
 import fs from 'fs-extra';
-import execa from 'execa';
+import { execa } from 'execa';
 
 const DEPLOY_TARGETS = ['web', 'desktop', 'edge'] as const;
 type DeployTarget = typeof DEPLOY_TARGETS[number];

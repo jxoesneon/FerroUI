@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
 import { createParser } from 'eventsource-parser';
-import type { ParsedEvent, ReconnectInterval } from 'eventsource-parser';
 import parsePartialJson from 'partial-json-parser';
 import type { AlloyLayout } from '@alloy/schema';
 
@@ -61,8 +60,8 @@ export function useAlloyLayout({ url, initialRequestId }: UseAlloyLayoutOptions)
         const decoder = new TextDecoder();
         let accumulatedData = '';
 
-        const onParse = (event: ParsedEvent | ReconnectInterval) => {
-          if (event.type === 'event') {
+        const onParse = (event: any) => {
+          if (event.data) {
             if (event.data === '[DONE]') {
               setLoading(false);
               return;
@@ -79,7 +78,9 @@ export function useAlloyLayout({ url, initialRequestId }: UseAlloyLayoutOptions)
           }
         };
 
-        const parser = createParser(onParse);
+        const parser = createParser({
+          onEvent: onParse
+        });
 
         let done = false;
         while (!done) {

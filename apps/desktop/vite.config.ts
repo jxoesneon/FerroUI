@@ -1,10 +1,11 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
       '@alloy/engine': path.resolve(__dirname, '../../packages/engine/src'),
@@ -13,8 +14,13 @@ export default defineConfig({
       '@alloy/tools': path.resolve(__dirname, '../../packages/tools/src'),
       '@alloy/telemetry': path.resolve(__dirname, '../../packages/telemetry/src'),
       '@alloy/i18n': path.resolve(__dirname, '../../packages/i18n/src'),
-      'zod': path.resolve(__dirname, '../../node_modules/zod'),
     },
+  },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: ['./src/test/setup.ts'],
+    include: ['**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
   },
   // Tauri expects a fixed port for HMR
   server: {

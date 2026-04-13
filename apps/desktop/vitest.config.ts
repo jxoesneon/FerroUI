@@ -17,6 +17,6 @@ export default defineConfig({
     name: 'desktop',
     environment: 'jsdom',
     globals: true,
-    include: [`${__dirname}/src/**/*.test.{ts,tsx}`],
+    include: ['**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
   },
 });

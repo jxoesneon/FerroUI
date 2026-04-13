@@ -1,6 +1,6 @@
 import { Command } from 'commander';
 import chalk from 'chalk';
-import execa from 'execa';
+import { execa } from 'execa';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs-extra';

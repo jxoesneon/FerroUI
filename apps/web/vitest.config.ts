@@ -21,8 +21,8 @@ export default defineConfig({
   test: {
     name: 'web',
     environment: 'jsdom',
-    setupFiles: [resolve(__dirname, 'src/setupTests.ts')],
+    setupFiles: ['./src/setupTests.ts'],
     globals: true,
-    include: [`${__dirname}/src/**/*.test.{ts,tsx}`],
+    include: ['**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
   },
 });

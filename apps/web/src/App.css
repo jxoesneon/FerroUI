@@ -1,7 +1,4 @@
-/* Alloy UI Base Styles */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@reference "tailwindcss";
 
 .alloy-app {
   @apply bg-gray-50 text-gray-900 font-sans;

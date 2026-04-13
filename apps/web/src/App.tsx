@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAlloyLayout } from './hooks/useAlloyLayout';
 import { AlloyRenderer } from './components/AlloyRenderer';
-import { actionRouter, ActionRouterContext } from './services/ActionRouter';
+import { actionRouter, type ActionRouterContext } from './services/ActionRouter';
 import './components/components-registration';
 import './App.css';
 
