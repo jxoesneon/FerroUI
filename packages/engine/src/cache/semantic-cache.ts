@@ -1,6 +1,8 @@
 import CryptoJS from 'crypto-js';
 import { AlloyLayout } from '@alloy/schema';
 
+const CACHE_SIGNING_SECRET = process.env.CACHE_SIGNING_SECRET ?? 'alloy-cache-hmac-secret-CHANGE-IN-PRODUCTION';
+
 export type DataClassification = 'PUBLIC' | 'INTERNAL' | 'RESTRICTED';
 
 const TTL_BY_CLASSIFICATION: Record<DataClassification, number> = {
@@ -15,6 +17,7 @@ export interface CacheEntry {
   toolOutputs: Record<string, unknown>;
   classification: DataClassification;
   ttlMs: number;
+  hmac: string;
 }
 
 export class SemanticCache {
@@ -55,15 +58,32 @@ export class SemanticCache {
     const key = this.generateKey(prompt, permissions, userId, toolOutputs, classification);
     const entry = this.cache.get(key);
 
-    if (entry && Date.now() - entry.timestamp < entry.ttlMs) {
-      return entry.layout;
-    }
+    if (!entry) return undefined;
 
-    if (entry) {
+    // Check TTL
+    if (Date.now() - entry.timestamp > entry.ttlMs) {
       this.cache.delete(key);
+      return undefined;
     }
 
-    return undefined;
+    // Verify HMAC integrity — Security spec §2.4
+    if (!this.verifyEntry(entry)) {
+      console.error('[SemanticCache] HMAC verification failed — possible cache poisoning. Evicting entry.');
+      this.cache.delete(key);
+      return undefined;
+    }
+
+    return entry.layout;
+  }
+
+  private signEntry(layout: AlloyLayout, toolOutputs: Record<string, unknown>, timestamp: number): string {
+    const payload = JSON.stringify({ layout, toolOutputs, timestamp });
+    return CryptoJS.HmacSHA256(payload, CACHE_SIGNING_SECRET).toString();
+  }
+
+  private verifyEntry(entry: CacheEntry): boolean {
+    const expected = this.signEntry(entry.layout, entry.toolOutputs, entry.timestamp);
+    return expected === entry.hmac;
   }
 
   public async set(
@@ -71,22 +91,21 @@ export class SemanticCache {
     permissions: string[],
     userId: string,
     toolOutputs: Record<string, unknown>,
-    layout: AlloyLayout
+    layout: AlloyLayout,
+    classification: DataClassification
   ): Promise<void> {
-    const classification = this.resolveClassification(toolOutputs);
-
-    if (classification === 'RESTRICTED') {
-      return;
-    }
-
     const ttlMs = TTL_BY_CLASSIFICATION[classification];
     const key = this.generateKey(prompt, permissions, userId, toolOutputs, classification);
+    const timestamp = Date.now();
+    const hmac = this.signEntry(layout, toolOutputs, timestamp);
+
     this.cache.set(key, {
       layout,
-      timestamp: Date.now(),
+      timestamp,
       toolOutputs,
       classification,
       ttlMs,
+      hmac,
     });
   }
 

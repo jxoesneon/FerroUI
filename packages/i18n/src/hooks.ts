@@ -41,3 +41,46 @@ export function useLocale() {
     setLocale,
   };
 }
+
+/**
+ * Icons that should NOT be mirrored in RTL layouts.
+ * These are inherently directional or symmetric.
+ */
+const MIRROR_EXEMPT_ICONS = new Set([
+  'check', 'checkmark', 'close', 'x', 'plus', 'minus',
+  'search', 'settings', 'gear', 'cog',
+  'clock', 'time', 'calendar',
+  'star', 'heart', 'flag',
+  'play', 'pause', 'stop', 'volume',
+  'upload', 'download',
+  'lock', 'unlock',
+  'eye', 'eye-off',
+  'refresh', 'sync',
+]);
+
+/**
+ * Determines if an icon should be mirrored for RTL layouts.
+ * Per i18n Guide §4.4
+ *
+ * @param iconName - The icon identifier
+ * @param direction - The current text direction ('ltr' | 'rtl')
+ * @returns true if the icon should be CSS-mirrored (transform: scaleX(-1))
+ */
+export function shouldMirrorIcon(iconName: string, direction: 'ltr' | 'rtl'): boolean {
+  if (direction === 'ltr') return false;
+  const normalized = iconName.toLowerCase().replace(/[_\s]/g, '-');
+  return !MIRROR_EXEMPT_ICONS.has(normalized);
+}
+
+/**
+ * Hook for icon mirroring based on current locale direction
+ */
+export function useIconMirroring() {
+  const { direction } = useLocale();
+  return {
+    shouldMirror: (iconName: string) => shouldMirrorIcon(iconName, direction),
+    mirrorStyle: (iconName: string) =>
+      shouldMirrorIcon(iconName, direction) ? { transform: 'scaleX(-1)' } : undefined,
+    direction,
+  };
+}

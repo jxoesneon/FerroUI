@@ -16,8 +16,9 @@ export const BLOCK_COMPONENTS = new Set(['Divider', 'Skeleton', 'Dashboard', 'KP
   'ActionButton', 'FormField', 'SearchBar', 'Avatar']);
 
 /**
- * Registry of component tier classifications.
- * This should eventually be populated from the @alloy/registry package.
+ * Static fallback registry of component tier classifications.
+ * Used when the runtime @alloy/registry is not available.
+ * Prefer calling syncTiersFromRegistry() at startup to populate from runtime.
  */
 export const COMPONENT_TIER_REGISTRY: Record<string, ComponentTier> = {
   // Atoms (Section 8.1)
@@ -48,6 +49,23 @@ export const COMPONENT_TIER_REGISTRY: Record<string, ComponentTier> = {
   FormGroup: ComponentTier.ORGANISM,
   StatusBanner: ComponentTier.ORGANISM,
 };
+
+/**
+ * Synchronizes tier classifications from the runtime @alloy/registry package.
+ * Call this at startup after all components have been registered.
+ */
+export function syncTiersFromRegistry(entries: Array<{ name: string; tier: ComponentTier }>): void {
+  for (const entry of entries) {
+    COMPONENT_TIER_REGISTRY[entry.name] = entry.tier;
+  }
+}
+
+/**
+ * Resolves the tier for a component type, checking the registry first.
+ */
+export function resolveComponentTier(type: string): ComponentTier | undefined {
+  return COMPONENT_TIER_REGISTRY[type];
+}
 
 /**
  * Validation error for tier rules.

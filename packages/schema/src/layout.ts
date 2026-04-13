@@ -32,7 +32,7 @@ export const AlloyComponentSchema: z.ZodType<AlloyComponent> = z.lazy(() =>
 export const AlloyLayoutSchema = z.object({
   schemaVersion: z.string().regex(/^\d+\.\d+$/, "Version must be in 'x.y' format"),
   requestId: z.string().uuid("Request ID must be a valid UUID"),
-  locale: z.string().regex(/^[a-z]{2}(-[A-Z]{2})?$/, "Locale must be a valid BCP 47 tag"),
+  locale: z.string().regex(/^[a-z]{2}(-[A-Z][a-z]{3})?(-[A-Z]{2})?$/, "Locale must be a valid BCP 47 tag"),
   layout: AlloyComponentSchema,
   metadata: LayoutMetadataSchema.optional(),
 }).refine(

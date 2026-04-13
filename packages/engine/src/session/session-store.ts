@@ -55,10 +55,67 @@ export class InMemorySessionStore implements SessionStore {
   }
 }
 
+// ─── Redis Session Store ────────────────────────────────────────────────────
+
+export interface RedisSessionClientLike {
+  get(key: string): Promise<string | null>;
+  set(key: string, value: string, options?: { PX?: number }): Promise<string | null>;
+  del(key: string | string[]): Promise<number>;
+}
+
+export class RedisSessionStore implements SessionStore {
+  private prefix = 'alloy:session:';
+
+  constructor(private client: RedisSessionClientLike) {}
+
+  async get(sessionId: string): Promise<SessionState | undefined> {
+    const raw = await this.client.get(this.prefix + sessionId);
+    if (!raw) return undefined;
+    const parsed = JSON.parse(raw);
+    return {
+      ...parsed,
+      createdAt: new Date(parsed.createdAt),
+      lastActivityAt: new Date(parsed.lastActivityAt),
+    };
+  }
+
+  async set(sessionId: string, session: SessionState): Promise<void> {
+    const ttlMs = session.ttlSeconds > 0 ? session.ttlSeconds * 1000 : 3600000;
+    await this.client.set(this.prefix + sessionId, JSON.stringify(session), { PX: ttlMs });
+  }
+
+  async delete(sessionId: string): Promise<void> {
+    await this.client.del(this.prefix + sessionId);
+  }
+
+  async touch(sessionId: string): Promise<void> {
+    const session = await this.get(sessionId);
+    if (!session) return;
+    session.lastActivityAt = new Date();
+    await this.set(sessionId, session);
+  }
+}
+
+// ─── Factory ────────────────────────────────────────────────────────────────
+
+let _redisClient: RedisSessionClientLike | undefined;
+
+/**
+ * Optionally inject a Redis client before the session store is created.
+ * Call this during server startup if REDIS_URL is set.
+ */
+export function setRedisClient(client: RedisSessionClientLike): void {
+  _redisClient = client;
+}
+
 export function createSessionStore(): SessionStore {
   const redisUrl = process.env.REDIS_URL;
+  if (redisUrl && _redisClient) {
+    console.log('[Session] Using RedisSessionStore');
+    return new RedisSessionStore(_redisClient);
+  }
   if (redisUrl) {
-    console.log('[Session] REDIS_URL detected — extend with ioredis adapter for production use');
+    console.warn('[Session] REDIS_URL set but no Redis client injected — falling back to InMemorySessionStore');
   }
   return new InMemorySessionStore({
     ttlSeconds: parseInt(process.env.SESSION_TTL_SECONDS ?? '3600', 10),

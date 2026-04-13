@@ -77,8 +77,8 @@ export function getToolsForUser(userPermissions: string[]): ToolManifest[] {
       return true;
     }
     
-    // User must have AT LEAST ONE of the required permissions
-    return tool.requiredPermissions.some(perm => userPermissions.includes(perm));
+    // User must have ALL required permissions
+    return tool.requiredPermissions.every(perm => userPermissions.includes(perm));
   });
 
   // Convert to manifest format for LLM
@@ -109,7 +109,7 @@ export async function executeTool(
 
   // 1. Check Permissions
   if (tool.requiredPermissions && tool.requiredPermissions.length > 0) {
-    const hasPermission = tool.requiredPermissions.some(perm => 
+    const hasPermission = tool.requiredPermissions.every(perm => 
       context.session.permissions.includes(perm)
     );
     

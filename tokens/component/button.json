@@ -1,0 +1,14 @@
+{
+  "button-bg-primary":       { "$value": "{color-brand}",       "$type": "color" },
+  "button-bg-primary-hover": { "$value": "{color-brand-hover}", "$type": "color" },
+  "button-bg-secondary":     { "$value": "transparent",         "$type": "color" },
+  "button-bg-danger":        { "$value": "{color-error}",       "$type": "color" },
+  "button-text-primary":     { "$value": "{white}",             "$type": "color" },
+  "button-text-secondary":   { "$value": "{color-brand}",       "$type": "color" },
+  "button-border-radius":    { "$value": "{radius-md}",         "$type": "borderRadius" },
+  "button-padding-x":        { "$value": "{space-md}",          "$type": "spacing" },
+  "button-padding-y":        { "$value": "{space-sm}",          "$type": "spacing" },
+  "button-font-size":        { "$value": "{font-size-sm}",      "$type": "fontSize" },
+  "button-font-weight":      { "$value": "{font-weight-medium}","$type": "fontWeight" },
+  "button-shadow":           { "$value": "{shadow-sm}",         "$type": "shadow" }
+}

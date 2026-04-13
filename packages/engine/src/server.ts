@@ -8,6 +8,7 @@ import { AnthropicProvider } from './providers/anthropic';
 import { OpenAIProvider } from './providers/openai';
 import { LlmProvider } from './providers/base';
 import { auditLogger, AuditEventType } from './audit/audit-logger';
+import { getPrometheusMetrics } from '@alloy/telemetry';
 import { sessionStore } from './session/session-store';
 import { createAuthMiddleware } from './auth/jwt';
 
@@ -86,7 +87,7 @@ export function createServer(options: { provider?: LlmProvider; port?: number } 
 
   // JWT auth — skip health/admin probes, enforce on API routes
   app.use(createAuthMiddleware({
-    skipPaths: ['/healthz', '/readyz', '/health', '/admin'],
+    skipPaths: ['/healthz', '/readyz', '/health', '/admin', '/health/circuit', '/metrics'],
   }));
 
   /**
@@ -148,6 +149,26 @@ export function createServer(options: { provider?: LlmProvider; port?: number } 
   });
 
   /**
+   * Prometheus metrics endpoint — Observability spec §6
+   */
+  app.get('/metrics', (_req, res) => {
+    res.setHeader('Content-Type', 'text/plain; version=0.0.4');
+    res.status(200).send(getPrometheusMetrics());
+  });
+
+  /**
+   * Circuit breaker state endpoint — Observability spec §6
+   */
+  app.get('/health/circuit', (_req, res) => {
+    res.status(circuitOpen ? 503 : 200).json({
+      status: circuitOpen ? 'open' : 'closed',
+      consecutiveFailures,
+      threshold: CIRCUIT_BREAKER_THRESHOLD,
+      timestamp: new Date().toISOString(),
+    });
+  });
+
+  /**
    * Health Check Endpoint (legacy — kept for backward compatibility)
    */
   app.get('/health', (_req, res) => {
@@ -197,8 +218,7 @@ export function createServer(options: { provider?: LlmProvider; port?: number } 
     // 3. Prevent prompt injection by neutralizing known delimiters
     prompt = prompt
       .trim()
-      .replace(/<script\b[^>]*>([\s\S]*?)<\/script>/gmi, "")
-      .replace(/[{}[\]]/g, " "); // Neutralize JSON-like structures that might confuse the pipeline
+      .replace(/<script\b[^>]*>([\s\S]*?)<\/script>/gmi, "");
 
     // Set up SSE headers
     res.setHeader('Content-Type', 'text/event-stream');

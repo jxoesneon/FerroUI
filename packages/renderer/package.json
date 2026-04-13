@@ -1,0 +1,24 @@
+{
+  "name": "@alloy/renderer",
+  "version": "0.1.0",
+  "description": "Alloy UI layout renderer — maps AlloyLayout JSON to React components via the component registry.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "@alloy/schema": "workspace:*",
+    "@alloy/registry": "workspace:*",
+    "react": "^18.3.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.0",
+    "typescript": "^5.5.0"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0"
+  }
+}

@@ -99,3 +99,35 @@ export function recordRequestCompletion(durationMs: number, success: boolean, at
     alloyMetrics.requestsErrors.add(1, attributes);
   }
 }
+
+/**
+ * In-memory counters for cache hit rate computation — Observability spec §4.4
+ */
+let cacheHits = 0;
+let cacheMisses = 0;
+
+export function recordCacheHit() { cacheHits++; alloyMetrics.cacheHits.add(1); }
+export function recordCacheMiss() { cacheMisses++; alloyMetrics.cacheMisses.add(1); }
+
+export function getCacheHitRate(): number {
+  const total = cacheHits + cacheMisses;
+  return total === 0 ? 0 : cacheHits / total;
+}
+
+/**
+ * Returns metrics in Prometheus text exposition format.
+ * Used by the /metrics endpoint.
+ */
+export function getPrometheusMetrics(): string {
+  const lines: string[] = [];
+  lines.push(`# HELP alloy_cache_hit_rate Ratio of cache hits to total lookups`);
+  lines.push(`# TYPE alloy_cache_hit_rate gauge`);
+  lines.push(`alloy_cache_hit_rate ${getCacheHitRate().toFixed(4)}`);
+  lines.push(`# HELP alloy_cache_hits_total Total cache hits`);
+  lines.push(`# TYPE alloy_cache_hits_total counter`);
+  lines.push(`alloy_cache_hits_total ${cacheHits}`);
+  lines.push(`# HELP alloy_cache_misses_total Total cache misses`);
+  lines.push(`# TYPE alloy_cache_misses_total counter`);
+  lines.push(`alloy_cache_misses_total ${cacheMisses}`);
+  return lines.join('\n') + '\n';
+}
