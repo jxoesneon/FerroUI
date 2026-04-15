@@ -13,14 +13,14 @@ const TEMPLATES: Record<string, { label: string; description: string }> = {
 };
 
 export const createCommand = new Command('create')
-  .description('Create a new Alloy UI project.')
+  .description('Create a new FerroUI UI project.')
   .argument('<name>', 'Name of the project')
   .option('-t, --template <template>', 'Template: default | minimal | full')
   .option('-p, --pkg-manager <manager>', 'Package manager: pnpm | npm | yarn')
   .option('--no-git', 'Skip git initialization')
   .option('--no-install', 'Skip dependency installation')
   .action(async (name: string, options: Record<string, any>) => {
-    console.log(chalk.bold.cyan('\n✦ Alloy UI Project Creator\n'));
+    console.log(chalk.bold.cyan('\n✦ FerroUI UI Project Creator\n'));
 
     const targetDir = path.resolve(process.cwd(), name);
 
@@ -74,16 +74,16 @@ export const createCommand = new Command('create')
         private: true,
         type: 'module',
         scripts: {
-          dev: 'alloy dev',
-          build: 'alloy build',
-          deploy: 'alloy deploy',
+          dev: 'ferroui dev',
+          build: 'ferroui build',
+          deploy: 'ferroui deploy',
           test: 'vitest run',
           typecheck: 'tsc --noEmit',
         },
         dependencies: {
-          '@alloy/schema': 'workspace:*',
-          '@alloy/registry': 'workspace:*',
-          '@alloy/tools': 'workspace:*',
+          '@ferroui/schema': 'workspace:*',
+          '@ferroui/registry': 'workspace:*',
+          '@ferroui/tools': 'workspace:*',
           'react': '^18.3.0',
           'react-dom': '^18.3.0',
           'zod': '^4.3.6',
@@ -94,7 +94,7 @@ export const createCommand = new Command('create')
           'typescript': '^6.0.0',
           'vite': '^5.1.4',
           'vitest': '^4.1.4',
-          'alloy': 'latest',
+          'ferroui': 'latest',
         },
       };
 
@@ -124,12 +124,12 @@ export const createCommand = new Command('create')
         { spaces: 2 }
       );
 
-      // ─── alloy.config.ts ───────────────────────────────────────────────────
+      // ─── ferroui.config.ts ───────────────────────────────────────────────────
       await fs.writeFile(
-        path.join(targetDir, 'alloy.config.ts'),
-        `import type { AlloyConfig } from '@alloy/schema';
+        path.join(targetDir, 'ferroui.config.ts'),
+        `import type { FerroUIConfig } from '@ferroui/schema';
 
-const config: AlloyConfig = {
+const config: FerroUIConfig = {
   framework: {
     schemaVersion: '1.0',
     defaultProvider: 'openai',
@@ -171,11 +171,11 @@ export default config;
       // ─── .env.local ────────────────────────────────────────────────────────
       await fs.writeFile(
         path.join(targetDir, '.env.local'),
-        `# Alloy UI Environment Variables
+        `# FerroUI UI Environment Variables
 # Copy to .env and fill in your values
 OPENAI_API_KEY=
 ANTHROPIC_API_KEY=
-ALLOY_API_KEY=
+FERROUI_API_KEY=
 `
       );
 
@@ -226,7 +226,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({ title, value, trend }) =
         await fs.ensureDir(path.join(targetDir, 'src/tools/getMetrics'));
         await fs.writeFile(
           path.join(targetDir, 'src/tools/getMetrics/index.ts'),
-          `import { registerTool } from '@alloy/tools';
+          `import { registerTool } from '@ferroui/tools';
 import { z } from 'zod';
 
 registerTool({
@@ -259,7 +259,7 @@ registerTool({
         path.join(targetDir, 'README.md'),
         `# ${name}
 
-> Built with [Alloy UI](https://alloy.dev) — AI-powered, server-driven UI.
+> Built with [FerroUI UI](https://ferroui.dev) — AI-powered, server-driven UI.
 
 ## Quick Start
 
@@ -272,7 +272,7 @@ cp .env.local .env
 # Edit .env and set OPENAI_API_KEY (or ANTHROPIC_API_KEY)
 
 # 3. Start development
-alloy dev
+ferroui dev
 
 # 4. Open the playground
 open http://localhost:3000
@@ -282,28 +282,28 @@ open http://localhost:3000
 
 \`\`\`
 src/
-  components/       # Alloy UI components (register with @alloy/registry)
-  tools/            # Data tools (register with @alloy/tools)
-alloy.config.ts     # Framework configuration
+  components/       # FerroUI UI components (register with @ferroui/registry)
+  tools/            # Data tools (register with @ferroui/tools)
+ferroui.config.ts     # Framework configuration
 \`\`\`
 
 ## Adding Components
 
 \`\`\`bash
-alloy generate component MyComponent
+ferroui generate component MyComponent
 \`\`\`
 
 ## Adding Tools
 
 \`\`\`bash
-alloy generate tool getMyData
+ferroui generate tool getMyData
 \`\`\`
 
 ## Deploying
 
 \`\`\`bash
-alloy build
-alloy deploy
+ferroui build
+ferroui deploy
 \`\`\`
 `
       );
@@ -316,7 +316,7 @@ alloy deploy
         try {
           execSync('git init', { cwd: targetDir, stdio: 'ignore' });
           execSync('git add -A', { cwd: targetDir, stdio: 'ignore' });
-          execSync('git commit -m "chore: initial commit from alloy create"', { cwd: targetDir, stdio: 'ignore' });
+          execSync('git commit -m "chore: initial commit from ferroui create"', { cwd: targetDir, stdio: 'ignore' });
           gitSpinner.succeed(chalk.green('Initialized git repository'));
         } catch {
           gitSpinner.warn(chalk.yellow('Could not initialize git (git not found or no config)'));
@@ -341,7 +341,7 @@ ${chalk.bold('Next steps:')}
   ${chalk.cyan(`cd ${name}`)}
   ${chalk.dim('# Add your API key:')}
   ${chalk.cyan('cp .env.local .env && $EDITOR .env')}
-  ${chalk.cyan('alloy dev')}
+  ${chalk.cyan('ferroui dev')}
 
   ${chalk.dim(`Open ${chalk.blue('http://localhost:3000')} and type your first prompt.`)}
 `);

@@ -1,0 +1,27 @@
+{
+  "name": "@ferroui/config",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Shared configuration (ESLint, TypeScript, Prettier) for FerroUI UI.",
+  "files": [
+    "eslint",
+    "typescript",
+    "prettier",
+    "tsconfig.base.json"
+  ],
+  "engines": {
+    "node": ">=25"
+  },
+  "keywords": [
+    "ferroui",
+    "config",
+    "eslint",
+    "typescript",
+    "prettier"
+  ],
+  "devDependencies": {
+    "eslint": "latest",
+    "prettier": "latest",
+    "typescript": "latest"
+  }
+}

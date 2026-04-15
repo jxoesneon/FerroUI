@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { z } from 'zod';
-import { AlloyLayout, validateLayout, ValidationIssue } from '@alloy/schema';
-import { registry } from '@alloy/registry';
+import { FerroUILayout, validateLayout, ValidationIssue } from '@ferroui/schema';
+import { registry } from '@ferroui/registry';
 import { LlmProvider } from '../providers/base';
 import { LlmRequest, RequestContext } from '../types';
 
@@ -67,7 +67,7 @@ export async function repairLayout(
   context: RequestContext,
   attempt: number = 1,
   maxAttempts: number = 3
-): Promise<AlloyLayout> {
+): Promise<FerroUILayout> {
   if (attempt > maxAttempts) {
     throw new Error(`Failed to repair layout after ${maxAttempts} attempts.`);
   }
@@ -75,7 +75,7 @@ export async function repairLayout(
   const errorReport = errors.map((e: ValidationIssue) => `- ${e.path}: ${e.message}`).join('\n');
   
   const repairSystemPrompt = `
-# Alloy UI - Repair Mode
+# FerroUI UI - Repair Mode
 
 The following layout JSON failed validation. Your task is to fix it.
 

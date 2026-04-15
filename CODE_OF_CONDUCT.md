@@ -2,7 +2,7 @@
 
 ## Our Pledge
 
-We pledge to make participation in Alloy UI a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, gender identity and expression, level of experience, nationality, personal appearance, race, religion, or sexual identity and orientation.
+We pledge to make participation in FerroUI UI a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, gender identity and expression, level of experience, nationality, personal appearance, race, religion, or sexual identity and orientation.
 
 ## Our Standards
 
@@ -21,7 +21,7 @@ We pledge to make participation in Alloy UI a harassment-free experience for eve
 
 ## Enforcement
 
-Instances of abusive behavior may be reported to the project team at conduct@alloy.dev. All complaints will be reviewed and investigated.
+Instances of abusive behavior may be reported to the project team at conduct@ferroui.dev. All complaints will be reviewed and investigated.
 
 ## Attribution
 

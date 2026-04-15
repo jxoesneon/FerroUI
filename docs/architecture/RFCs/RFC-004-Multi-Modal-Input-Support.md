@@ -9,7 +9,7 @@
 
 ## Summary
 
-This RFC proposes extending the Alloy UI request model to support **multi-modal inputs** — voice, images, and documents — in addition to natural language text. This addresses the open question in the whitepaper regarding multi-modal handling.
+This RFC proposes extending the FerroUI UI request model to support **multi-modal inputs** — voice, images, and documents — in addition to natural language text. This addresses the open question in the whitepaper regarding multi-modal handling.
 
 ## Motivation
 
@@ -24,7 +24,7 @@ Users increasingly expect to interact with AI systems using:
 ### 1. Extended Request Format
 
 ```typescript
-interface AlloyRequest {
+interface FerroUIRequest {
   id: string;
   text?: string;
   context?: ConversationContext;
@@ -81,7 +81,7 @@ interface LlmProvider {
 ### 5. Example: Screenshot Analysis
 
 ```typescript
-const request: AlloyRequest = {
+const request: FerroUIRequest = {
   id: 'req-123',
   text: 'What errors do you see in this form?',
   attachments: [{

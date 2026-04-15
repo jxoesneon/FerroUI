@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { z } from 'zod';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { AlloyLayout, AlloyComponent } from '@alloy/schema';
+import { FerroUILayout, FerroUIComponent } from '@ferroui/schema';
 
 export interface RequestContext {
   userId: string;
@@ -40,7 +40,7 @@ export interface EngineChunk {
     name: string;
     result: any;
   };
-  layout?: Partial<AlloyLayout>;
+  layout?: Partial<FerroUILayout>;
   error?: {
     code: string;
     message: string;

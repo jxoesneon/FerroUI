@@ -1,4 +1,4 @@
-# PRD-001: Alloy UI Core Framework
+# PRD-001: FerroUI UI Core Framework
 
 **Version:** 1.0  
 **Status:** Approved  
@@ -10,7 +10,7 @@
 
 ## 1. Executive Summary
 
-Alloy UI is an AI-powered, server-driven UI meta-framework that enables developers to build dynamic, natural language-driven interfaces without writing static screens. This PRD defines the core framework capabilities, user experience goals, and success metrics for the initial release.
+FerroUI UI is an AI-powered, server-driven UI meta-framework that enables developers to build dynamic, natural language-driven interfaces without writing static screens. This PRD defines the core framework capabilities, user experience goals, and success metrics for the initial release.
 
 ### 1.1 Problem Statement
 
@@ -24,7 +24,7 @@ Current approaches resolve this badly:
 
 ### 1.2 Solution
 
-Alloy UI treats the LLM as a **runtime UI orchestrator** rather than a content generator. Developers register typed components and data tools; the AI assembles, validates, streams, and self-heals layouts on demand.
+FerroUI UI treats the LLM as a **runtime UI orchestrator** rather than a content generator. Developers register typed components and data tools; the AI assembles, validates, streams, and self-heals layouts on demand.
 
 ---
 
@@ -111,9 +111,9 @@ Tech Stack: React, Framer Motion, Tailwind CSS
 
 | ID | Feature | Description | Acceptance Criteria |
 |----|---------|-------------|---------------------|
-| F-008 | alloy CLI | Command-line development tool | `alloy dev` starts local environment in <30s |
-| F-009 | Component Scaffolding | Generate new components with CLI | `alloy generate component` creates all boilerplate |
-| F-010 | Tool Scaffolding | Generate new tools with CLI | `alloy generate tool` creates Zod schema + mock |
+| F-008 | ferroui CLI | Command-line development tool | `ferroui dev` starts local environment in <30s |
+| F-009 | Component Scaffolding | Generate new components with CLI | `ferroui generate component` creates all boilerplate |
+| F-010 | Tool Scaffolding | Generate new tools with CLI | `ferroui generate tool` creates Zod schema + mock |
 | F-011 | Registry Inspector | Browser-based component explorer | Visual preview of all registered components |
 | F-012 | Layout Playground | Test prompts and see pipeline output | Side-by-side: prompt, Phase 1, Phase 2, render |
 | F-013 | Hot Reload | Automatic refresh on code changes | <2s reload time for component changes |
@@ -154,13 +154,13 @@ Tech Stack: React, Framer Motion, Tailwind CSS
 ### 5.1 First-Time Developer Journey
 
 ```
-1. Discover Alloy UI (GitHub, blog post, conference)
+1. Discover FerroUI UI (GitHub, blog post, conference)
    ↓
 2. Read Quickstart Guide (5 minutes)
    ↓
-3. Run `npm create alloy-app@latest my-app` (2 minutes)
+3. Run `npm create ferroui-app@latest my-app` (2 minutes)
    ↓
-4. Run `cd my-app && alloy dev` (30 seconds)
+4. Run `cd my-app && ferroui dev` (30 seconds)
    ↓
 5. Open Layout Playground, type first prompt (2 minutes)
    ↓
@@ -178,13 +178,13 @@ SUCCESS: First AI-powered feature live in < 1 hour
 ```
 1. Need new component (DataGrid with inline editing)
    ↓
-2. Run `alloy generate component DataGrid` (5 seconds)
+2. Run `ferroui generate component DataGrid` (5 seconds)
    ↓
 3. Implement component with TypeScript + Zod schema (30 minutes)
    ↓
 4. Add Storybook stories for visual testing (15 minutes)
    ↓
-5. Run `alloy eval` to test with AI (2 minutes)
+5. Run `ferroui eval` to test with AI (2 minutes)
    ↓
 6. Submit PR with changeset (5 minutes)
    ↓

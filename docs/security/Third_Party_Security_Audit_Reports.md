@@ -9,7 +9,7 @@
 
 ## 1. Overview
 
-This document summarizes third-party security audits conducted on Alloy UI. Full reports are available upon request to authorized personnel.
+This document summarizes third-party security audits conducted on FerroUI UI. Full reports are available upon request to authorized personnel.
 
 ---
 
@@ -244,7 +244,7 @@ Removed server version headers and customized error pages.
 ### 6.2 Bug Bounty Program
 
 **Platform:** HackerOne  
-**Scope:** *.alloy.dev, API, documentation  
+**Scope:** *.ferroui.dev, API, documentation  
 **Rewards:**
 - Critical: $5,000
 - High: $2,000

@@ -3,22 +3,22 @@ use std::collections::HashMap;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
-pub struct AlloyComponent {
+pub struct FerroUIComponent {
     pub r#type: String,
     pub id: Option<String>,
     pub props: Option<HashMap<String, serde_json::Value>>,
-    pub children: Option<Vec<AlloyComponent>>,
+    pub children: Option<Vec<FerroUIComponent>>,
     pub action: Option<serde_json::Value>,
     pub aria: Option<serde_json::Value>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
-pub struct AlloyLayout {
+pub struct FerroUILayout {
     pub schema_version: String,
     pub request_id: String,
     pub locale: String,
-    pub layout: AlloyComponent,
+    pub layout: FerroUIComponent,
     pub metadata: Option<serde_json::Value>,
 }
 
@@ -28,7 +28,7 @@ pub enum EngineChunk {
     Phase { phase: u8, content: String },
     ToolCall { name: String, args: serde_json::Value },
     ToolOutput { name: String, result: serde_json::Value },
-    LayoutChunk { layout: Option<AlloyLayout>, content: Option<String> },
+    LayoutChunk { layout: Option<FerroUILayout>, content: Option<String> },
     Error { code: String, message: String, retryable: bool },
     Complete { content: Option<String> },
 }

@@ -1,15 +1,27 @@
 {
-  "name": "@alloy/i18n",
+  "name": "@ferroui/i18n",
   "version": "0.1.0",
   "private": true,
+  "description": "Internationalization and localization utilities for FerroUI UI.",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "engines": {
+    "node": ">=25"
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
     "test": "vitest run"
+  },
+  "keywords": [
+    "ferroui",
+    "i18n",
+    "localization"
+  ],
+  "dependencies": {
+    "@ferroui/shared": "workspace:*"
   },
   "peerDependencies": {
     "react": ">=18.0.0"

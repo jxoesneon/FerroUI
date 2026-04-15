@@ -9,7 +9,7 @@
 
 ## Context
 
-Following a critical git failure and dependency corruption incident, the Alloy monorepo underwent a complete restoration. This event highlighted the fragility of our dependency management and build pipeline. Key issues encountered:
+Following a critical git failure and dependency corruption incident, the FerroUI monorepo underwent a complete restoration. This event highlighted the fragility of our dependency management and build pipeline. Key issues encountered:
 
 - TypeScript 6.0 breaking changes (`esModuleInterop` removal, `ignoreDeprecations` requirement)
 - ESM/CommonJS interop failures with `execa` and other dual-mode packages
@@ -29,7 +29,7 @@ We will establish a **Forward Compatibility Policy** with the following pillars:
 | Runtime (Node.js) | Pin to LTS or Current stable | `v25.x` (Current) |
 | TypeScript | Pin to latest stable minor | `^6.0.0` |
 | Critical build tools | Pin exact versions | `pnpm@10.33.0` |
-| Internal packages | Always use `workspace:*` | `"@alloy/schema": "workspace:*"` |
+| Internal packages | Always use `workspace:*` | `"@ferroui/schema": "workspace:*"` |
 | External runtime deps | Caret for patch updates only | `"^18.2.0"` → `"^18.2.0"` |
 
 ### 2. Workspace Protocol Enforcement
@@ -39,8 +39,8 @@ All internal monorepo dependencies MUST use `workspace:*` protocol:
 ```json
 {
   "dependencies": {
-    "@alloy/schema": "workspace:*",
-    "@alloy/engine": "workspace:*"
+    "@ferroui/schema": "workspace:*",
+    "@ferroui/engine": "workspace:*"
   }
 }
 ```

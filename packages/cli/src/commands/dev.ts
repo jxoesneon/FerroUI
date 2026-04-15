@@ -38,11 +38,16 @@ export const devCommand = new Command('dev')
   .option('--engine-port <number>', 'Engine port', '3001')
   .option('--inspector-port <number>', 'Registry inspector port', '3002')
   .option('--no-open', "Don't open browser automatically")
+  .option('--engine-only', 'Start only the orchestration engine (backend)')
+  .option('--renderer-only', 'Start only the layout playground/renderer (frontend)')
   .action(async (options) => {
-    console.log(chalk.bold.cyan('\n✦ Alloy UI Development Environment\n'));
+    console.log(chalk.bold.cyan('\n✦ FerroUI UI Development Environment\n'));
 
     const cwd = process.cwd();
     const pkgManager = detectPkgManager(cwd);
+    
+    const startEngine = options.engineOnly || (!options.engineOnly && !options.rendererOnly);
+    const startRenderer = options.rendererOnly || (!options.engineOnly && !options.rendererOnly);
 
     // Determine monorepo layout: if running inside the monorepo, use workspace paths.
     // Otherwise fall back to locally installed package entry points.
@@ -62,82 +67,89 @@ export const devCommand = new Command('dev')
 
     try {
       // ── 1. Layout Playground ────────────────────────────────────────────
-      const webDir = path.join(appsDir, 'web');
-      const webExists = await fs.pathExists(webDir);
+      if (startRenderer) {
+        const webDir = path.join(appsDir, 'web');
+        const webExists = await fs.pathExists(webDir);
 
-      if (webExists) {
-        const playground = execa(pkgManager, ['run', 'dev', '--', '--port', playgroundPort], {
-          cwd: webDir,
-          stdio: 'inherit',
-          env: { ...sharedEnv, PORT: String(playgroundPort) },
-          reject: false,
-        });
-        processes.push(playground as any);
-      } else {
-        spinner.warn(chalk.yellow('apps/web not found — playground not started'));
+        if (webExists) {
+          const playground = execa(pkgManager, ['run', 'dev', '--', '--port', playgroundPort], {
+            cwd: webDir,
+            stdio: 'inherit',
+            env: { ...sharedEnv, PORT: String(playgroundPort) },
+            reject: false,
+          });
+          processes.push(playground as any);
+        } else {
+          spinner.warn(chalk.yellow('apps/web not found — playground not started'));
+        }
       }
 
       // ── 2. Orchestration Engine ─────────────────────────────────────────
-      let engineEntry: string | undefined;
-      const engineDist = path.join(packagesDir, 'engine/dist/server.js');
-      const engineSrc = path.join(packagesDir, 'engine/src/server.ts');
-      if (await fs.pathExists(engineDist)) {
-        engineEntry = engineDist;
-      } else if (await fs.pathExists(engineSrc)) {
-        engineEntry = engineSrc;
-      }
+      if (startEngine) {
+        let engineEntry: string | undefined;
+        const engineDist = path.join(packagesDir, 'engine/dist/server.js');
+        const engineSrc = path.join(packagesDir, 'engine/src/server.ts');
+        if (await fs.pathExists(engineDist)) {
+          engineEntry = engineDist;
+        } else if (await fs.pathExists(engineSrc)) {
+          engineEntry = engineSrc;
+        }
 
-      if (engineEntry) {
-        const useTs = engineEntry.endsWith('.ts');
-        const engineCmd = useTs ? 'npx' : 'node';
-        const engineArgs = useTs
-          ? ['ts-node', '--esm', engineEntry]
-          : [engineEntry];
+        if (engineEntry) {
+          const useTs = engineEntry.endsWith('.ts');
+          const engineCmd = useTs ? 'npx' : 'node';
+          const engineArgs = useTs
+            ? ['ts-node', '--esm', engineEntry]
+            : [engineEntry];
 
-        const engine = execa(engineCmd, engineArgs, {
-          stdio: 'inherit',
-          env: { ...sharedEnv, PORT: String(enginePort) },
-          reject: false,
-        });
-        processes.push(engine as any);
-      } else {
-        spinner.warn(chalk.yellow('Engine entry not found — engine not started'));
-      }
+          const engine = execa(engineCmd, engineArgs, {
+            stdio: 'inherit',
+            env: { ...sharedEnv, PORT: String(enginePort) },
+            reject: false,
+          });
+          processes.push(engine as any);
+        } else {
+          spinner.warn(chalk.yellow('Engine entry not found — engine not started'));
+        }
 
-      // ── 3. Registry Inspector ───────────────────────────────────────────
-      let inspectorEntry: string | undefined;
-      const inspectorDist = path.join(packagesDir, 'registry/dist/inspector.js');
-      const inspectorSrc = path.join(packagesDir, 'registry/src/inspector.ts');
-      if (await fs.pathExists(inspectorDist)) {
-        inspectorEntry = inspectorDist;
-      } else if (await fs.pathExists(inspectorSrc)) {
-        inspectorEntry = inspectorSrc;
-      }
+        // ── 3. Registry Inspector ───────────────────────────────────────────
+        let inspectorEntry: string | undefined;
+        const inspectorDist = path.join(packagesDir, 'registry/dist/inspector.js');
+        const inspectorSrc = path.join(packagesDir, 'registry/src/inspector.ts');
+        if (await fs.pathExists(inspectorDist)) {
+          inspectorEntry = inspectorDist;
+        } else if (await fs.pathExists(inspectorSrc)) {
+          inspectorEntry = inspectorSrc;
+        }
 
-      if (inspectorEntry) {
-        const useTs = inspectorEntry.endsWith('.ts');
-        const inspCmd = useTs ? 'npx' : 'node';
-        const inspArgs = useTs
-          ? ['ts-node', '--esm', inspectorEntry, '--port', String(inspectorPort)]
-          : [inspectorEntry, '--port', String(inspectorPort)];
+        if (inspectorEntry) {
+          const useTs = inspectorEntry.endsWith('.ts');
+          const inspCmd = useTs ? 'npx' : 'node';
+          const inspArgs = useTs
+            ? ['ts-node', '--esm', inspectorEntry, '--port', String(inspectorPort)]
+            : [inspectorEntry, '--port', String(inspectorPort)];
 
-        const inspector = execa(inspCmd, inspArgs, {
-          stdio: 'inherit',
-          env: { ...sharedEnv, PORT: String(inspectorPort) },
-          reject: false,
-        });
-        processes.push(inspector as any);
-      } else {
-        spinner.warn(chalk.yellow('Registry inspector entry not found — inspector not started'));
+          const inspector = execa(inspCmd, inspArgs, {
+            stdio: 'inherit',
+            env: { ...sharedEnv, PORT: String(inspectorPort) },
+            reject: false,
+          });
+          processes.push(inspector as any);
+        } else {
+          spinner.warn(chalk.yellow('Registry inspector entry not found — inspector not started'));
+        }
       }
 
       spinner.succeed(chalk.green('Services started!'));
 
-      console.log(`
-  ${chalk.bold('✔ Layout Playground:')}   ${chalk.blue(`http://localhost:${playgroundPort}`)}
-  ${chalk.bold('✔ Orchestration Engine:')} ${chalk.blue(`http://localhost:${enginePort}`)}
-  ${chalk.bold('✔ Registry Inspector:')}  ${chalk.blue(`http://localhost:${inspectorPort}`)}
-`);
+      if (startRenderer) {
+        console.log(`  ${chalk.bold('✔ Layout Playground:')}   ${chalk.blue(`http://localhost:${playgroundPort}`)}`);
+      }
+      if (startEngine) {
+        console.log(`  ${chalk.bold('✔ Orchestration Engine:')} ${chalk.blue(`http://localhost:${enginePort}`)}`);
+        console.log(`  ${chalk.bold('✔ Registry Inspector:')}  ${chalk.blue(`http://localhost:${inspectorPort}`)}`);
+      }
+
       console.log(chalk.dim('  Watching for changes... Press Ctrl+C to stop.\n'));
 
       if (options.open !== false) {

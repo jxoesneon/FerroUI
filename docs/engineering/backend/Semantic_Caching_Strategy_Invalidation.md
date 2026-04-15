@@ -50,7 +50,7 @@ The semantic cache reduces LLM API costs and improves response latency by cachin
 │    CACHE HIT        │         │    CACHE MISS       │
 │                     │         │                     │
 │ Return cached       │         │ Execute full        │
-│ AlloyLayout         │         │ pipeline            │
+│ FerroUILayout         │         │ pipeline            │
 │                     │         │ Store in cache      │
 └─────────────────────┘         │ Return layout       │
                                 └─────────────────────┘
@@ -139,15 +139,15 @@ function fingerprintToolResult(result: unknown): string {
 | Deployment | Backend | Configuration |
 |------------|---------|---------------|
 | Web SaaS | Redis | `redis://localhost:6379` |
-| Desktop | SQLite | `~/.alloy/cache.db` |
-| Edge | Cloudflare KV | Namespace: `alloy-cache` |
+| Desktop | SQLite | `~/.ferroui/cache.db` |
+| Edge | Cloudflare KV | Namespace: `ferroui-cache` |
 
 ### 4.2 Cache Entry Structure
 
 ```typescript
 interface CacheEntry {
   key: string;
-  layout: AlloyLayout;
+  layout: FerroUILayout;
   createdAt: Date;
   expiresAt: Date;
   toolFingerprints: Array<{
@@ -170,7 +170,7 @@ class RedisCache implements SemanticCache {
   private redis: Redis;
   
   async get(key: string): Promise<CacheEntry | null> {
-    const data = await this.redis.get(`alloy:cache:${key}`);
+    const data = await this.redis.get(`ferroui:cache:${key}`);
     if (!data) return null;
     
     const entry: CacheEntry = JSON.parse(data);
@@ -186,14 +186,14 @@ class RedisCache implements SemanticCache {
   
   async set(key: string, entry: CacheEntry, ttlSeconds: number): Promise<void> {
     await this.redis.setex(
-      `alloy:cache:${key}`,
+      `ferroui:cache:${key}`,
       ttlSeconds,
       JSON.stringify(entry)
     );
   }
   
   async delete(key: string): Promise<void> {
-    await this.redis.del(`alloy:cache:${key}`);
+    await this.redis.del(`ferroui:cache:${key}`);
   }
 }
 ```
@@ -383,9 +383,9 @@ interface CacheMetrics {
 }
 
 // Export to Prometheus
-const cacheHitCounter = new Counter('alloy_cache_hits_total');
-const cacheMissCounter = new Counter('alloy_cache_misses_total');
-const cacheLookupHistogram = new Histogram('alloy_cache_lookup_duration_seconds');
+const cacheHitCounter = new Counter('ferroui_cache_hits_total');
+const cacheMissCounter = new Counter('ferroui_cache_misses_total');
+const cacheLookupHistogram = new Histogram('ferroui_cache_lookup_duration_seconds');
 ```
 
 ---
@@ -437,7 +437,7 @@ See [RFC-002: Shared Semantic Cache](../../architecture/RFCs/RFC-002-Shared-Sema
 ## 10. Related Documents
 
 - [Tool Registration API Reference](./Tool_Registration_API_Reference.md)
-- [AlloyLayout JSON Schema Specification](./AlloyLayout_JSON_Schema_Specification.md)
+- [FerroUILayout JSON Schema Specification](./FerroUILayout_JSON_Schema_Specification.md)
 - [ADR-002: Semantic Caching](../../architecture/ADRs/ADR-002-Semantic-Caching.md)
 
 ---

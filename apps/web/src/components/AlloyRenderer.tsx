@@ -1,19 +1,19 @@
 import React, { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import type { AlloyComponent } from '@alloy/schema';
-import { registry } from '@alloy/registry';
-import { AlloyErrorBoundary } from './ErrorBoundary';
+import type { FerroUIComponent } from '@ferroui/schema';
+import { registry } from '@ferroui/registry';
+import { FerroUIErrorBoundary } from './ErrorBoundary';
 import { actionRouter } from '../services/ActionRouter';
 
-interface AlloyRendererProps {
-  component: AlloyComponent;
+interface FerroUIRendererProps {
+  component: FerroUIComponent;
 }
 
 /**
- * Recursive Alloy UI Renderer.
+ * Recursive FerroUI UI Renderer.
  * Implements Section 8.3: Atomic Component Hierarchy & Section 8.4: Framer Motion Animations.
  */
-export const AlloyRenderer: React.FC<AlloyRendererProps> = ({ component }) => {
+export const FerroUIRenderer: React.FC<FerroUIRendererProps> = ({ component }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { type, id, props, children, action, aria } = component;
 
@@ -38,7 +38,7 @@ export const AlloyRenderer: React.FC<AlloyRendererProps> = ({ component }) => {
     : undefined;
 
   return (
-    <AlloyErrorBoundary name={type}>
+    <FerroUIErrorBoundary name={type}>
       <motion.div
         layout
         initial={{ opacity: 0, scale: 0.95 }}
@@ -56,12 +56,12 @@ export const AlloyRenderer: React.FC<AlloyRendererProps> = ({ component }) => {
       >
         <ComponentImplementation {...props}>
           <AnimatePresence mode="popLayout">
-            {children?.map((child: AlloyComponent, index: number) => (
-              <AlloyRenderer key={child.id || `${type}-child-${index}`} component={child} />
+            {children?.map((child: FerroUIComponent, index: number) => (
+              <FerroUIRenderer key={child.id || `${type}-child-${index}`} component={child} />
             ))}
           </AnimatePresence>
         </ComponentImplementation>
       </motion.div>
-    </AlloyErrorBoundary>
+    </FerroUIErrorBoundary>
   );
 };

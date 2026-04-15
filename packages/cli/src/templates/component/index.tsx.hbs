@@ -8,7 +8,7 @@ import type { {{name}}Props } from './types';
 export const {{name}} = forwardRef<HTMLDivElement, {{name}}Props>(
   ({ children, ...props }, ref) => {
     return (
-      <div ref={ref} className="alloy-{{lowerName}}" {...props}>
+      <div ref={ref} className="ferroui-{{lowerName}}" {...props}>
         {children}
       </div>
     );

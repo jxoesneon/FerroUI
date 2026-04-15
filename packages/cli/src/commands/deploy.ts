@@ -9,7 +9,7 @@ const DEPLOY_TARGETS = ['web', 'desktop', 'edge'] as const;
 type DeployTarget = typeof DEPLOY_TARGETS[number];
 
 export const deployCommand = new Command('deploy')
-  .description('Deploy the Alloy project to a specified target.')
+  .description('Deploy the FerroUI project to a specified target.')
   .argument('[target]', `Deployment target: ${DEPLOY_TARGETS.join(' | ')}`, 'web')
   .option('-e, --env <environment>', 'Deployment environment (staging, production)', 'production')
   .option('--dry-run', 'Validate config and build without actually deploying', false)
@@ -29,7 +29,7 @@ export const deployCommand = new Command('deploy')
       const distDir = path.resolve(cwd, 'dist');
 
       if (!await fs.pathExists(distDir)) {
-        spinner.fail(chalk.red(`Build directory not found at ${distDir}. Run 'alloy build' first.`));
+        spinner.fail(chalk.red(`Build directory not found at ${distDir}. Run 'ferroui build' first.`));
         process.exit(1);
       }
 

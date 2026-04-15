@@ -31,13 +31,13 @@ git --version
 
 ```bash
 # Using npm
-npm create alloy-app@latest my-alloy-app
+npm create ferroui-app@latest my-ferroui-app
 
 # Using pnpm (recommended)
-pnpm create alloy-app@latest my-alloy-app
+pnpm create ferroui-app@latest my-ferroui-app
 
 # Using yarn
-yarn create alloy-app my-alloy-app
+yarn create ferroui-app my-ferroui-app
 ```
 
 ### 2.2 Follow the Prompts
@@ -63,7 +63,7 @@ Creating project...
 ### 2.3 Navigate to Your Project
 
 ```bash
-cd my-alloy-app
+cd my-ferroui-app
 ```
 
 ---
@@ -94,13 +94,13 @@ OPENAI_API_KEY=sk-your-key-here
 ### 3.2 Verify Configuration
 
 ```bash
-alloy doctor
+ferroui doctor
 ```
 
 Expected output:
 
 ```
-Checking Alloy UI installation...
+Checking FerroUI UI installation...
 
 ✔ Node.js version (20.11.0)
 ✔ pnpm version (8.15.0)
@@ -120,7 +120,7 @@ Ready to start!
 ### 4.1 Run the Dev Command
 
 ```bash
-alloy dev
+ferroui dev
 ```
 
 Expected output:
@@ -170,7 +170,7 @@ Show me a dashboard with sales KPIs
 
 ### 5.3 Explore the Output
 
-Click **"View JSON"** to see the generated AlloyLayout:
+Click **"View JSON"** to see the generated FerroUILayout:
 
 ```json
 {
@@ -204,7 +204,7 @@ Click **"View JSON"** to see the generated AlloyLayout:
 ### 6.1 Generate Component Boilerplate
 
 ```bash
-alloy generate component MyMetric
+ferroui generate component MyMetric
 ```
 
 Select options:
@@ -265,7 +265,7 @@ MyMetric.displayName = 'MyMetric';
 Edit `src/components/index.ts`:
 
 ```typescript
-import { registerComponent } from '@alloy/core';
+import { registerComponent } from '@ferroui/core';
 import { MyMetric } from './MyMetric';
 import { MyMetricSchema } from './MyMetric/schema';
 
@@ -295,7 +295,7 @@ Your `MyMetric` component should now appear in the generated layout!
 ### 7.1 Generate Tool Boilerplate
 
 ```bash
-alloy generate tool getWeather
+ferroui generate tool getWeather
 ```
 
 Select options:
@@ -313,7 +313,7 @@ Select options:
 Edit `src/tools/getWeather/index.ts`:
 
 ```typescript
-import { registerTool } from '@alloy/tools';
+import { registerTool } from '@ferroui/tools';
 import { z } from 'zod';
 
 const WeatherSchema = z.object({
@@ -375,9 +375,9 @@ ls examples/
 
 ### 8.3 Join the Community
 
-- **Discord:** [https://discord.gg/alloyui](https://discord.gg/alloyui)
-- **GitHub Discussions:** [https://github.com/alloyui/alloy/discussions](https://github.com/alloyui/alloy/discussions)
-- **Twitter:** [@alloyui](https://twitter.com/alloyui)
+- **Discord:** [https://discord.gg/ferrouiui](https://discord.gg/ferrouiui)
+- **GitHub Discussions:** [https://github.com/ferrouiui/ferroui/discussions](https://github.com/ferrouiui/ferroui/discussions)
+- **Twitter:** [@ferrouiui](https://twitter.com/ferrouiui)
 
 ---
 
@@ -387,7 +387,7 @@ ls examples/
 
 | Issue | Solution |
 |-------|----------|
-| `PORT 3000 already in use` | Kill process on port 3000 or change port: `alloy dev --port 3001` |
+| `PORT 3000 already in use` | Kill process on port 3000 or change port: `ferroui dev --port 3001` |
 | `OPENAI_API_KEY invalid` | Check your API key at [platform.openai.com](https://platform.openai.com) |
 | `Component not found` | Ensure component is registered in `src/components/index.ts` |
 | `Tool timeout` | Increase timeout in tool config or optimize tool implementation |
@@ -396,13 +396,13 @@ ls examples/
 
 ```bash
 # Check system health
-alloy doctor
+ferroui doctor
 
 # View logs
-alloy logs --follow
+ferroui logs --follow
 
 # Get help for any command
-alloy dev --help
+ferroui dev --help
 ```
 
 ---
@@ -410,7 +410,7 @@ alloy dev --help
 ## 10. Congratulations!
 
 You've successfully:
-- ✅ Installed Alloy UI
+- ✅ Installed FerroUI UI
 - ✅ Generated your first AI-powered layout
 - ✅ Created a custom component
 - ✅ Built a custom tool

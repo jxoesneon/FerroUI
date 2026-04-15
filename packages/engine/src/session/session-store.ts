@@ -6,6 +6,8 @@ export interface SessionState {
   createdAt: Date;
   lastActivityAt: Date;
   ttlSeconds: number;
+  /** Generic state record for component-level persistence (RFC-001) */
+  state?: Record<string, any>;
 }
 
 export interface SessionStore {
@@ -64,7 +66,7 @@ export interface RedisSessionClientLike {
 }
 
 export class RedisSessionStore implements SessionStore {
-  private prefix = 'alloy:session:';
+  private prefix = 'ferroui:session:';
 
   constructor(private client: RedisSessionClientLike) {}
 

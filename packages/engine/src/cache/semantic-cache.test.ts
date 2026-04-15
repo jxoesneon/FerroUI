@@ -1,13 +1,13 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { SemanticCache } from './semantic-cache';
-import { AlloyLayout } from '@alloy/schema';
+import { FerroUILayout } from '@ferroui/schema';
 
-function makeLayout(requestId: string): AlloyLayout {
+function makeLayout(requestId: string): FerroUILayout {
   return {
     schemaVersion: '1.0',
     requestId,
     locale: 'en',
-    layout: { id: 'root', type: 'container', props: {}, children: [] } as unknown as AlloyLayout['layout'],
+    layout: { id: 'root', type: 'container', props: {}, children: [] } as unknown as FerroUILayout['layout'],
     metadata: { generatedAt: new Date().toISOString() },
   };
 }

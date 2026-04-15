@@ -1,12 +1,12 @@
 import { logs, Logger, LogRecord } from '@opentelemetry/api-logs';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { AlloyAttributes } from './types';
+import { FerroUIAttributes } from './types';
 
-const INSTRUMENTATION_NAME = '@alloy/telemetry';
+const INSTRUMENTATION_NAME = '@ferroui/telemetry';
 const INSTRUMENTATION_VERSION = '0.1.0';
 
 /**
- * Returns the Alloy UI logger
+ * Returns the FerroUI UI logger
  */
 export function getLogger(): Logger {
   return logs.getLogger(INSTRUMENTATION_NAME, INSTRUMENTATION_VERSION);
@@ -50,7 +50,7 @@ export function log(
     severityText: level.toUpperCase(),
     body: message,
     attributes: {
-      service: 'alloy-engine',
+      service: 'ferroui-engine',
       version: '1.0.0',
       ...attributes
     },

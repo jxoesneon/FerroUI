@@ -59,27 +59,76 @@ export const ToolCallActionSchema = z.object({
   }),
 });
 
+export const StateUpdateActionSchema = z.object({
+  type: z.literal('STATE_UPDATE'),
+  payload: z.object({
+    id: z.string().min(1, "Target component ID must not be empty"),
+    state: z.record(z.string(), z.unknown()),
+  }),
+});
+
 export const ActionSchema = z.discriminatedUnion('type', [
   NavigateActionSchema,
   ToastActionSchema,
   RefreshActionSchema,
   ToolCallActionSchema,
+  StateUpdateActionSchema,
 ]);
 
 export type Action = z.infer<typeof ActionSchema>;
 
 /**
+ * Layout Actions State Machines (RFC-001)
+ */
+export const TransitionSchema = z.object({
+  target: z.string(),
+  condition: z.string().optional(),
+  action: ActionSchema.optional(),
+});
+
+export const StateDefinitionSchema: z.ZodType<any> = z.lazy(() => z.object({
+  on: z.record(z.string(), TransitionSchema).optional(),
+  entry: ActionSchema.optional(),
+  exit: ActionSchema.optional(),
+  render: FerroUIComponentSchema.optional().describe('State-specific component override'),
+}));
+
+export const StateMachineDefinitionSchema = z.object({
+  initial: z.string(),
+  states: z.record(z.string(), StateDefinitionSchema),
+  context: z.record(z.string(), z.unknown()).optional(),
+});
+
+export type StateMachineDefinition = z.infer<typeof StateMachineDefinitionSchema>;
+
+/**
  * Base Component Definition
  * Defined in Section 2.2 of the specification
  */
-export type AlloyComponent = {
+export type FerroUIComponent = {
   type: string;
   id?: string;
   props?: Record<string, unknown>;
-  children?: AlloyComponent[];
+  children?: FerroUIComponent[];
   action?: Action;
-  aria?: AriaProps;
+  aria: AriaProps;
+  stateMachine?: StateMachineDefinition;
 };
+
+/**
+ * Recursive Zod Schema for FerroUIComponent
+ */
+export const FerroUIComponentSchema: z.ZodType<FerroUIComponent> = z.lazy(() =>
+  z.object({
+    type: z.string().min(1, "Component type is required"),
+    id: z.string().optional(),
+    props: z.record(z.string(), z.unknown()).optional(),
+    children: z.array(z.lazy(() => FerroUIComponentSchema)).optional(),
+    action: ActionSchema.optional(),
+    aria: AriaPropsSchema,
+    stateMachine: StateMachineDefinitionSchema.optional(),
+  })
+);
 
 /**
  * Layout Metadata
@@ -95,6 +144,26 @@ export const LayoutMetadataSchema = z.object({
 });
 
 export type LayoutMetadata = z.infer<typeof LayoutMetadataSchema>;
+
+/**
+ * Root FerroUILayout Object
+ * Defined in Section 2.1 of the specification
+ */
+export const FerroUILayoutSchema = z.object({
+  schemaVersion: z.string().regex(/^\d+\.\d+$/, "Version must be in 'x.y' format").default('1.1.0'),
+  requestId: z.string().uuid("Request ID must be a valid UUID"),
+  locale: z.string().regex(/^[a-z]{2}(-[A-Z][a-z]{3})?(-[A-Z]{2})?$/, "Locale must be a valid BCP 47 tag"),
+  layout: FerroUIComponentSchema,
+  metadata: LayoutMetadataSchema.optional(),
+}).refine(
+  (data) => data.layout.type === 'Dashboard',
+  {
+    message: "Root component must be 'Dashboard' (Rule R005)",
+    path: ['layout', 'type'],
+  }
+);
+
+export type FerroUILayout = z.infer<typeof FerroUILayoutSchema>;
 
 /**
  * Validation Result Interface

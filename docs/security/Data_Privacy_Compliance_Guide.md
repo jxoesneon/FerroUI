@@ -8,7 +8,7 @@
 
 ## 1. Overview
 
-This guide outlines Alloy UI's approach to data privacy compliance, including GDPR, CCPA, and other privacy regulations. It provides implementation guidance for developers and administrators.
+This guide outlines FerroUI UI's approach to data privacy compliance, including GDPR, CCPA, and other privacy regulations. It provides implementation guidance for developers and administrators.
 
 ---
 
@@ -196,7 +196,7 @@ PHI must never be:
 
 ```typescript
 // Route PHI requests to local LLM
-function selectProvider(request: AlloyRequest): LlmProvider {
+function selectProvider(request: FerroUIRequest): LlmProvider {
   if (request.containsPHI) {
     return localOllamaProvider; // No data egress
   }

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { AlloyLayoutSchema } from './layout';
+import { FerroUILayoutSchema } from './types';
 
 export enum EngineChunkType {
   PHASE = 'phase',
@@ -35,7 +35,7 @@ const ToolOutputChunkSchema = z.object({
 
 const LayoutChunkSchema = z.object({
   type: z.literal(EngineChunkType.LAYOUT_CHUNK),
-  layout: AlloyLayoutSchema,
+  layout: FerroUILayoutSchema,
 });
 
 const RawChunkSchema = z.object({

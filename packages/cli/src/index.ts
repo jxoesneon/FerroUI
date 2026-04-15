@@ -10,12 +10,13 @@ import { deployCommand } from './commands/deploy';
 import { registryCommand } from './commands/registry';
 import { updateCommand } from './commands/update';
 import { logsCommand } from './commands/logs';
+import { tokensCommand } from './commands/tokens';
 
 const program = new Command();
 
 program
-  .name('alloy')
-  .description('Alloy UI CLI — The primary interface for Alloy UI development.')
+  .name('ferroui')
+  .description('FerroUI UI CLI — The primary interface for FerroUI UI development.')
   .version('1.0.0');
 
 // Register commands
@@ -29,6 +30,7 @@ program.addCommand(evalCommand);
 program.addCommand(doctorCommand);
 program.addCommand(updateCommand);
 program.addCommand(logsCommand);
+program.addCommand(tokensCommand);
 
 program.on('command:*', () => {
   console.error(chalk.red('Invalid command: %s\nSee --help for a list of available commands.'), program.args.join(' '));

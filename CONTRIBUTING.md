@@ -1,6 +1,6 @@
-# Contributing to Alloy UI
+# Contributing to FerroUI UI
 
-Thank you for your interest in contributing to Alloy UI! This document provides guidelines for contributing to the project.
+Thank you for your interest in contributing to FerroUI UI! This document provides guidelines for contributing to the project.
 
 ---
 
@@ -46,8 +46,8 @@ When creating a bug report, include:
 
 ```bash
 # Clone the repository
-git clone https://github.com/alloyui/alloy.git
-cd alloy
+git clone https://github.com/ferrouiui/ferroui.git
+cd ferroui
 
 # Install dependencies
 pnpm install
@@ -105,8 +105,8 @@ chore: update dependencies
 
 ## Questions?
 
-- Discord: https://discord.gg/alloyui
-- Discussions: https://github.com/alloyui/alloy/discussions
+- Discord: https://discord.gg/ferrouiui
+- Discussions: https://github.com/ferrouiui/ferroui/discussions
 
 ---
 

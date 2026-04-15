@@ -10,8 +10,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@alloy/registry": "workspace:*",
-    "@alloy/schema": "workspace:*",
+    "@ferroui/registry": "workspace:*",
+    "@ferroui/schema": "workspace:*",
     "clsx": "^2.1.1",
     "eventsource-parser": "^3.0.6",
     "framer-motion": "^12.38.0",

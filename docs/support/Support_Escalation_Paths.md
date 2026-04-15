@@ -129,10 +129,10 @@ Attachments:
 
 | Team | Email | Slack | Hours |
 |------|-------|-------|-------|
-| Tier 1 | support@alloy.dev | #support-tier1 | 24/7 |
-| Tier 2 | tech-support@alloy.dev | #support-tier2 | 24/7 |
-| Engineering | eng-oncall@alloy.dev | #incidents | 24/7 |
-| Leadership | leadership@alloy.dev | #escalations | Business hours |
+| Tier 1 | support@ferroui.dev | #support-tier1 | 24/7 |
+| Tier 2 | tech-support@ferroui.dev | #support-tier2 | 24/7 |
+| Engineering | eng-oncall@ferroui.dev | #incidents | 24/7 |
+| Leadership | leadership@ferroui.dev | #escalations | Business hours |
 
 ### 4.2 Emergency Contacts
 

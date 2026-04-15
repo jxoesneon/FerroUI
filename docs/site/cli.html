@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CLI Usage Guide — Alloy UI Docs</title>
+    <title>CLI Usage Guide — FerroUI UI Docs</title>
     <link rel="stylesheet" href="./style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -40,11 +40,11 @@
     <div class="background-glow"></div>
     <nav class="glass-nav">
         <div class="nav-content">
-            <a href="./index.html" class="logo">ALLOY<span>UI</span></a>
+            <a href="./index.html" class="logo">FERROUI<span>UI</span></a>
             <div class="nav-links">
                 <a href="./index.html" class="nav-link">Home</a>
                 <a href="./api/index.html" class="nav-link">API</a>
-                <a href="https://github.com/jxoesneon/Alloy" class="nav-link">GitHub</a>
+                <a href="https://github.com/jxoesneon/FerroUI" class="nav-link">GitHub</a>
             </div>
         </div>
     </nav>
@@ -65,19 +65,19 @@
 <h3>Global Installation</h3>
 
 <p>``<code>bash</p>
-<p>npm install -g @alloy/cli</p>
+<p>npm install -g @ferroui/cli</p>
 </code>`<code>
 
 <h3>Project-local Installation</h3>
 
 </code>`<code>bash
-<p>npm install --save-dev @alloy/cli</p>
+<p>npm install --save-dev @ferroui/cli</p>
 </code>`<code>
 
 <h3>Verify Installation</h3>
 
 </code>`<code>bash
-<p>alloy --version</p>
+<p>ferroui --version</p>
 <h1>Output: 1.0.0</h1>
 </code>`<code>
 
@@ -87,12 +87,12 @@
 
 <h3>2.1 Project Commands</h3>
 
-<p>#### </code>alloy create <project-name><code></p>
+<p>#### </code>ferroui create <project-name><code></p>
 
-<p>Create a new Alloy UI project.</p>
+<p>Create a new FerroUI UI project.</p>
 
 </code>`<code>bash
-<p>alloy create my-app</p>
+<p>ferroui create my-app</p>
 </code>`<code>
 
 <strong>Options:</strong>
@@ -104,17 +104,17 @@
 <strong>Example:</strong>
 
 </code>`<code>bash
-<p>alloy create my-app --template full --pm npm</p>
+<p>ferroui create my-app --template full --pm npm</p>
 </code>`<code>
 
 <hr class="doc-hr">
 
-<p>#### </code>alloy dev<code></p>
+<p>#### </code>ferroui dev<code></p>
 
 <p>Start the development environment.</p>
 
 </code>`<code>bash
-<p>alloy dev</p>
+<p>ferroui dev</p>
 </code>`<code>
 
 <strong>Options:</strong>
@@ -124,7 +124,7 @@
 <strong>Example:</strong>
 
 </code>`<code>bash
-<p>alloy dev --port 8080 --no-open</p>
+<p>ferroui dev --port 8080 --no-open</p>
 </code>`<code>
 
 <strong>What it starts:</strong><ul class="doc-list"><li>Orchestration engine (API server)</li></ul><ul class="doc-list"><li>Layout playground (web UI)</li></ul><ul class="doc-list"><li>Registry inspector (component browser)</li></ul><ul class="doc-list"><li>Hot reload watcher</li></ul><ul class="doc-list"><li>OpenTelemetry exporter (optional)</li></ul>
@@ -133,12 +133,12 @@
 
 <h3>2.2 Code Generation Commands</h3>
 
-<p>#### </code>alloy generate component <name><code></p>
+<p>#### </code>ferroui generate component <name><code></p>
 
 <p>Generate a new component with boilerplate.</p>
 
 </code>`<code>bash
-<p>alloy generate component UserCard</p>
+<p>ferroui generate component UserCard</p>
 </code>`<code>
 
 <strong>Options:</strong>
@@ -150,7 +150,7 @@
 <strong>Example:</strong>
 
 </code>`<code>bash
-<p>alloy generate component Button --tier atom --stories --tests</p>
+<p>ferroui generate component Button --tier atom --stories --tests</p>
 </code>`<code>
 
 <strong>Generated files:</strong>
@@ -167,12 +167,12 @@
 
 <hr class="doc-hr">
 
-<p>#### </code>alloy generate tool <name><code></p>
+<p>#### </code>ferroui generate tool <name><code></p>
 
 <p>Generate a new data tool.</p>
 
 </code>`<code>bash
-<p>alloy generate tool getUserData</p>
+<p>ferroui generate tool getUserData</p>
 </code>`<code>
 
 <strong>Options:</strong>
@@ -184,31 +184,31 @@
 <strong>Example:</strong>
 
 </code>`<code>bash
-<p>alloy generate tool calculateMetrics --category computation --mock</p>
+<p>ferroui generate tool calculateMetrics --category computation --mock</p>
 </code>`<code>
 
 <hr class="doc-hr">
 
 <h3>2.3 Development Commands</h3>
 
-<p>#### </code>alloy registry inspect<code></p>
+<p>#### </code>ferroui registry inspect<code></p>
 
 <p>Open the registry inspector in browser.</p>
 
 </code>`<code>bash
-<p>alloy registry inspect</p>
+<p>ferroui registry inspect</p>
 </code>`<code>
 
 <strong>Features:</strong><ul class="doc-list"><li>Browse all registered components</li></ul><ul class="doc-list"><li>View prop schemas</li></ul><ul class="doc-list"><li>See live previews</li></ul><ul class="doc-list"><li>Search and filter</li></ul>
 
 <hr class="doc-hr">
 
-<p>#### </code>alloy eval<code></p>
+<p>#### </code>ferroui eval<code></p>
 
 <p>Run the prompt evaluation suite.</p>
 
 </code>`<code>bash
-<p>alloy eval</p>
+<p>ferroui eval</p>
 </code>`<code>
 
 <strong>Options:</strong>
@@ -220,19 +220,19 @@
 <strong>Example:</strong>
 
 </code>`<code>bash
-<p>alloy eval --provider openai --model gpt-4 --format html --output report.html</p>
+<p>ferroui eval --provider openai --model gpt-4 --format html --output report.html</p>
 </code>`<code>
 
 <hr class="doc-hr">
 
 <h3>2.4 Build & Deploy Commands</h3>
 
-<p>#### </code>alloy build<code></p>
+<p>#### </code>ferroui build<code></p>
 
 <p>Build the project for production.</p>
 
 </code>`<code>bash
-<p>alloy build</p>
+<p>ferroui build</p>
 </code>`<code>
 
 <strong>Options:</strong>
@@ -243,12 +243,12 @@
 
 <hr class="doc-hr">
 
-<p>#### </code>alloy deploy<code></p>
+<p>#### </code>ferroui deploy<code></p>
 
 <p>Deploy to configured target.</p>
 
 </code>`<code>bash
-<p>alloy deploy</p>
+<p>ferroui deploy</p>
 </code>`<code>
 
 <strong>Options:</strong>
@@ -261,24 +261,24 @@
 
 <h3>2.5 Utility Commands</h3>
 
-<p>#### </code>alloy doctor<code></p>
+<p>#### </code>ferroui doctor<code></p>
 
 <p>Diagnose common issues.</p>
 
 </code>`<code>bash
-<p>alloy doctor</p>
+<p>ferroui doctor</p>
 </code>`<code>
 
 <strong>Checks:</strong><ul class="doc-list"><li>Node.js version</li></ul><ul class="doc-list"><li>Package manager version</li></ul><ul class="doc-list"><li>Git repository</li></ul><ul class="doc-list"><li>TypeScript configuration</li></ul><ul class="doc-list"><li>ESLint configuration</li></ul><ul class="doc-list"><li>Environment variables</li></ul><ul class="doc-list"><li>API key validity</li></ul>
 
 <hr class="doc-hr">
 
-<p>#### </code>alloy update<code></p>
+<p>#### </code>ferroui update<code></p>
 
-<p>Update Alloy UI to latest version.</p>
+<p>Update FerroUI UI to latest version.</p>
 
 </code>`<code>bash
-<p>alloy update</p>
+<p>ferroui update</p>
 </code>`<code>
 
 <strong>Options:</strong>
@@ -287,12 +287,12 @@
 
 <hr class="doc-hr">
 
-<p>#### </code>alloy logs<code></p>
+<p>#### </code>ferroui logs<code></p>
 
 <p>View application logs.</p>
 
 </code>`<code>bash
-<p>alloy logs</p>
+<p>ferroui logs</p>
 </code>`<code>
 
 <strong>Options:</strong>
@@ -303,9 +303,9 @@
 
 <h2>3. Configuration</h2>
 
-<h3>3.1 alloy.config.js</h3>
+<h3>3.1 ferroui.config.js</h3>
 
-<p>Create </code>alloy.config.js<code> in your project root:</p>
+<p>Create </code>ferroui.config.js<code> in your project root:</p>
 
 </code>`<code>javascript
 <p>module.exports = {</p>
@@ -376,7 +376,7 @@
 
 <h3>4.2 Optional Variables</h3>
 
-<div class="table-wrapper"><table class="api-table"><tr><th>Variable</th><th>Description</th><th>Default</th></tr><tr><td></code>ALLOY_PROMPT_VERSION<code></td><td>System prompt version</td><td></code>1.0<code></td></tr><tr><td></code>ALLOY_LOG_LEVEL<code></td><td>Log level</td><td></code>info<code></td></tr><tr><td></code>ALLOY_CACHE_ENABLED<code></td><td>Enable semantic cache</td><td></code>true<code></td></tr><tr><td></code>ALLOY_TELEMETRY_ENABLED<code></td><td>Enable telemetry</td><td></code>true<code></td></tr></table></div>
+<div class="table-wrapper"><table class="api-table"><tr><th>Variable</th><th>Description</th><th>Default</th></tr><tr><td></code>FERROUI_PROMPT_VERSION<code></td><td>System prompt version</td><td></code>1.0<code></td></tr><tr><td></code>FERROUI_LOG_LEVEL<code></td><td>Log level</td><td></code>info<code></td></tr><tr><td></code>FERROUI_CACHE_ENABLED<code></td><td>Enable semantic cache</td><td></code>true<code></td></tr><tr><td></code>FERROUI_TELEMETRY_ENABLED<code></td><td>Enable telemetry</td><td></code>true<code></td></tr></table></div>
 
 <hr class="doc-hr">
 
@@ -387,10 +387,10 @@
 <p>Add to your </code>.bashrc<code> or </code>.zshrc<code>:</p>
 
 </code>`<code>bash
-<p>alias ad='alloy dev'</p>
-<p>alias ab='alloy build'</p>
-<p>alias ae='alloy eval'</p>
-<p>alias adoc='alloy doctor'</p>
+<p>alias ad='ferroui dev'</p>
+<p>alias ab='ferroui build'</p>
+<p>alias ae='ferroui eval'</p>
+<p>alias adoc='ferroui doctor'</p>
 </code>`<code>
 
 <h3>5.2 NPM Scripts</h3>
@@ -400,10 +400,10 @@
 </code>`<code>json
 <p>{</p>
 <p>  "scripts": {</p>
-<p>    "dev": "alloy dev",</p>
-<p>    "build": "alloy build",</p>
-<p>    "eval": "alloy eval",</p>
-<p>    "deploy": "alloy deploy"</p>
+<p>    "dev": "ferroui dev",</p>
+<p>    "build": "ferroui build",</p>
+<p>    "eval": "ferroui eval",</p>
+<p>    "deploy": "ferroui deploy"</p>
 <p>  }</p>
 <p>}</p>
 </code>`<code>
@@ -412,7 +412,7 @@
 
 <strong>VS Code:</strong>
 
-<p>Install the Alloy UI extension for:<ul class="doc-list"><li>Syntax highlighting</li></ul><ul class="doc-list"><li>Auto-completion</li></ul><ul class="doc-list"><li>Inline documentation</li></ul></p>
+<p>Install the FerroUI UI extension for:<ul class="doc-list"><li>Syntax highlighting</li></ul><ul class="doc-list"><li>Auto-completion</li></ul><ul class="doc-list"><li>Inline documentation</li></ul></p>
 
 <hr class="doc-hr">
 
@@ -425,7 +425,7 @@
 <h3>6.2 Debug Mode</h3>
 
 </code>`<code>bash
-<p>DEBUG=alloy* alloy dev</p>
+<p>DEBUG=ferroui* ferroui dev</p>
 </code>``
 
 <hr class="doc-hr">
@@ -442,7 +442,7 @@
     </main>
 
     <footer class="glass-footer">
-        <p>&copy; 2026 Alloy Project Team. Built with Liquid Mercury standards.</p>
+        <p>&copy; 2026 FerroUI Project Team. Built with Liquid Mercury standards.</p>
     </footer>
 </body>
 </html>

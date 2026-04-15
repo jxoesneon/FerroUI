@@ -9,7 +9,7 @@
 
 ## 1. Overview
 
-This document outlines the security threat model for Alloy UI. It identifies potential threats, assesses their risk, and defines mitigation strategies.
+This document outlines the security threat model for FerroUI UI. It identifies potential threats, assesses their risk, and defines mitigation strategies.
 
 ---
 
@@ -326,7 +326,7 @@ function redactPII(data: unknown): unknown {
 
 ### 7.1 SOC 2
 
-| Control | Alloy UI Implementation |
+| Control | FerroUI UI Implementation |
 |---------|------------------------|
 | CC6.1 | Logical access controls |
 | CC6.2 | Authentication |
@@ -336,7 +336,7 @@ function redactPII(data: unknown): unknown {
 
 ### 7.2 GDPR
 
-| Requirement | Alloy UI Implementation |
+| Requirement | FerroUI UI Implementation |
 |-------------|------------------------|
 | Data Minimization | PII redaction before LLM |
 | Right to Erasure | Cache invalidation API |

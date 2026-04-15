@@ -101,7 +101,7 @@ const HTML_TEMPLATE = (title: string, content: string, depth = 0) => {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${title} — Alloy UI Docs</title>
+    <title>${title} — FerroUI UI Docs</title>
     <link rel="stylesheet" href="${relPath}/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -137,11 +137,11 @@ const HTML_TEMPLATE = (title: string, content: string, depth = 0) => {
     <div class="background-glow"></div>
     <nav class="glass-nav">
         <div class="nav-content">
-            <a href="${relPath}/index.html" class="logo">ALLOY<span>UI</span></a>
+            <a href="${relPath}/index.html" class="logo">FERROUI<span>UI</span></a>
             <div class="nav-links">
                 <a href="${relPath}/index.html" class="nav-link">Home</a>
                 <a href="${relPath}/api/index.html" class="nav-link">API</a>
-                <a href="https://github.com/jxoesneon/Alloy" class="nav-link">GitHub</a>
+                <a href="https://github.com/jxoesneon/FerroUI" class="nav-link">GitHub</a>
             </div>
         </div>
     </nav>
@@ -154,7 +154,7 @@ const HTML_TEMPLATE = (title: string, content: string, depth = 0) => {
     </main>
 
     <footer class="glass-footer">
-        <p>&copy; 2026 Alloy Project Team. Built with Liquid Mercury standards.</p>
+        <p>&copy; 2026 FerroUI Project Team. Built with Liquid Mercury standards.</p>
     </footer>
 </body>
 </html>
@@ -178,7 +178,7 @@ async function generateApiDocs() {
 
   // 3. API Documentation
   const components = [
-    { name: 'Dashboard', tier: 'Organism', description: 'The root container for all Alloy layouts.' },
+    { name: 'Dashboard', tier: 'Organism', description: 'The root container for all FerroUI layouts.' },
     { name: 'KPIBoard', tier: 'Organism', description: 'A grid of key performance indicators.' },
     { name: 'DataTable', tier: 'Organism', description: 'A powerful, interactive data table.' },
     { name: 'ChartPanel', tier: 'Organism', description: 'Visualizes data using various chart types.' },
@@ -228,7 +228,7 @@ async function generateApiDocs() {
 
   const apiIndexHtml = `
     <h1>API Reference</h1>
-    <p>Select a registry to explore the Alloy UI ecosystem capabilities.</p>
+    <p>Select a registry to explore the FerroUI UI ecosystem capabilities.</p>
     <div class="docs-grid" style="margin-top: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
         <div class="glass-card doc-category" style="padding: 2rem; border-radius: 24px; border: 1px solid rgba(255,255,255,0.05);">
             <h3>Components</h3>

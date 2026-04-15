@@ -6,6 +6,7 @@ export enum AuditEventType {
   CIRCUIT_OPEN = 'circuit_open',
   CIRCUIT_RESET = 'circuit_reset',
   RATE_LIMITED = 'rate_limited',
+  SESSION_UPDATED = 'session_updated',
 }
 
 interface BaseAuditEvent {
@@ -30,6 +31,8 @@ export interface RequestCompleteEvent extends BaseAuditEvent {
   durationMs: number;
   repairAttempts?: number;
   cacheHit?: boolean;
+  hasSensitiveData?: boolean;
+  isSuspicious?: boolean;
 }
 
 export interface RequestStartEvent extends BaseAuditEvent {
@@ -37,6 +40,7 @@ export interface RequestStartEvent extends BaseAuditEvent {
   promptHash: string;
   permissions: string[];
   locale: string;
+  isSuspicious?: boolean;
 }
 
 export interface RequestErrorEvent extends BaseAuditEvent {
@@ -55,13 +59,20 @@ export interface RateLimitedEvent extends BaseAuditEvent {
   ip: string;
 }
 
+export interface SessionUpdatedEvent extends BaseAuditEvent {
+  type: AuditEventType.SESSION_UPDATED;
+  componentId: string;
+  newState: string;
+}
+
 export type AuditEvent =
   | ToolCallEvent
   | RequestCompleteEvent
   | RequestStartEvent
   | RequestErrorEvent
   | CircuitEvent
-  | RateLimitedEvent;
+  | RateLimitedEvent
+  | SessionUpdatedEvent;
 
 export interface AuditLoggerOptions {
   output?: 'console' | 'memory' | 'file';

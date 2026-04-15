@@ -9,13 +9,13 @@
 
 ## 1. Overview
 
-Accessibility in Alloy UI is non-negotiable and non-bypassable. Because the AI generates layouts dynamically, a11y cannot be left to developer diligence on a per-screen basis. This checklist ensures all components and generated layouts meet WCAG 2.1 Level AA standards.
+Accessibility in FerroUI UI is non-negotiable and non-bypassable. Because the AI generates layouts dynamically, a11y cannot be left to developer diligence on a per-screen basis. This checklist ensures all components and generated layouts meet WCAG 2.1 Level AA standards.
 
 ---
 
 ## 2. Compliance Levels
 
-| Level | Description | Alloy UI Requirement |
+| Level | Description | FerroUI UI Requirement |
 |-------|-------------|---------------------|
 | A | Essential accessibility | 100% compliance required |
 | AA | Ideal accessibility | 100% compliance required |

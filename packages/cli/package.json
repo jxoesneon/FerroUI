@@ -1,10 +1,13 @@
 {
-  "name": "@alloy/cli",
+  "name": "@ferroui/cli",
   "version": "1.0.0",
-  "description": "The primary interface for Alloy UI development.",
+  "description": "The primary interface for FerroUI UI development, providing CLI commands for project management.",
   "main": "dist/index.js",
   "bin": {
-    "alloy": "bin/alloy.js"
+    "ferroui": "bin/ferroui.js"
+  },
+  "engines": {
+    "node": ">=25"
   },
   "scripts": {
     "build": "tsc",
@@ -12,6 +15,11 @@
     "dev": "ts-node src/index.ts",
     "test": "vitest run"
   },
+  "keywords": [
+    "ferroui",
+    "cli",
+    "development"
+  ],
   "dependencies": {
     "chalk": "^5.6.2",
     "commander": "^14.0.3",

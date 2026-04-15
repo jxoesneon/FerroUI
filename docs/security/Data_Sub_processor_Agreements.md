@@ -9,7 +9,7 @@
 
 ## 1. Overview
 
-This document lists all data sub-processors used by Alloy UI and the agreements in place with each.
+This document lists all data sub-processors used by FerroUI UI and the agreements in place with each.
 
 ---
 
@@ -123,7 +123,7 @@ This document lists all data sub-processors used by Alloy UI and the agreements 
 ### 6.1 Data Protection Officer
 
 **Name:** Jane Smith  
-**Email:** dpo@alloy.dev  
+**Email:** dpo@ferroui.dev  
 **Phone:** +1 (555) 123-4567
 
 ### 6.2 Sub-Processor Contacts

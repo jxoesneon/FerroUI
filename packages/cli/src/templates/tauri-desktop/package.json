@@ -1,0 +1,24 @@
+{
+  "name": "ferroui-app-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tauri dev",
+    "build": "tauri build",
+    "typecheck": "tsc"
+  },
+  "dependencies": {
+    "@ferroui/renderer": "workspace:*",
+    "@ferroui/registry": "workspace:*",
+    "@ferroui/i18n": "workspace:*",
+    "@tauri-apps/api": "^2.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.0.0",
+    "typescript": "^6.0.0",
+    "vite": "^6.0.0"
+  }
+}

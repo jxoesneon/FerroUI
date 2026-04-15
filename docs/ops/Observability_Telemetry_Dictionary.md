@@ -8,7 +8,7 @@
 
 ## 1. Overview
 
-This document defines the observability and telemetry standards for Alloy UI.
+This document defines the observability and telemetry standards for FerroUI UI.
 All components must emit structured telemetry compatible with OpenTelemetry
 (OTel).
 
@@ -63,7 +63,7 @@ Structured event records.
 | `request.id`       | string  | Request identifier           | `550e8400-e29b-41d4-a716-446655440000` |
 | `user.id`          | string  | Anonymized user ID           | `anon_abc123`                          |
 | `prompt.hash`      | string  | SHA-256 of normalized prompt | `a1b2c3...`                            |
-| `schema.version`   | string  | AlloyLayout schema version   | `1.0`                                  |
+| `schema.version`   | string  | FerroUILayout schema version   | `1.0`                                  |
 | `provider.id`      | string  | LLM provider                 | `openai`                               |
 | `provider.model`   | string  | LLM model                    | `gpt-4`                                |
 | `phase.latency_ms` | number  | Phase duration               | `1250`                                 |
@@ -84,40 +84,40 @@ Structured event records.
 
 | Metric                    | Type      | Unit         | Description      |
 | ------------------------- | --------- | ------------ | ---------------- |
-| `alloy.requests.total`    | Counter   | requests     | Total requests   |
-| `alloy.requests.duration` | Histogram | milliseconds | Request duration |
-| `alloy.requests.errors`   | Counter   | errors       | Error count      |
-| `alloy.cache.hits`        | Counter   | hits         | Cache hits       |
-| `alloy.cache.misses`      | Counter   | misses       | Cache misses     |
-| `alloy.cache.hit_rate`    | Gauge     | ratio        | Cache hit rate   |
+| `ferroui.requests.total`    | Counter   | requests     | Total requests   |
+| `ferroui.requests.duration` | Histogram | milliseconds | Request duration |
+| `ferroui.requests.errors`   | Counter   | errors       | Error count      |
+| `ferroui.cache.hits`        | Counter   | hits         | Cache hits       |
+| `ferroui.cache.misses`      | Counter   | misses       | Cache misses     |
+| `ferroui.cache.hit_rate`    | Gauge     | ratio        | Cache hit rate   |
 
 ### 4.2 LLM Metrics
 
 | Metric                    | Type      | Unit         | Description       |
 | ------------------------- | --------- | ------------ | ----------------- |
-| `alloy.llm.calls`         | Counter   | calls        | LLM API calls     |
-| `alloy.llm.duration`      | Histogram | milliseconds | LLM response time |
-| `alloy.llm.tokens.input`  | Counter   | tokens       | Input tokens      |
-| `alloy.llm.tokens.output` | Counter   | tokens       | Output tokens     |
-| `alloy.llm.cost`          | Counter   | dollars      | Estimated cost    |
+| `ferroui.llm.calls`         | Counter   | calls        | LLM API calls     |
+| `ferroui.llm.duration`      | Histogram | milliseconds | LLM response time |
+| `ferroui.llm.tokens.input`  | Counter   | tokens       | Input tokens      |
+| `ferroui.llm.tokens.output` | Counter   | tokens       | Output tokens     |
+| `ferroui.llm.cost`          | Counter   | dollars      | Estimated cost    |
 
 ### 4.3 Tool Metrics
 
 | Metric                 | Type      | Unit         | Description         |
 | ---------------------- | --------- | ------------ | ------------------- |
-| `alloy.tools.calls`    | Counter   | calls        | Tool executions     |
-| `alloy.tools.duration` | Histogram | milliseconds | Tool execution time |
-| `alloy.tools.errors`   | Counter   | errors       | Tool errors         |
-| `alloy.tools.timeout`  | Counter   | timeouts     | Tool timeouts       |
+| `ferroui.tools.calls`    | Counter   | calls        | Tool executions     |
+| `ferroui.tools.duration` | Histogram | milliseconds | Tool execution time |
+| `ferroui.tools.errors`   | Counter   | errors       | Tool errors         |
+| `ferroui.tools.timeout`  | Counter   | timeouts     | Tool timeouts       |
 
 ### 4.4 Validation Metrics
 
 | Metric                            | Type    | Unit           | Description              |
 | --------------------------------- | ------- | -------------- | ------------------------ |
-| `alloy.validation.total`          | Counter | validations    | Total validations        |
-| `alloy.validation.failed`         | Counter | failures       | Failed validations       |
-| `alloy.validation.repairs`        | Counter | repairs        | Repair attempts          |
-| `alloy.validation.hallucinations` | Counter | hallucinations | Component hallucinations |
+| `ferroui.validation.total`          | Counter | validations    | Total validations        |
+| `ferroui.validation.failed`         | Counter | failures       | Failed validations       |
+| `ferroui.validation.repairs`        | Counter | repairs        | Repair attempts          |
+| `ferroui.validation.hallucinations` | Counter | hallucinations | Component hallucinations |
 
 ---
 
@@ -132,7 +132,7 @@ Structured event records.
   "message": "Layout generated successfully",
   "requestId": "550e8400-e29b-41d4-a716-446655440000",
   "userId": "anon_abc123",
-  "service": "alloy-engine",
+  "service": "ferroui-engine",
   "version": "1.0.0",
   "attributes": {
     "promptHash": "a1b2c3...",
@@ -228,10 +228,10 @@ Response:
 ```yaml
 # alerts.yml
 groups:
-  - name: alloy-ui
+  - name: ferroui-ui
     rules:
       - alert: HighErrorRate
-        expr: rate(alloy.requests.errors[5m]) > 0.05
+        expr: rate(ferroui.requests.errors[5m]) > 0.05
         for: 5m
         labels:
           severity: critical
@@ -240,7 +240,7 @@ groups:
 
       - alert: HighLatency
         expr:
-          histogram_quantile(0.95, rate(alloy.requests.duration_bucket[5m])) >
+          histogram_quantile(0.95, rate(ferroui.requests.duration_bucket[5m])) >
           5000
         for: 5m
         labels:
@@ -249,7 +249,7 @@ groups:
           summary: 'High latency detected'
 
       - alert: LLMProviderDown
-        expr: alloy.llm.calls == 0
+        expr: ferroui.llm.calls == 0
         for: 2m
         labels:
           severity: critical
@@ -257,7 +257,7 @@ groups:
           summary: 'LLM provider appears down'
 
       - alert: HighHallucinationRate
-        expr: rate(alloy.validation.hallucinations[5m]) > 0.02
+        expr: rate(ferroui.validation.hallucinations[5m]) > 0.02
         for: 10m
         labels:
           severity: warning

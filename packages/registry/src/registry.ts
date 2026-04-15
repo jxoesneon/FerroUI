@@ -1,8 +1,8 @@
-import { ComponentTier, AlloyComponent } from '@alloy/schema';
+import { ComponentTier, FerroUIComponent } from '@ferroui/schema';
 import { RegistryEntry, RegistrationOptions, ComponentIdentifier } from './types';
 
 /**
- * The core Component Registry runtime for Alloy UI.
+ * The core Component Registry runtime for FerroUI UI.
  * Responsible for component registration, versioning, and hierarchy validation.
  */
 export class ComponentRegistry {
@@ -95,7 +95,7 @@ export class ComponentRegistry {
    * Validates a component hierarchy according to Atomic Design rules.
    * Throws if validation fails.
    */
-  public validateHierarchy(component: AlloyComponent): void {
+  public validateHierarchy(component: FerroUIComponent): void {
     const entry = this.getComponentEntry(component.type);
     if (!entry) {
       throw new Error(`Component type '${component.type}' is not registered.`);

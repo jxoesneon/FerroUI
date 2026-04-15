@@ -6,14 +6,14 @@ type ServiceName = typeof AUDIT_LOG_SERVICES[number];
 
 function getServiceUrls(): Record<ServiceName, string> {
   return {
-    engine: process.env.ALLOY_ENGINE_URL ?? 'http://localhost:4000',
-    registry: process.env.ALLOY_REGISTRY_URL ?? 'http://localhost:3002',
-    playground: process.env.ALLOY_PLAYGROUND_URL ?? 'http://localhost:3000',
+    engine: process.env.FERROUI_ENGINE_URL ?? 'http://localhost:4000',
+    registry: process.env.FERROUI_REGISTRY_URL ?? 'http://localhost:3002',
+    playground: process.env.FERROUI_PLAYGROUND_URL ?? 'http://localhost:3000',
   };
 }
 
 export const logsCommand = new Command('logs')
-  .description('Stream structured audit logs from Alloy services.')
+  .description('Stream structured audit logs from FerroUI services.')
   .option('-f, --follow', 'Stream logs continuously (tail -f style)', false)
   .option('-s, --service <service>', `Service to tail: ${AUDIT_LOG_SERVICES.join(' | ')}`, 'engine')
   .option('-n, --lines <number>', 'Number of past log lines to show on start', '50')
@@ -52,7 +52,7 @@ async function fetchRecentLogs(url: string, lines: number, jsonOutput: boolean):
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error(chalk.red(`Cannot connect to service: ${msg}`));
-    console.log(chalk.dim('  Make sure the service is running with: alloy dev'));
+    console.log(chalk.dim('  Make sure the service is running with: ferroui dev'));
     process.exit(1);
   }
 }

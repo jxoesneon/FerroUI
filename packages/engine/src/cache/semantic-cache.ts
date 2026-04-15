@@ -1,7 +1,8 @@
 import CryptoJS from 'crypto-js';
-import { AlloyLayout } from '@alloy/schema';
+import { FerroUILayout } from '@ferroui/schema';
+import { CacheBackend, InMemoryCacheBackend } from './cache-backend.js';
 
-const CACHE_SIGNING_SECRET = process.env.CACHE_SIGNING_SECRET ?? 'alloy-cache-hmac-secret-CHANGE-IN-PRODUCTION';
+const CACHE_SIGNING_SECRET = process.env.CACHE_SIGNING_SECRET ?? 'ferroui-cache-hmac-secret-CHANGE-IN-PRODUCTION';
 
 export type DataClassification = 'PUBLIC' | 'INTERNAL' | 'RESTRICTED';
 
@@ -12,7 +13,7 @@ const TTL_BY_CLASSIFICATION: Record<DataClassification, number> = {
 };
 
 export interface CacheEntry {
-  layout: AlloyLayout;
+  layout: FerroUILayout;
   timestamp: number;
   toolOutputs: Record<string, unknown>;
   classification: DataClassification;
@@ -22,7 +23,9 @@ export interface CacheEntry {
 
 export class SemanticCache {
   private static instance: SemanticCache;
-  private cache: Map<string, CacheEntry> = new Map();
+  private backend: CacheBackend = new InMemoryCacheBackend();
+  private usageOrder: Set<string> = new Set();
+  private maxSize: number = 1000;
 
   private constructor() {}
 
@@ -31,6 +34,20 @@ export class SemanticCache {
       SemanticCache.instance = new SemanticCache();
     }
     return SemanticCache.instance;
+  }
+
+  public setBackend(backend: CacheBackend): void {
+    this.backend = backend;
+    this.usageOrder.clear();
+  }
+
+  public setMaxSize(size: number): void {
+    this.maxSize = size;
+  }
+
+  private touch(key: string): void {
+    this.usageOrder.delete(key);
+    this.usageOrder.add(key);
   }
 
   private resolveClassification(toolOutputs: Record<string, unknown>): DataClassification {
@@ -48,7 +65,7 @@ export class SemanticCache {
     permissions: string[],
     userId: string,
     toolOutputs: Record<string, unknown>
-  ): Promise<AlloyLayout | undefined> {
+  ): Promise<FerroUILayout | undefined> {
     const classification = this.resolveClassification(toolOutputs);
 
     if (classification === 'RESTRICTED') {
@@ -56,27 +73,35 @@ export class SemanticCache {
     }
 
     const key = this.generateKey(prompt, permissions, userId, toolOutputs, classification);
-    const entry = this.cache.get(key);
+    const data = await this.backend.get(key);
 
-    if (!entry) return undefined;
+    if (!data) {
+      this.usageOrder.delete(key);
+      return undefined;
+    }
+
+    const entry: CacheEntry = JSON.parse(data);
 
     // Check TTL
     if (Date.now() - entry.timestamp > entry.ttlMs) {
-      this.cache.delete(key);
+      await this.backend.delete(key);
+      this.usageOrder.delete(key);
       return undefined;
     }
 
     // Verify HMAC integrity — Security spec §2.4
     if (!this.verifyEntry(entry)) {
       console.error('[SemanticCache] HMAC verification failed — possible cache poisoning. Evicting entry.');
-      this.cache.delete(key);
+      await this.backend.delete(key);
+      this.usageOrder.delete(key);
       return undefined;
     }
 
+    this.touch(key);
     return entry.layout;
   }
 
-  private signEntry(layout: AlloyLayout, toolOutputs: Record<string, unknown>, timestamp: number): string {
+  private signEntry(layout: FerroUILayout, toolOutputs: Record<string, unknown>, timestamp: number): string {
     const payload = JSON.stringify({ layout, toolOutputs, timestamp });
     return CryptoJS.HmacSHA256(payload, CACHE_SIGNING_SECRET).toString();
   }
@@ -91,35 +116,56 @@ export class SemanticCache {
     permissions: string[],
     userId: string,
     toolOutputs: Record<string, unknown>,
-    layout: AlloyLayout,
+    layout: FerroUILayout,
     classification: DataClassification
   ): Promise<void> {
     const ttlMs = TTL_BY_CLASSIFICATION[classification];
+    if (ttlMs === 0) return;
+
     const key = this.generateKey(prompt, permissions, userId, toolOutputs, classification);
     const timestamp = Date.now();
     const hmac = this.signEntry(layout, toolOutputs, timestamp);
 
-    this.cache.set(key, {
+    const entry: CacheEntry = {
       layout,
       timestamp,
       toolOutputs,
       classification,
       ttlMs,
       hmac,
-    });
+    };
+
+    await this.backend.set(key, JSON.stringify(entry), ttlMs);
+    this.touch(key);
+
+    // LRU Eviction
+    if (this.usageOrder.size > this.maxSize) {
+      const lruKey = this.usageOrder.values().next().value;
+      if (lruKey) {
+        this.usageOrder.delete(lruKey);
+        await this.backend.delete(lruKey);
+      }
+    }
   }
 
   public async invalidate(toolName: string, params?: unknown): Promise<void> {
-    for (const [key, entry] of this.cache.entries()) {
+    const keys = await this.backend.keys();
+    for (const key of keys) {
+      const data = await this.backend.get(key);
+      if (!data) continue;
+      
+      const entry: CacheEntry = JSON.parse(data);
       const output = entry.toolOutputs[toolName];
       if (output) {
         if (!params) {
-          this.cache.delete(key);
+          await this.backend.delete(key);
+          this.usageOrder.delete(key);
           continue;
         }
         if ((output as Record<string, unknown>).args &&
             JSON.stringify((output as Record<string, unknown>).args) === JSON.stringify(params)) {
-          this.cache.delete(key);
+          await this.backend.delete(key);
+          this.usageOrder.delete(key);
         }
       }
     }
@@ -127,10 +173,16 @@ export class SemanticCache {
 
   public async invalidatePattern(pattern: string): Promise<void> {
     const regex = new RegExp('^' + pattern.replace(/\*/g, '.*') + '$');
-    for (const [key, entry] of this.cache.entries()) {
+    const keys = await this.backend.keys();
+    for (const key of keys) {
+      const data = await this.backend.get(key);
+      if (!data) continue;
+
+      const entry: CacheEntry = JSON.parse(data);
       const toolNames = Object.keys(entry.toolOutputs);
       if (toolNames.some(name => regex.test(name))) {
-        this.cache.delete(key);
+        await this.backend.delete(key);
+        this.usageOrder.delete(key);
       }
     }
   }
@@ -142,21 +194,39 @@ export class SemanticCache {
     toolOutputs: Record<string, unknown>,
     classification: DataClassification
   ): string {
-    const normalizedPrompt = prompt.trim().toLowerCase();
+    // 1. Prompt Normalization - Spec §3.1
+    const normalizedPrompt = prompt
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, ' ') // Collapse whitespace
+      .replace(/[?.!,;]$/, '') // Remove trailing punctuation
+      .replace(/\bcan't\b/g, 'cannot') // Expand common contractions (example)
+      .replace(/\bdon't\b/g, 'do not');
+
+    // 2. Permissions Normalization & Hashing - Spec §3.2
     const sortedPermissions = [...permissions].sort();
+    const permissionsHash = CryptoJS.SHA256(sortedPermissions.join(',')).toString().slice(0, 16);
 
     const userScope = classification === 'PUBLIC' ? 'shared' : userId;
 
-    const serializedOutputs = JSON.stringify(
-      Object.entries(toolOutputs).sort(([a], [b]) => a.localeCompare(b))
-    );
+    // 3. Tool Fingerprinting - Spec §3.3
+    // Hash individual tool outputs to create a stable compound fingerpint
+    const fingerprintedOutputs = Object.entries(toolOutputs)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([name, output]) => {
+        const canonical = JSON.stringify(output);
+        const hash = CryptoJS.SHA256(canonical).toString().slice(0, 16);
+        return `${name}:${hash}`;
+      })
+      .join('|');
 
-    const combined = `${classification}|${normalizedPrompt}|${sortedPermissions.join(',')}|${userScope}|${serializedOutputs}`;
+    const combined = `${classification}|${normalizedPrompt}|${permissionsHash}|${userScope}|${fingerprintedOutputs}`;
     return CryptoJS.SHA256(combined).toString();
   }
 
-  public clear(): void {
-    this.cache.clear();
+  public async clear(): Promise<void> {
+    await this.backend.clear();
+    this.usageOrder.clear();
   }
 }
 

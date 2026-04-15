@@ -8,7 +8,7 @@
 
 ## 1. Overview
 
-This document tracks all open-source dependencies used in Alloy UI, their licenses, and compliance status.
+This document tracks all open-source dependencies used in FerroUI UI, their licenses, and compliance status.
 
 ---
 
@@ -118,7 +118,7 @@ Required in source files:
 
 ```typescript
 /**
- * Copyright (c) 2026 Alloy UI Contributors
+ * Copyright (c) 2026 FerroUI UI Contributors
  * SPDX-License-Identifier: MIT
  * 
  * This file may contain portions of third-party code.
@@ -174,8 +174,8 @@ npm run sbom:cyclonedx
 {
   "spdxVersion": "SPDX-2.3",
   "SPDXID": "SPDXRef-DOCUMENT",
-  "name": "alloy-ui",
-  "documentNamespace": "https://alloy.dev/sbom/1.0.0",
+  "name": "ferroui-ui",
+  "documentNamespace": "https://ferroui.dev/sbom/1.0.0",
   "packages": [
     {
       "SPDXID": "SPDXRef-Package-react",

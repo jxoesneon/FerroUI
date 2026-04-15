@@ -1,9 +1,0 @@
-{
-  "radius-none": { "$value": "0px",   "$type": "borderRadius" },
-  "radius-sm":   { "$value": "2px",   "$type": "borderRadius" },
-  "radius-md":   { "$value": "6px",   "$type": "borderRadius" },
-  "radius-lg":   { "$value": "8px",   "$type": "borderRadius" },
-  "radius-xl":   { "$value": "12px",  "$type": "borderRadius" },
-  "radius-2xl":  { "$value": "16px",  "$type": "borderRadius" },
-  "radius-full": { "$value": "9999px","$type": "borderRadius" }
-}

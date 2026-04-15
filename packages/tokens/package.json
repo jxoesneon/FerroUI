@@ -1,0 +1,28 @@
+{
+  "name": "@ferroui/tokens",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Design tokens for the FerroUI UI system, providing unified color, spacing, and typography scales.",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=25"
+  },
+  "scripts": {
+    "build": "node --experimental-strip-types src/build.ts",
+    "dev": "node --experimental-strip-types src/build.ts --watch"
+  },
+  "keywords": [
+    "ferroui",
+    "tokens",
+    "design-system"
+  ],
+  "devDependencies": {
+    "@ferroui/config": "workspace:*",
+    "typescript": "latest"
+  }
+}

@@ -1,4 +1,4 @@
-import { ComponentTier, AlloyComponent } from './types';
+import { ComponentTier, FerroUIComponent } from './types';
 
 /**
  * Inline components — can appear inside block components but cannot contain block children.
@@ -17,7 +17,7 @@ export const BLOCK_COMPONENTS = new Set(['Divider', 'Skeleton', 'Dashboard', 'KP
 
 /**
  * Static fallback registry of component tier classifications.
- * Used when the runtime @alloy/registry is not available.
+ * Used when the runtime @ferroui/registry is not available.
  * Prefer calling syncTiersFromRegistry() at startup to populate from runtime.
  */
 export const COMPONENT_TIER_REGISTRY: Record<string, ComponentTier> = {
@@ -51,7 +51,7 @@ export const COMPONENT_TIER_REGISTRY: Record<string, ComponentTier> = {
 };
 
 /**
- * Synchronizes tier classifications from the runtime @alloy/registry package.
+ * Synchronizes tier classifications from the runtime @ferroui/registry package.
  * Call this at startup after all components have been registered.
  */
 export function syncTiersFromRegistry(entries: Array<{ name: string; tier: ComponentTier }>): void {
@@ -81,7 +81,7 @@ export interface TierValidationError {
  * Implements Rules R008, R009, and R005 from the specification.
  */
 export function validateTiers(
-  component: AlloyComponent,
+  component: FerroUIComponent,
   path = 'layout'
 ): TierValidationError[] {
   const errors: TierValidationError[] = [];
@@ -123,9 +123,18 @@ export function validateTiers(
     }
   }
 
+  // Rule R011: Dashboard must only appear at the root
+  if (component.type === 'Dashboard' && path !== 'layout') {
+    errors.push({
+      path,
+      message: "Component 'Dashboard' must only appear at the root of the layout.",
+      rule: 'R011',
+    });
+  }
+
   // Recurse into children
   if (component.children) {
-    component.children.forEach((child, index) => {
+    component.children.forEach((child: FerroUIComponent, index: number) => {
       errors.push(...validateTiers(child, `${path}.children[${index}]`));
     });
   }

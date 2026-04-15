@@ -1,9 +1,9 @@
 import { RequestContext, EngineChunk, EngineConfig } from './types';
 import { LlmProvider } from './providers/base';
 import { runDualPhasePipeline } from './pipeline/dual-phase';
-import { tracer } from '@alloy/telemetry';
+import { tracer } from '@ferroui/telemetry';
 
-export class AlloyEngine {
+export class FerroUIEngine {
   private provider: LlmProvider;
   private config: EngineConfig;
 
@@ -18,18 +18,18 @@ export class AlloyEngine {
   }
 
   /**
-   * Main entry point for the Alloy UI engine.
+   * Main entry point for the FerroUI UI engine.
    * Processes a user prompt through the Dual-Phase Pipeline.
    */
   public async *process(
     prompt: string,
     context: RequestContext
   ): AsyncGenerator<EngineChunk, void, undefined> {
-    const span = tracer.startSpan('AlloyEngine.process', {
+    const span = tracer.startSpan('FerroUIEngine.process', {
       attributes: {
-        'alloy.prompt': prompt,
-        'alloy.userId': context.userId,
-        'alloy.requestId': context.requestId,
+        'ferroui.prompt': prompt,
+        'ferroui.userId': context.userId,
+        'ferroui.requestId': context.requestId,
       },
     });
 
@@ -83,7 +83,7 @@ export class AlloyEngine {
             props: {
               status: 'error',
               title: 'System in Safe Mode',
-              message: 'Alloy encountered an unrecoverable error during UI generation. Repair attempts have been exhausted to prevent further instability.'
+              message: 'FerroUI encountered an unrecoverable error during UI generation. Repair attempts have been exhausted to prevent further instability.'
             }
           }
         ]

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ComponentTier } from '@alloy/schema';
+import { ComponentTier } from '@ferroui/schema';
 import { ComponentType } from 'react';
 
 /**

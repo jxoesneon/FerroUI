@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { registry } from './registry';
-import { ComponentTier } from '@alloy/schema';
+import { ComponentTier } from '@ferroui/schema';
 import { z } from 'zod';
 
 describe('ComponentRegistry', () => {

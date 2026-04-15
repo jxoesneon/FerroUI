@@ -1,10 +1,10 @@
 [package]
-name = "alloy-desktop"
+name = "ferroui-desktop"
 version = "1.0.0"
-description = "Alloy UI Desktop"
-authors = ["Alloy Project Team"]
+description = "FerroUI UI Desktop"
+authors = ["FerroUI Project Team"]
 license = "MIT"
-repository = "https://github.com/alloy/alloy"
+repository = "https://github.com/ferroui/ferroui"
 edition = "2021"
 rust-version = "1.60"
 

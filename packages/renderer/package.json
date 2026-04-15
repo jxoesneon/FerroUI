@@ -1,17 +1,25 @@
 {
-  "name": "@alloy/renderer",
+  "name": "@ferroui/renderer",
   "version": "0.1.0",
-  "description": "Alloy UI layout renderer — maps AlloyLayout JSON to React components via the component registry.",
+  "description": "FerroUI UI layout renderer — maps FerroUILayout JSON to React components via the component registry.",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "engines": {
+    "node": ">=25"
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch"
   },
+  "keywords": [
+    "ferroui",
+    "renderer",
+    "react"
+  ],
   "dependencies": {
-    "@alloy/schema": "workspace:*",
-    "@alloy/registry": "workspace:*",
+    "@ferroui/schema": "workspace:*",
+    "@ferroui/registry": "workspace:*",
     "react": "^19.2.5"
   },
   "devDependencies": {

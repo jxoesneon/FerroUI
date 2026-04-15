@@ -1,4 +1,4 @@
-# Alloy UI System Architecture Document
+# FerroUI UI System Architecture Document
 
 **Version:** 1.0  
 **Last Updated:** 2025-04-10  
@@ -9,7 +9,7 @@
 
 ## 1. Executive Summary
 
-Alloy UI is a production-grade, open meta-framework for building AI-driven applications where the user interface is synthesized at runtime in response to natural language intent. This document formalizes the complete architecture covering the dual-phase orchestration pipeline, atomic component model, LLM strategy layer, schema governance, security, observability, accessibility, internationalization, and developer ergonomics.
+FerroUI UI is a production-grade, open meta-framework for building AI-driven applications where the user interface is synthesized at runtime in response to natural language intent. This document formalizes the complete architecture covering the dual-phase orchestration pipeline, atomic component model, LLM strategy layer, schema governance, security, observability, accessibility, internationalization, and developer ergonomics.
 
 ---
 
@@ -27,18 +27,18 @@ Alloy UI is a production-grade, open meta-framework for building AI-driven appli
 | Accessibility by Default | Every component ships with correct ARIA roles and keyboard navigation |
 | Observable by Default | Every pipeline stage emits structured traces compatible with OpenTelemetry |
 
-### 2.2 What Alloy UI Is NOT
+### 2.2 What FerroUI UI Is NOT
 
 - **Not a low-code visual editor** — There is no drag-and-drop canvas
 - **Not a chatbot framework** — The LLM produces structured JSON, not prose
-- **Not a design system** — Alloy UI consumes a design system through its component registry
+- **Not a design system** — FerroUI UI consumes a design system through its component registry
 - **Not a no-code platform** — Developers write typed components and tool functions in real code
 
 ---
 
 ## 3. Four-Layer Runtime Architecture
 
-Alloy UI is organized into four distinct runtime layers. Each layer has a single responsibility and communicates with adjacent layers through versioned, typed contracts.
+FerroUI UI is organized into four distinct runtime layers. Each layer has a single responsibility and communicates with adjacent layers through versioned, typed contracts.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -60,14 +60,14 @@ Alloy UI is organized into four distinct runtime layers. Each layer has a single
 
 ## 4. Layer 1 — Client Renderer
 
-The renderer is intentionally "dumb." It knows nothing about data, users, or business logic. It receives a fully validated AlloyLayout JSON tree and paints it using the component registry.
+The renderer is intentionally "dumb." It knows nothing about data, users, or business logic. It receives a fully validated FerroUILayout JSON tree and paints it using the component registry.
 
 ### 4.1 Component Registry
 
 The registry is a compile-time dictionary mapping string identifiers to React components:
 
 ```typescript
-type ComponentRegistry = Record<string, React.ComponentType<AlloyComponentProps>>;
+type ComponentRegistry = Record<string, React.ComponentType<FerroUIComponentProps>>;
 ```
 
 Registry entries are versioned. A component registered as `DataCard` and later breaking-changed becomes `DataCard@2`. The renderer resolves the correct version from the schema's `schemaVersion` field.
@@ -91,13 +91,13 @@ The router handles four canonical action types:
 | REFRESH | Re-run the current orchestration pipeline | Same original prompt |
 | TOOL_CALL | Invoke a registered backend tool directly | `{ tool: string, args: object }` |
 
-**Convention:** Direct `fetch()` calls from component code are forbidden — enforced via ESLint rule `alloy/no-direct-fetch`.
+**Convention:** Direct `fetch()` calls from component code are forbidden — enforced via ESLint rule `ferroui/no-direct-fetch`.
 
 ---
 
 ## 5. Layer 2 — Orchestration Engine
 
-The orchestration engine is the heart of Alloy UI. It can be deployed as:
+The orchestration engine is the heart of FerroUI UI. It can be deployed as:
 - TypeScript (Node.js / Bun) service
 - Embedded in a Tauri Rust binary
 - Edge deployment on Cloudflare Workers with Durable Objects
@@ -126,7 +126,7 @@ The pipeline enforces strict separation between data gathering and UI generation
 2. **CONTEXT RESOLUTION** — Resolve user identity, permissions, ambient state
 3. **PHASE 1: DATA GATHERING** — LLM makes tool calls; engine executes against Tool Registry
 4. **LOADING SIGNAL** — Stream skeleton loading layout immediately
-5. **PHASE 2: UI GENERATION** — LLM produces ONLY valid AlloyLayout JSON
+5. **PHASE 2: UI GENERATION** — LLM produces ONLY valid FerroUILayout JSON
 6. **VALIDATION & SELF-HEALING** — Full validation suite runs; repair loop fires on failure
 7. **STREAMING DELIVERY** — Validated JSON streamed chunk-by-chunk to renderer
 
@@ -178,7 +178,7 @@ interface LlmProvider {
 
 ### 6.3 Hot-Swapping
 
-The active provider can be changed via privileged `TOOL_CALL` action (`tool: "alloy.setProvider"`) without restarting the server. Transition is atomic: in-flight requests complete against old provider; new requests use new provider.
+The active provider can be changed via privileged `TOOL_CALL` action (`tool: "ferroui.setProvider"`) without restarting the server. Transition is atomic: in-flight requests complete against old provider; new requests use new provider.
 
 ---
 
@@ -211,9 +211,9 @@ This prevents prompt-injection attacks attempting data exfiltration.
 
 ---
 
-## 8. The Alloy Component Model
+## 8. The FerroUI Component Model
 
-Alloy UI enforces a three-tier Atomic hierarchy that is machine-validated.
+FerroUI UI enforces a three-tier Atomic hierarchy that is machine-validated.
 
 ### 8.1 Tier Definitions
 
@@ -248,7 +248,7 @@ Alloy UI enforces a three-tier Atomic hierarchy that is machine-validated.
 | Unknown component types flagged as hallucinated | Immediate rejection |
 | All required props must be present | Repair triggered, not silent fallback |
 
-### 8.3 The AlloyLayout JSON Schema
+### 8.3 The FerroUILayout JSON Schema
 
 ```json
 {
@@ -356,11 +356,11 @@ apps/
 packages/
   engine/        — Core orchestration engine
   registry/      — Component registry and Atomic library
-  schema/        — AlloyLayout Zod schemas
+  schema/        — FerroUILayout Zod schemas
   tools/         — Tool registration helpers
   telemetry/     — OTel instrumentation
   i18n/          — Locale bundles
-alloy/
+ferroui/
   prompts/       — Versioned system prompt files
   evals/         — Automated prompt evaluation suite
 ```
@@ -373,7 +373,7 @@ alloy/
 - [Component Development Guidelines](../engineering/frontend/Component_Development_Guidelines.md)
 - [Design Token & Theming Specification](../engineering/frontend/Design_Token_Theming_Specification.md)
 - [Tool Registration API Reference](../engineering/backend/Tool_Registration_API_Reference.md)
-- [AlloyLayout JSON Schema Specification](../engineering/backend/AlloyLayout_JSON_Schema_Specification.md)
+- [FerroUILayout JSON Schema Specification](../engineering/backend/FerroUILayout_JSON_Schema_Specification.md)
 - [Security Threat Model](../security/Security_Threat_Model.md)
 - [Observability & Telemetry Dictionary](../ops/Observability_Telemetry_Dictionary.md)
 

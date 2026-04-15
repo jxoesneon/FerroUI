@@ -8,15 +8,15 @@
 
 ## 1. General Questions
 
-### Q: What is Alloy UI?
+### Q: What is FerroUI UI?
 
-**A:** Alloy UI is an AI-powered, server-driven UI framework. Instead of writing static screens, you register components and data tools in TypeScript, and the AI assembles, validates, and streams layouts on demand based on natural language prompts.
+**A:** FerroUI UI is an AI-powered, server-driven UI framework. Instead of writing static screens, you register components and data tools in TypeScript, and the AI assembles, validates, and streams layouts on demand based on natural language prompts.
 
 ---
 
-### Q: What can I build with Alloy UI?
+### Q: What can I build with FerroUI UI?
 
-**A:** Alloy UI is ideal for:
+**A:** FerroUI UI is ideal for:
 - Internal dashboards
 - Admin panels
 - Data visualization tools
@@ -25,21 +25,21 @@
 
 ---
 
-### Q: Do I need to know AI/ML to use Alloy UI?
+### Q: Do I need to know AI/ML to use FerroUI UI?
 
-**A:** No! Alloy UI handles all the AI complexity. You write TypeScript components and tools like you normally would. The framework manages prompt engineering, model selection, and response parsing.
+**A:** No! FerroUI UI handles all the AI complexity. You write TypeScript components and tools like you normally would. The framework manages prompt engineering, model selection, and response parsing.
 
 ---
 
 ## 2. Getting Started
 
-### Q: How do I install Alloy UI?
+### Q: How do I install FerroUI UI?
 
 **A:**
 ```bash
-npm create alloy-app@latest my-app
+npm create ferroui-app@latest my-app
 cd my-app
-alloy dev
+ferroui dev
 ```
 
 See [Quickstart Guide](../dev-experience/Quickstart_Developer_Onboarding.md) for details.
@@ -55,9 +55,9 @@ See [Quickstart Guide](../dev-experience/Quickstart_Developer_Onboarding.md) for
 
 ---
 
-### Q: Can I use Alloy UI for free?
+### Q: Can I use FerroUI UI for free?
 
-**A:** Alloy UI is open source and free to use. However, you'll need:
+**A:** FerroUI UI is open source and free to use. However, you'll need:
 - An LLM provider account (OpenAI, Anthropic, etc.)
 - Infrastructure for deployment (optional)
 
@@ -67,7 +67,7 @@ See [Quickstart Guide](../dev-experience/Quickstart_Developer_Onboarding.md) for
 
 ### Q: What is the Atomic Design hierarchy?
 
-**A:** Alloy UI uses three tiers:
+**A:** FerroUI UI uses three tiers:
 - **Atoms** — Irreducible UI primitives (Text, Icon, Badge)
 - **Molecules** — Compositions of atoms (StatBadge, FormField)
 - **Organisms** — Functional blocks (DataTable, KPIBoard)
@@ -80,7 +80,7 @@ See [Component Development Guidelines](../engineering/frontend/Component_Develop
 
 **A:**
 ```bash
-alloy generate component MyComponent
+ferroui generate component MyComponent
 ```
 
 This creates all the boilerplate files with TypeScript types, Zod schema, and tests.
@@ -92,7 +92,7 @@ This creates all the boilerplate files with TypeScript types, Zod schema, and te
 **A:** Yes! Wrap your existing components with a Zod schema and register them:
 
 ```typescript
-import { registerComponent } from '@alloy/core';
+import { registerComponent } from '@ferroui/core';
 import { MyExistingComponent } from './MyExistingComponent';
 import { MyComponentSchema } from './schema';
 
@@ -120,7 +120,7 @@ registerComponent({
 
 **A:**
 ```bash
-alloy generate tool getUserData
+ferroui generate tool getUserData
 ```
 
 Then implement the `execute` function:
@@ -174,9 +174,9 @@ registerTool({
 
 ```bash
 # Environment variable
-export ALLOY_DEFAULT_PROVIDER=anthropic
+export FERROUI_DEFAULT_PROVIDER=anthropic
 
-# Or in alloy.config.js
+# Or in ferroui.config.js
 module.exports = {
   providers: {
     default: 'anthropic',
@@ -195,8 +195,8 @@ module.exports = {
 brew install ollama
 ollama pull llama2
 
-# Configure Alloy UI
-export ALLOY_DEFAULT_PROVIDER=ollama
+# Configure FerroUI UI
+export FERROUI_DEFAULT_PROVIDER=ollama
 export OLLAMA_BASE_URL=http://localhost:11434
 ```
 
@@ -204,7 +204,7 @@ export OLLAMA_BASE_URL=http://localhost:11434
 
 ## 6. Deployment
 
-### Q: Where can I deploy Alloy UI?
+### Q: Where can I deploy FerroUI UI?
 
 **A:** Three deployment options:
 1. **Web SaaS** — Docker/Kubernetes on AWS, GCP, Azure
@@ -217,7 +217,7 @@ See deployment guides in [ops](../ops/deployment-guides/).
 
 ### Q: Is there a hosted version?
 
-**A:** Enterprise customers can request a managed deployment. Contact sales@alloy.dev.
+**A:** Enterprise customers can request a managed deployment. Contact sales@ferroui.dev.
 
 ---
 
@@ -270,10 +270,10 @@ See [Security Threat Model](../security/Security_Threat_Model.md).
 ### Q: Where can I get help?
 
 **A:**
-- Documentation: https://docs.alloy.dev
-- Discord: https://discord.gg/alloyui
-- GitHub Discussions: https://github.com/alloyui/alloy/discussions
-- Email: support@alloy.dev
+- Documentation: https://docs.ferroui.dev
+- Discord: https://discord.gg/ferrouiui
+- GitHub Discussions: https://github.com/ferrouiui/ferroui/discussions
+- Email: support@ferroui.dev
 
 ---
 

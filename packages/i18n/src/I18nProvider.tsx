@@ -24,7 +24,7 @@ export const I18nProvider: React.FC<I18nProviderProps> = ({
     if (typeof window !== 'undefined') {
       const urlLocale = new URLSearchParams(window.location.search).get('locale');
       const browserLocales = window.navigator.languages;
-      const storedLocale = localStorage.getItem('alloy_locale');
+      const storedLocale = localStorage.getItem('ferroui_locale');
       
       return resolveLocale(urlLocale, storedLocale, browserLocales);
     }
@@ -42,7 +42,7 @@ export const I18nProvider: React.FC<I18nProviderProps> = ({
     if (typeof document !== 'undefined') {
       document.documentElement.dir = direction;
       document.documentElement.lang = locale;
-      localStorage.setItem('alloy_locale', locale);
+      localStorage.setItem('ferroui_locale', locale);
     }
   }, [locale, direction]);
 

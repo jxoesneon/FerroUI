@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useAlloyLayout } from '../../web/src/hooks/useAlloyLayout';
-import { AlloyRenderer } from '../../web/src/components/AlloyRenderer';
+import { useFerroUILayout } from '../../web/src/hooks/useFerroUILayout';
+import { FerroUIRenderer } from '../../web/src/components/FerroUIRenderer';
 import { actionRouter, type ActionRouterContext } from '../../web/src/services/ActionRouter';
 import '../../web/src/components/components-registration';
 import '../../web/src/App.css';
@@ -12,7 +12,7 @@ interface Toast {
 }
 
 function App() {
-  const { layout, loading, error, refresh } = useAlloyLayout({
+  const { layout, loading, error, refresh } = useFerroUILayout({
     url: 'http://localhost:3001/api/layout', // Desktop app connects to local engine
   });
 
@@ -55,9 +55,9 @@ function App() {
   }
 
   return (
-    <div className="alloy-app min-h-screen relative">
+    <div className="ferroui-app min-h-screen relative">
       {/* Main Layout Rendering */}
-      {layout?.layout && <AlloyRenderer component={layout.layout as any} />}
+      {layout?.layout && <FerroUIRenderer component={layout.layout as any} />}
 
       {/* Loading Indicator */}
       {loading && (

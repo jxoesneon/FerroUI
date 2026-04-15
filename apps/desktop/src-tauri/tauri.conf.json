@@ -7,7 +7,7 @@
     "withGlobalTauri": true
   },
   "package": {
-    "productName": "Alloy UI",
+    "productName": "FerroUI UI",
     "version": "1.0.0"
   },
   "tauri": {
@@ -21,7 +21,7 @@
     "bundle": {
       "active": true,
       "category": "DeveloperTool",
-      "copyright": "© 2026 Alloy UI",
+      "copyright": "© 2026 FerroUI UI",
       "deb": {
         "depends": []
       },
@@ -33,7 +33,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "dev.alloy.desktop",
+      "identifier": "dev.ferroui.desktop",
       "longDescription": "AI-powered server-driven UI framework",
       "macOS": {
         "entitlements": null,
@@ -43,7 +43,7 @@
         "signingIdentity": null
       },
       "resources": [],
-      "shortDescription": "Alloy UI Desktop",
+      "shortDescription": "FerroUI UI Desktop",
       "targets": ["dmg", "msi", "deb", "appimage"],
       "windows": {
         "certificateThumbprint": null,
@@ -59,7 +59,7 @@
         "fullscreen": false,
         "height": 900,
         "resizable": true,
-        "title": "Alloy UI",
+        "title": "FerroUI UI",
         "width": 1440
       }
     ]

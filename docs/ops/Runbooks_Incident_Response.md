@@ -59,31 +59,31 @@
 
 ```bash
 # Check pod status
-kubectl get pods -n alloy-ui
+kubectl get pods -n ferroui-ui
 
 # Check logs
-kubectl logs -n alloy-ui deployment/alloy-ui --tail=100
+kubectl logs -n ferroui-ui deployment/ferroui-ui --tail=100
 
 # Check events
-kubectl get events -n alloy-ui --sort-by='.lastTimestamp'
+kubectl get events -n ferroui-ui --sort-by='.lastTimestamp'
 ```
 
 4. **Enable circuit breaker** (if not already)
 
 ```bash
-kubectl set env deployment/alloy-ui ALLOY_CIRCUIT_BREAKER=OPEN
+kubectl set env deployment/ferroui-ui FERROUI_CIRCUIT_BREAKER=OPEN
 ```
 
 5. **Scale up** if resource constrained
 
 ```bash
-kubectl scale deployment/alloy-ui --replicas=10 -n alloy-ui
+kubectl scale deployment/ferroui-ui --replicas=10 -n ferroui-ui
 ```
 
 6. **Rollback** if recent deployment
 
 ```bash
-kubectl rollout undo deployment/alloy-ui -n alloy-ui
+kubectl rollout undo deployment/ferroui-ui -n ferroui-ui
 ```
 
 **Communication:**
@@ -108,10 +108,10 @@ kubectl rollout undo deployment/alloy-ui -n alloy-ui
 
 ```bash
 # Check error logs
-kubectl logs -n alloy-ui deployment/alloy-ui | grep ERROR
+kubectl logs -n ferroui-ui deployment/ferroui-ui | grep ERROR
 
 # Check specific error patterns
-kubectl logs -n alloy-ui deployment/alloy-ui | grep -i "timeout\|validation\|hallucination"
+kubectl logs -n ferroui-ui deployment/ferroui-ui | grep -i "timeout\|validation\|hallucination"
 ```
 
 2. **Check LLM provider status**
@@ -123,13 +123,13 @@ curl https://status.openai.com/api/v2/status.json
 3. **Switch provider** if needed
 
 ```bash
-kubectl set env deployment/alloy-ui ALLOY_DEFAULT_PROVIDER=anthropic
+kubectl set env deployment/ferroui-ui FERROUI_DEFAULT_PROVIDER=anthropic
 ```
 
 4. **Increase cache TTL** to reduce LLM calls
 
 ```bash
-kubectl set env deployment/alloy-ui ALLOY_CACHE_TTL=600
+kubectl set env deployment/ferroui-ui FERROUI_CACHE_TTL=600
 ```
 
 ---
@@ -146,7 +146,7 @@ kubectl set env deployment/alloy-ui ALLOY_CACHE_TTL=600
 1. **Check resource usage**
 
 ```bash
-kubectl top pods -n alloy-ui
+kubectl top pods -n ferroui-ui
 ```
 
 2. **Check Redis performance**
@@ -158,13 +158,13 @@ redis-cli -h redis info stats
 3. **Enable optimistic streaming**
 
 ```bash
-kubectl set env deployment/alloy-ui ALLOY_STREAM_MODE=OPTIMISTIC
+kubectl set env deployment/ferroui-ui FERROUI_STREAM_MODE=OPTIMISTIC
 ```
 
 4. **Scale horizontally**
 
 ```bash
-kubectl scale deployment/alloy-ui --replicas=10 -n alloy-ui
+kubectl scale deployment/ferroui-ui --replicas=10 -n ferroui-ui
 ```
 
 ---
@@ -182,13 +182,13 @@ kubectl scale deployment/alloy-ui --replicas=10 -n alloy-ui
 2. **Switch to backup provider**
 
 ```bash
-kubectl set env deployment/alloy-ui ALLOY_DEFAULT_PROVIDER=anthropic
+kubectl set env deployment/ferroui-ui FERROUI_DEFAULT_PROVIDER=anthropic
 ```
 
 3. **Enable local LLM** (if configured)
 
 ```bash
-kubectl set env deployment/alloy-ui ALLOY_DEFAULT_PROVIDER=ollama
+kubectl set env deployment/ferroui-ui FERROUI_DEFAULT_PROVIDER=ollama
 ```
 
 ---
@@ -205,19 +205,19 @@ kubectl set env deployment/alloy-ui ALLOY_DEFAULT_PROVIDER=ollama
 1. **Check Redis health**
 
 ```bash
-kubectl exec -it redis-0 -n alloy-ui -- redis-cli ping
+kubectl exec -it redis-0 -n ferroui-ui -- redis-cli ping
 ```
 
 2. **Restart Redis** (if needed)
 
 ```bash
-kubectl rollout restart deployment/redis -n alloy-ui
+kubectl rollout restart deployment/redis -n ferroui-ui
 ```
 
 3. **Disable cache temporarily**
 
 ```bash
-kubectl set env deployment/alloy-ui ALLOY_CACHE_ENABLED=false
+kubectl set env deployment/ferroui-ui FERROUI_CACHE_ENABLED=false
 ```
 
 ---

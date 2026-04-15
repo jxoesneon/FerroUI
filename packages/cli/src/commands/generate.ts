@@ -15,7 +15,7 @@ export const generateCommand = new Command('generate')
 
 generateCommand
   .command('component <name>')
-  .description('Generate a new Alloy component with Zod schema, types, index, stories, and tests.')
+  .description('Generate a new FerroUI component with Zod schema, types, index, stories, and tests.')
   .option('-t, --tier <tier>', 'Atomic tier (atom, molecule, organism)', 'molecule')
   .option('--no-stories', 'Exclude Storybook stories')
   .option('--no-tests', 'Exclude tests')
@@ -75,7 +75,7 @@ generateCommand
 
 generateCommand
   .command('tool <name>')
-  .description('Generate a new Alloy tool with Zod schema, execute function, and mock.')
+  .description('Generate a new FerroUI tool with Zod schema, execute function, and mock.')
   .option('-c, --category <category>', 'Tool category (data-fetch, computation, external-api)', 'data-fetch')
   .option('--no-mock', 'Exclude mock implementation')
   .option('-d, --dir <dir>', 'Output directory', 'src/tools')
@@ -122,6 +122,51 @@ generateCommand
       filesToGenerate.forEach(f => console.log(chalk.dim(`  - ${f.output}`)));
     } catch (error: any) {
       spinner.fail(chalk.red(`Failed to generate tool.`));
+      console.error(error.message);
+      process.exit(1);
+    }
+  });
+
+generateCommand
+  .command('prompt <name>')
+  .description('Generate a new versioned FerroUI system prompt.')
+  .option('-v, --version <version>', 'Prompt version (e.g., v1, v2)', 'v1')
+  .option('-d, --dir <dir>', 'Output directory', 'prompts')
+  .action(async (name, options) => {
+    const spinner = ora(`Generating prompt ${chalk.bold(name)}...`).start();
+    
+    try {
+      const promptName = name.toLowerCase().replace(/\s+/g, '-');
+      const version = options.version.startsWith('v') ? options.version : `v${options.version}`;
+      const outputDir = path.resolve(process.cwd(), options.dir, version);
+      const outputFile = path.join(outputDir, `${promptName}.md`);
+      
+      if (fs.existsSync(outputFile)) {
+        spinner.fail(chalk.red(`Prompt file already exists: ${outputFile}`));
+        process.exit(1);
+      }
+
+      await fs.ensureDir(outputDir);
+
+      const templatePath = path.resolve(__dirname, '../templates/prompt/index.md.hbs');
+      let templateContent = '# {{name}} System Prompt\n\n## Role\n\n## Context\n\n## Constraints\n';
+      
+      if (await fs.pathExists(templatePath)) {
+        templateContent = await fs.readFile(templatePath, 'utf-8');
+      }
+
+      const template = Handlebars.compile(templateContent);
+      const result = template({
+        name: name,
+        version: version,
+        date: new Date().toISOString().slice(0, 10),
+      });
+      
+      await fs.writeFile(outputFile, result);
+
+      spinner.succeed(chalk.green(`Generated ${chalk.bold(promptName)} in ${options.dir}/${version}/${promptName}.md`));
+    } catch (error: any) {
+      spinner.fail(chalk.red(`Failed to generate prompt.`));
       console.error(error.message);
       process.exit(1);
     }

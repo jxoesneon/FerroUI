@@ -8,7 +8,7 @@
 
 ## 1. Overview
 
-This guide covers packaging Alloy UI as a desktop application using Tauri. Tauri
+This guide covers packaging FerroUI UI as a desktop application using Tauri. Tauri
 provides:
 
 - Native performance with WebKit rendering
@@ -100,7 +100,7 @@ apps/desktop/
     "bundle": {
       "active": true,
       "category": "DeveloperTool",
-      "copyright": "© 2026 Alloy UI",
+      "copyright": "© 2026 FerroUI UI",
       "deb": {
         "depends": []
       },
@@ -112,7 +112,7 @@ apps/desktop/
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "dev.alloy.desktop",
+      "identifier": "dev.ferroui.desktop",
       "longDescription": "AI-powered server-driven UI framework",
       "macOS": {
         "entitlements": null,
@@ -122,7 +122,7 @@ apps/desktop/
         "signingIdentity": null
       },
       "resources": [],
-      "shortDescription": "Alloy UI Desktop",
+      "shortDescription": "FerroUI UI Desktop",
       "targets": ["dmg", "msi", "deb", "appimage"],
       "windows": {
         "certificateThumbprint": null,
@@ -136,7 +136,7 @@ apps/desktop/
     "updater": {
       "active": true,
       "endpoints": [
-        "https://releases.alloy.dev/{{target}}/{{current_version}}"
+        "https://releases.ferroui.dev/{{target}}/{{current_version}}"
       ],
       "dialog": true,
       "pubkey": "YOUR_UPDATER_PUBLIC_KEY"
@@ -146,7 +146,7 @@ apps/desktop/
         "fullscreen": false,
         "height": 900,
         "resizable": true,
-        "title": "Alloy UI",
+        "title": "FerroUI UI",
         "width": 1440
       }
     ]
@@ -158,7 +158,7 @@ apps/desktop/
 
 ```toml
 [package]
-name = "alloy-desktop"
+name = "ferroui-desktop"
 version = "1.0.0"
 edition = "2021"
 
@@ -193,7 +193,7 @@ fn main() {
     tauri::Builder::default()
         .setup(|app| {
             // Initialize local LLM
-            let engine = alloy_engine::Engine::new_local();
+            let engine = ferroui_engine::Engine::new_local();
             app.manage(engine);
 
             Ok(())
@@ -211,7 +211,7 @@ fn main() {
 #[tauri::command]
 async fn generate_layout(
     prompt: String,
-    engine: tauri::State<'_, alloy_engine::Engine>,
+    engine: tauri::State<'_, ferroui_engine::Engine>,
 ) -> Result<String, String> {
     engine.generate_layout(&prompt).await
         .map(|layout| serde_json::to_string(&layout).unwrap())
@@ -221,7 +221,7 @@ async fn generate_layout(
 #[tauri::command]
 async fn set_provider(
     provider: String,
-    engine: tauri::State<'_, alloy_engine::Engine>,
+    engine: tauri::State<'_, ferroui_engine::Engine>,
 ) -> Result<(), String> {
     engine.set_provider(&provider).await
         .map_err(|e| e.to_string())
@@ -287,13 +287,13 @@ npm run tauri build -- --target x86_64-unknown-linux-gnu
 ```
 src-tauri/target/release/bundle/
 ├── dmg/                    # macOS DMG
-│   └── alloy-ui_1.0.0_universal.dmg
+│   └── ferroui-ui_1.0.0_universal.dmg
 ├── msi/                    # Windows installer
-│   └── alloy-ui_1.0.0_x64_en-US.msi
+│   └── ferroui-ui_1.0.0_x64_en-US.msi
 ├── deb/                    # Debian package
-│   └── alloy-ui_1.0.0_amd64.deb
+│   └── ferroui-ui_1.0.0_amd64.deb
 └── appimage/               # Linux AppImage
-    └── alloy-ui_1.0.0_amd64.AppImage
+    └── ferroui-ui_1.0.0_amd64.AppImage
 ```
 
 ---
@@ -313,7 +313,7 @@ src-tauri/target/release/bundle/
 
 # Notarize
 xcrun altool --notarize-app \
-  --primary-bundle-id "dev.alloy.desktop" \
+  --primary-bundle-id "dev.ferroui.desktop" \
   --username "your@email.com" \
   --password "@keychain:AC_PASSWORD" \
   --file src-tauri/target/release/bundle/dmg/*.dmg
@@ -340,9 +340,9 @@ signtool sign /f certificate.pfx /p password \
 
 ```bash
 # Upload release artifacts
-curl -X POST https://releases.alloy.dev/upload \
+curl -X POST https://releases.ferroui.dev/upload \
   -H "Authorization: Bearer $TOKEN" \
-  -F "file=@alloy-ui_1.0.0_universal.dmg" \
+  -F "file=@ferroui-ui_1.0.0_universal.dmg" \
   -F "version=1.0.0" \
   -F "platform=darwin-universal"
 ```

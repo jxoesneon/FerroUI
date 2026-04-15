@@ -1,7 +1,7 @@
 import React from 'react';
 import { z } from 'zod';
-import { ComponentTier } from '@alloy/schema';
-import { registerComponent } from '@alloy/registry';
+import { ComponentTier } from '@ferroui/schema';
+import { registerComponent } from '@ferroui/registry';
 
 /**
  * Dashboard Component (Root)
@@ -9,7 +9,7 @@ import { registerComponent } from '@alloy/registry';
 export const Dashboard: React.FC<{ children?: React.ReactNode }> = ({ children }) => (
   <div className="dashboard min-h-screen bg-gray-100 p-8">
     <header className="mb-8">
-      <h1 className="text-4xl font-bold text-gray-900">Alloy UI Dashboard</h1>
+      <h1 className="text-4xl font-bold text-gray-900">FerroUI UI Dashboard</h1>
     </header>
     <main className="grid grid-cols-1 gap-6">
       {children}

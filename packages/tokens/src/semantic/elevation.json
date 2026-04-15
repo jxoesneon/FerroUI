@@ -1,0 +1,38 @@
+{
+  "light": {
+    "elevation": {
+      "card": { "$value": "{shadow.base}", "$type": "shadow" },
+      "dropdown": { "$value": "{shadow.md}", "$type": "shadow" },
+      "modal": { "$value": "{shadow.lg}", "$type": "shadow" },
+      "tooltip": { "$value": "{shadow.sm}", "$type": "shadow" },
+      "sticky": { "$value": "{shadow.base}", "$type": "shadow" }
+    }
+  },
+  "dark": {
+    "elevation": {
+      "card": { "$value": "{shadow.md}", "$type": "shadow" },
+      "dropdown": { "$value": "{shadow.lg}", "$type": "shadow" },
+      "modal": { "$value": "{shadow.xl}", "$type": "shadow" },
+      "tooltip": { "$value": "{shadow.base}", "$type": "shadow" },
+      "sticky": { "$value": "{shadow.md}", "$type": "shadow" }
+    }
+  },
+  "enterprise": {
+    "elevation": {
+      "card": { "$value": "{shadow.base}", "$type": "shadow" },
+      "dropdown": { "$value": "{shadow.md}", "$type": "shadow" },
+      "modal": { "$value": "{shadow.lg}", "$type": "shadow" },
+      "tooltip": { "$value": "{shadow.sm}", "$type": "shadow" },
+      "sticky": { "$value": "{shadow.base}", "$type": "shadow" }
+    }
+  },
+  "high-contrast": {
+    "elevation": {
+      "card": { "$value": "{shadow.base}", "$type": "shadow" },
+      "dropdown": { "$value": "{shadow.md}", "$type": "shadow" },
+      "modal": { "$value": "{shadow.lg}", "$type": "shadow" },
+      "tooltip": { "$value": "{shadow.sm}", "$type": "shadow" },
+      "sticky": { "$value": "{shadow.base}", "$type": "shadow" }
+    }
+  }
+}

@@ -3,7 +3,7 @@ import { createCommand } from './commands/create';
 import { devCommand } from './commands/dev';
 import { evalCommand } from './commands/eval';
 
-describe('Alloy CLI Command Registration', () => {
+describe('FerroUI CLI Command Registration', () => {
   it('should have standard commands registered', () => {
     expect(createCommand.name()).toBe('create');
     expect(devCommand.name()).toBe('dev');

@@ -16,9 +16,9 @@ export interface AuthOptions {
   skipPaths?: string[];
 }
 
-const DEFAULT_SECRET = 'alloy-dev-secret-CHANGE-IN-PRODUCTION';
+const DEFAULT_SECRET = 'ferroui-dev-secret-CHANGE-IN-PRODUCTION';
 const DEFAULT_EXPIRES_IN = '8h';
-const DEFAULT_COOKIE_NAME = 'alloy_session';
+const DEFAULT_COOKIE_NAME = 'ferroui_session';
 
 const ALWAYS_SKIP = ['/healthz', '/readyz', '/health'];
 

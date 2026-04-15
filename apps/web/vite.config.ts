@@ -9,12 +9,12 @@ export default defineConfig({
   plugins: [react(), tailwindcss(), tsconfigPaths()],
   resolve: {
     alias: {
-      '@alloy/engine': path.resolve(__dirname, '../../packages/engine/src'),
-      '@alloy/registry': path.resolve(__dirname, '../../packages/registry/src'),
-      '@alloy/schema': path.resolve(__dirname, '../../packages/schema/src'),
-      '@alloy/tools': path.resolve(__dirname, '../../packages/tools/src'),
-      '@alloy/telemetry': path.resolve(__dirname, '../../packages/telemetry/src'),
-      '@alloy/i18n': path.resolve(__dirname, '../../packages/i18n/src'),
+      '@ferroui/engine': path.resolve(__dirname, '../../packages/engine/src'),
+      '@ferroui/registry': path.resolve(__dirname, '../../packages/registry/src'),
+      '@ferroui/schema': path.resolve(__dirname, '../../packages/schema/src'),
+      '@ferroui/tools': path.resolve(__dirname, '../../packages/tools/src'),
+      '@ferroui/telemetry': path.resolve(__dirname, '../../packages/telemetry/src'),
+      '@ferroui/i18n': path.resolve(__dirname, '../../packages/i18n/src'),
     },
   },
   test: {

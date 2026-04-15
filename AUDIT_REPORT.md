@@ -1,4 +1,4 @@
-# Alloy UI Feature Implementation Audit
+# FerroUI UI Feature Implementation Audit
 
 **Date:** 2026-04-12 (v3 — full re-audit, all source files directly inspected)
 **Scope:** PRD-001, PRD-002, System Architecture Document, all ADRs, all RFCs, Engineering Specs, Security Threat Model, Observability Dictionary, A11y Checklist, Design Token Spec, i18n Guide
@@ -32,7 +32,7 @@
 | F-001 | Component Registry | ✅ COMPLETE | `packages/registry/src/registry.ts` | Versioned `Map<string,Map<number,RegistryEntry>>`, tier support, `getAllComponents()` |
 | F-002 | Tool Registration | ✅ COMPLETE | `packages/tools/src/registry.ts` | `registerTool()`, permission filter, Zod-to-JSON-schema manifest, timeout, ToolError types |
 | F-003 | Dual-Phase Pipeline | ✅ COMPLETE | `packages/engine/src/pipeline/dual-phase.ts` | Phase 1 (tool gather), Phase 2 (UI gen), PII redact, XML escape |
-| F-004 | Streaming Delivery | ✅ COMPLETE | `apps/web/src/hooks/useAlloyLayout.ts` | SSE + `eventsource-parser`, `partial-json-parser`, AbortController |
+| F-004 | Streaming Delivery | ✅ COMPLETE | `apps/web/src/hooks/useFerroUILayout.ts` | SSE + `eventsource-parser`, `partial-json-parser`, AbortController |
 | F-005 | Self-Healing | ✅ COMPLETE | `packages/engine/src/validation/repair.ts` | `repairLayout()` up to 3 attempts, Levenshtein fuzzy match |
 | F-006 | Validation Engine | ✅ COMPLETE | `packages/schema/src/layout.ts` | `validateLayout()` with Zod; schema guards all fields |
 | F-007 | Error Boundaries | ✅ COMPLETE | `apps/web/src/components/ErrorBoundary.tsx` | Per-component React error boundaries |
@@ -45,7 +45,7 @@
 
 | ID | Feature | Status | Notes |
 |----|---------|--------|-------|
-| F-008 | alloy CLI | ✅ COMPLETE | All 12 commands registered in `index.ts` |
+| F-008 | ferroui CLI | ✅ COMPLETE | All 12 commands registered in `index.ts` |
 | F-009 | Component Scaffolding | ✅ COMPLETE | `generate component` — Handlebars templates, tier flag, stories/tests flags |
 | F-010 | Tool Scaffolding | ✅ COMPLETE | `generate tool` — category flag, mock flag, Zod template |
 | F-011 | Registry Inspector | ✅ COMPLETE | `inspector.ts` serves HTML browser UI + JSON API at `/` and `/api`. CLI opens browser automatically. |
@@ -56,18 +56,18 @@
 
 | Command | Status | File | Notes |
 |---------|--------|------|-------|
-| `alloy create <name>` | ✅ DONE | `commands/create.ts` | — |
-| `alloy dev` | ✅ DONE | `commands/dev.ts` | — |
-| `alloy generate component` | ✅ DONE | `commands/generate.ts` | — |
-| `alloy generate tool` | ✅ DONE | `commands/generate.ts` | — |
-| `alloy registry inspect` | ✅ DONE | `commands/registry.ts` | Launches `inspector.js` HTML UI + opens browser |
-| `alloy eval` | ✅ DONE | `commands/eval.ts` | Full suite — HTML report, CI exit code, 5 dimensions |
-| `alloy build` | ✅ DONE | `commands/build.ts` | tsc + per-package build + web/server/edge dirs + manifest |
-| `alloy deploy` | ✅ DONE | `commands/deploy.ts` | Real Vercel/Netlify/wrangler/tauri dispatch; dry-run supported |
-| `alloy doctor` | ✅ DONE | `commands/doctor.ts` | Full env checks, JSON output, fix suggestions |
-| `alloy update` | ✅ DONE | `commands/update.ts` | Queries npm registry, prompts, installs |
-| `alloy logs` | ✅ DONE | `commands/logs.ts` | `--follow` SSE streaming + `--json` + formatted output against `/admin/logs` |
-| `alloy migrate` | ✅ DONE | `commands/migrate.js` | Schema migration tooling |
+| `ferroui create <name>` | ✅ DONE | `commands/create.ts` | — |
+| `ferroui dev` | ✅ DONE | `commands/dev.ts` | — |
+| `ferroui generate component` | ✅ DONE | `commands/generate.ts` | — |
+| `ferroui generate tool` | ✅ DONE | `commands/generate.ts` | — |
+| `ferroui registry inspect` | ✅ DONE | `commands/registry.ts` | Launches `inspector.js` HTML UI + opens browser |
+| `ferroui eval` | ✅ DONE | `commands/eval.ts` | Full suite — HTML report, CI exit code, 5 dimensions |
+| `ferroui build` | ✅ DONE | `commands/build.ts` | tsc + per-package build + web/server/edge dirs + manifest |
+| `ferroui deploy` | ✅ DONE | `commands/deploy.ts` | Real Vercel/Netlify/wrangler/tauri dispatch; dry-run supported |
+| `ferroui doctor` | ✅ DONE | `commands/doctor.ts` | Full env checks, JSON output, fix suggestions |
+| `ferroui update` | ✅ DONE | `commands/update.ts` | Queries npm registry, prompts, installs |
+| `ferroui logs` | ✅ DONE | `commands/logs.ts` | `--follow` SSE streaming + `--json` + formatted output against `/admin/logs` |
+| `ferroui migrate` | ✅ DONE | `commands/migrate.js` | Schema migration tooling |
 
 ---
 
@@ -103,7 +103,7 @@
 
 | ID | Feature | Status | Location | Notes |
 |----|---------|--------|----------|-------|
-| F-024 | A11y by Default | ✅ COMPLETE | `AlloyRenderer.tsx`, `accessibility.test.tsx` | All 6 ARIA props (`role`, `label`, `labelledBy`, `describedBy`, `hidden`, `live`) rendered. 7 axe-core WCAG 2.1 AA tests pass in `accessibility.test.tsx` using `vitest-axe`. |
+| F-024 | A11y by Default | ✅ COMPLETE | `FerroUIRenderer.tsx`, `accessibility.test.tsx` | All 6 ARIA props (`role`, `label`, `labelledBy`, `describedBy`, `hidden`, `live`) rendered. 7 axe-core WCAG 2.1 AA tests pass in `accessibility.test.tsx` using `vitest-axe`. |
 | F-025 | i18n Support | ✅ COMPLETE | `packages/i18n/` | `I18nProvider`, `useI18n`, `formatDate/Number/Currency`, RTL via `document.dir`, locale persistence |
 | F-026 | Security Hardening | ✅ COMPLETE | `packages/engine/src/server.ts` | CSP, HSTS, `X-Frame-Options`, `X-Content-Type-Options`, XSS header, PII redaction, XML escape, prompt sanitization |
 | F-027 | Rate Limiting | ✅ COMPLETE | `packages/engine/src/server.ts` | `express-rate-limit` at 100 req/15min per IP, `draft-7` headers |
@@ -125,7 +125,7 @@
 
 ## 6. Schema Compliance — 100% ✅
 
-All `AlloyLayout` fields from `AlloyLayout_JSON_Schema_Specification.md` are implemented:
+All `FerroUILayout` fields from `FerroUILayout_JSON_Schema_Specification.md` are implemented:
 
 | Field | Status | Location |
 |-------|--------|----------|
@@ -134,14 +134,14 @@ All `AlloyLayout` fields from `AlloyLayout_JSON_Schema_Specification.md` are imp
 | `locale` (BCP 47) | ✅ | `packages/schema/src/layout.ts` |
 | `layout` (root component) | ✅ | `packages/schema/src/layout.ts` |
 | `metadata` (optional) | ✅ | `LayoutMetadataSchema` |
-| `component.type` | ✅ | `AlloyComponent` |
-| `component.id` | ✅ | `AlloyComponent` |
-| `component.props` | ✅ | `AlloyComponent` |
-| `component.children` | ✅ | `AlloyComponent` recursive |
+| `component.type` | ✅ | `FerroUIComponent` |
+| `component.id` | ✅ | `FerroUIComponent` |
+| `component.props` | ✅ | `FerroUIComponent` |
+| `component.children` | ✅ | `FerroUIComponent` recursive |
 | `component.action` | ✅ | `ActionSchema` discriminated union |
 | `component.aria` | ✅ | `AriaPropsSchema` |
 | NAVIGATE / SHOW_TOAST / REFRESH / TOOL_CALL | ✅ | All 4 action schemas present |
-| `AlloyConfig` schema | ✅ | `packages/schema/src/config.ts` |
+| `FerroUIConfig` schema | ✅ | `packages/schema/src/config.ts` |
 
 ---
 
@@ -217,12 +217,12 @@ All spec-required features are implemented. The following items are production-h
 - [x] Dual-phase pipeline: phase 1 + 2, PII redact, XML escape
 - [x] SSE streaming: partial JSON, AbortController
 - [x] Self-healing: fuzzy match, 3-attempt loop
-- [x] Schema validation: full AlloyLayout coverage
+- [x] Schema validation: full FerroUILayout coverage
 
 ### CLI
 - [x] All 12 commands registered and functional
-- [x] `alloy logs` — SSE streaming + JSON + formatted output
-- [x] `alloy deploy` — real Vercel/Netlify/wrangler/tauri dispatch
+- [x] `ferroui logs` — SSE streaming + JSON + formatted output
+- [x] `ferroui deploy` — real Vercel/Netlify/wrangler/tauri dispatch
 - [x] Registry Inspector — full HTML browser UI + JSON API
 
 ### AI & LLM
@@ -257,7 +257,7 @@ All spec-required features are implemented. The following items are production-h
 
 **Overall Score: 100% spec coverage**
 
-The Alloy UI codebase is fully implemented against all spec requirements (PRD-001, PRD-002, System Architecture, all ADRs, Security Threat Model, A11y Checklist, Design Token Spec, i18n Guide). All tests pass, lint is clean, and no stubs or placeholders remain.
+The FerroUI UI codebase is fully implemented against all spec requirements (PRD-001, PRD-002, System Architecture, all ADRs, Security Threat Model, A11y Checklist, Design Token Spec, i18n Guide). All tests pass, lint is clean, and no stubs or placeholders remain.
 
 **Strengths:**
 - Full TypeScript type safety across all packages

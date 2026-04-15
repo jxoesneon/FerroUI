@@ -1,26 +1,26 @@
 import { useState, useEffect, useCallback } from 'react';
 import { createParser } from 'eventsource-parser';
 import parsePartialJson from 'partial-json-parser';
-import type { AlloyLayout } from '@alloy/schema';
+import type { FerroUILayout } from '@ferroui/schema';
 
-interface UseAlloyLayoutOptions {
+interface UseFerroUILayoutOptions {
   url: string;
   initialRequestId?: string;
 }
 
-interface UseAlloyLayoutResult {
-  layout: Partial<AlloyLayout> | null;
+interface UseFerroUILayoutResult {
+  layout: Partial<FerroUILayout> | null;
   loading: boolean;
   error: Error | null;
   refresh: () => void;
 }
 
 /**
- * Hook for consuming Alloy UI layouts via Server-Sent Events (SSE).
+ * Hook for consuming FerroUI UI layouts via Server-Sent Events (SSE).
  * Implements Section 8.5 of the System Architecture Document (Streaming Architecture).
  */
-export function useAlloyLayout({ url, initialRequestId }: UseAlloyLayoutOptions): UseAlloyLayoutResult {
-  const [layout, setLayout] = useState<Partial<AlloyLayout> | null>(null);
+export function useFerroUILayout({ url, initialRequestId }: UseFerroUILayoutOptions): UseFerroUILayoutResult {
+  const [layout, setLayout] = useState<Partial<FerroUILayout> | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
   const [refreshCount, setRefreshCount] = useState<number>(0);
@@ -71,7 +71,7 @@ export function useAlloyLayout({ url, initialRequestId }: UseAlloyLayoutOptions)
               // The event data might be a JSON chunk or a partial JSON string
               accumulatedData += event.data;
               const partialLayout = parsePartialJson(accumulatedData);
-              setLayout(partialLayout as Partial<AlloyLayout>);
+              setLayout(partialLayout as Partial<FerroUILayout>);
             } catch (e) {
               console.error('Error parsing partial JSON:', e);
             }

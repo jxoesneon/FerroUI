@@ -11,19 +11,19 @@
 ### Global Installation
 
 ```bash
-npm install -g @alloy/cli
+npm install -g @ferroui/cli
 ```
 
 ### Project-local Installation
 
 ```bash
-npm install --save-dev @alloy/cli
+npm install --save-dev @ferroui/cli
 ```
 
 ### Verify Installation
 
 ```bash
-alloy --version
+ferroui --version
 # Output: 1.0.0
 ```
 
@@ -33,12 +33,12 @@ alloy --version
 
 ### 2.1 Project Commands
 
-#### `alloy create <project-name>`
+#### `ferroui create <project-name>`
 
-Create a new Alloy UI project.
+Create a new FerroUI UI project.
 
 ```bash
-alloy create my-app
+ferroui create my-app
 ```
 
 **Options:**
@@ -57,17 +57,17 @@ alloy create my-app
 **Example:**
 
 ```bash
-alloy create my-app --template full --pm npm
+ferroui create my-app --template full --pm npm
 ```
 
 ---
 
-#### `alloy dev`
+#### `ferroui dev`
 
 Start the development environment.
 
 ```bash
-alloy dev
+ferroui dev
 ```
 
 **Options:**
@@ -82,7 +82,7 @@ alloy dev
 **Example:**
 
 ```bash
-alloy dev --port 8080 --no-open
+ferroui dev --port 8080 --no-open
 ```
 
 **What it starts:**
@@ -96,12 +96,12 @@ alloy dev --port 8080 --no-open
 
 ### 2.2 Code Generation Commands
 
-#### `alloy generate component <name>`
+#### `ferroui generate component <name>`
 
 Generate a new component with boilerplate.
 
 ```bash
-alloy generate component UserCard
+ferroui generate component UserCard
 ```
 
 **Options:**
@@ -121,7 +121,7 @@ alloy generate component UserCard
 **Example:**
 
 ```bash
-alloy generate component Button --tier atom --stories --tests
+ferroui generate component Button --tier atom --stories --tests
 ```
 
 **Generated files:**
@@ -138,12 +138,12 @@ src/components/Button/
 
 ---
 
-#### `alloy generate tool <name>`
+#### `ferroui generate tool <name>`
 
 Generate a new data tool.
 
 ```bash
-alloy generate tool getUserData
+ferroui generate tool getUserData
 ```
 
 **Options:**
@@ -162,19 +162,19 @@ alloy generate tool getUserData
 **Example:**
 
 ```bash
-alloy generate tool calculateMetrics --category computation --mock
+ferroui generate tool calculateMetrics --category computation --mock
 ```
 
 ---
 
 ### 2.3 Development Commands
 
-#### `alloy registry inspect`
+#### `ferroui registry inspect`
 
 Open the registry inspector in browser.
 
 ```bash
-alloy registry inspect
+ferroui registry inspect
 ```
 
 **Features:**
@@ -185,12 +185,12 @@ alloy registry inspect
 
 ---
 
-#### `alloy eval`
+#### `ferroui eval`
 
 Run the prompt evaluation suite.
 
 ```bash
-alloy eval
+ferroui eval
 ```
 
 **Options:**
@@ -212,19 +212,19 @@ alloy eval
 **Example:**
 
 ```bash
-alloy eval --provider openai --model gpt-4 --format html --output report.html
+ferroui eval --provider openai --model gpt-4 --format html --output report.html
 ```
 
 ---
 
 ### 2.4 Build & Deploy Commands
 
-#### `alloy build`
+#### `ferroui build`
 
 Build the project for production.
 
 ```bash
-alloy build
+ferroui build
 ```
 
 **Options:**
@@ -242,12 +242,12 @@ alloy build
 
 ---
 
-#### `alloy deploy`
+#### `ferroui deploy`
 
 Deploy to configured target.
 
 ```bash
-alloy deploy
+ferroui deploy
 ```
 
 **Options:**
@@ -268,12 +268,12 @@ alloy deploy
 
 ### 2.5 Utility Commands
 
-#### `alloy doctor`
+#### `ferroui doctor`
 
 Diagnose common issues.
 
 ```bash
-alloy doctor
+ferroui doctor
 ```
 
 **Checks:**
@@ -287,12 +287,12 @@ alloy doctor
 
 ---
 
-#### `alloy update`
+#### `ferroui update`
 
-Update Alloy UI to latest version.
+Update FerroUI UI to latest version.
 
 ```bash
-alloy update
+ferroui update
 ```
 
 **Options:**
@@ -304,12 +304,12 @@ alloy update
 
 ---
 
-#### `alloy logs`
+#### `ferroui logs`
 
 View application logs.
 
 ```bash
-alloy logs
+ferroui logs
 ```
 
 **Options:**
@@ -324,9 +324,9 @@ alloy logs
 
 ## 3. Configuration
 
-### 3.1 alloy.config.js
+### 3.1 ferroui.config.js
 
-Create `alloy.config.js` in your project root:
+Create `ferroui.config.js` in your project root:
 
 ```javascript
 module.exports = {
@@ -403,10 +403,10 @@ module.exports = {
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `ALLOY_PROMPT_VERSION` | System prompt version | `1.0` |
-| `ALLOY_LOG_LEVEL` | Log level | `info` |
-| `ALLOY_CACHE_ENABLED` | Enable semantic cache | `true` |
-| `ALLOY_TELEMETRY_ENABLED` | Enable telemetry | `true` |
+| `FERROUI_PROMPT_VERSION` | System prompt version | `1.0` |
+| `FERROUI_LOG_LEVEL` | Log level | `info` |
+| `FERROUI_CACHE_ENABLED` | Enable semantic cache | `true` |
+| `FERROUI_TELEMETRY_ENABLED` | Enable telemetry | `true` |
 
 ---
 
@@ -417,10 +417,10 @@ module.exports = {
 Add to your `.bashrc` or `.zshrc`:
 
 ```bash
-alias ad='alloy dev'
-alias ab='alloy build'
-alias ae='alloy eval'
-alias adoc='alloy doctor'
+alias ad='ferroui dev'
+alias ab='ferroui build'
+alias ae='ferroui eval'
+alias adoc='ferroui doctor'
 ```
 
 ### 5.2 NPM Scripts
@@ -430,10 +430,10 @@ Add to your `package.json`:
 ```json
 {
   "scripts": {
-    "dev": "alloy dev",
-    "build": "alloy build",
-    "eval": "alloy eval",
-    "deploy": "alloy deploy"
+    "dev": "ferroui dev",
+    "build": "ferroui build",
+    "eval": "ferroui eval",
+    "deploy": "ferroui deploy"
   }
 }
 ```
@@ -442,7 +442,7 @@ Add to your `package.json`:
 
 **VS Code:**
 
-Install the Alloy UI extension for:
+Install the FerroUI UI extension for:
 - Syntax highlighting
 - Auto-completion
 - Inline documentation
@@ -463,7 +463,7 @@ Install the Alloy UI extension for:
 ### 6.2 Debug Mode
 
 ```bash
-DEBUG=alloy* alloy dev
+DEBUG=ferroui* ferroui dev
 ```
 
 ---

@@ -1,0 +1,66 @@
+{
+  "light": {
+    "typography": {
+      "body": {
+        "family": { "$value": "{font.family.sans}", "$type": "fontFamily" },
+        "size": { "$value": "{font.size.base}", "$type": "fontSize" }
+      },
+      "code": {
+        "family": { "$value": "{font.family.mono}", "$type": "fontFamily" },
+        "size": { "$value": "{font.size.sm}", "$type": "fontSize" }
+      },
+      "heading": {
+        "family": { "$value": "{font.family.sans}", "$type": "fontFamily" },
+        "size": { "$value": "{font.size.2xl}", "$type": "fontSize" }
+      }
+    }
+  },
+  "dark": {
+    "typography": {
+      "body": {
+        "family": { "$value": "{font.family.sans}", "$type": "fontFamily" },
+        "size": { "$value": "{font.size.base}", "$type": "fontSize" }
+      },
+      "code": {
+        "family": { "$value": "{font.family.mono}", "$type": "fontFamily" },
+        "size": { "$value": "{font.size.sm}", "$type": "fontSize" }
+      },
+      "heading": {
+        "family": { "$value": "{font.family.sans}", "$type": "fontFamily" },
+        "size": { "$value": "{font.size.2xl}", "$type": "fontSize" }
+      }
+    }
+  },
+  "enterprise": {
+    "typography": {
+      "body": {
+        "family": { "$value": "'IBM Plex Sans', 'system-ui', sans-serif", "$type": "fontFamily" },
+        "size": { "$value": "{font.size.base}", "$type": "fontSize" }
+      },
+      "code": {
+        "family": { "$value": "'IBM Plex Mono', monospace", "$type": "fontFamily" },
+        "size": { "$value": "{font.size.sm}", "$type": "fontSize" }
+      },
+      "heading": {
+        "family": { "$value": "'IBM Plex Sans', sans-serif", "$type": "fontFamily" },
+        "size": { "$value": "{font.size.2xl}", "$type": "fontSize" }
+      }
+    }
+  },
+  "high-contrast": {
+    "typography": {
+      "body": {
+        "family": { "$value": "{font.family.sans}", "$type": "fontFamily" },
+        "size": { "$value": "{font.size.base}", "$type": "fontSize" }
+      },
+      "code": {
+        "family": { "$value": "{font.family.mono}", "$type": "fontFamily" },
+        "size": { "$value": "{font.size.sm}", "$type": "fontSize" }
+      },
+      "heading": {
+        "family": { "$value": "{font.family.sans}", "$type": "fontFamily" },
+        "size": { "$value": "{font.size.2xl}", "$type": "fontSize" }
+      }
+    }
+  }
+}

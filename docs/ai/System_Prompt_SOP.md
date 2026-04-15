@@ -9,7 +9,7 @@
 
 ## 1. Overview
 
-The system prompt is the most critical artifact in the Alloy UI system. It defines the AI's entire operating contract. This SOP establishes procedures for creating, reviewing, deploying, and maintaining system prompts.
+The system prompt is the most critical artifact in the FerroUI UI system. It defines the AI's entire operating contract. This SOP establishes procedures for creating, reviewing, deploying, and maintaining system prompts.
 
 ---
 
@@ -18,7 +18,7 @@ The system prompt is the most critical artifact in the Alloy UI system. It defin
 ### 2.1 Repository Structure
 
 ```
-alloy/prompts/
+ferroui/prompts/
 ├── v1.0/
 │   ├── phase1-data-gathering.md
 │   ├── phase2-ui-generation.md
@@ -44,7 +44,7 @@ alloy/prompts/
 
 All changes to system prompts require:
 
-1. **Pull Request** — Changes submitted via PR to `alloy/prompts/`
+1. **Pull Request** — Changes submitted via PR to `ferroui/prompts/`
 2. **Automated Evaluation** — Full eval suite must pass
 3. **Peer Review** — At least 2 AI engineers must approve
 4. **Staging Deployment** — Test in staging environment
@@ -54,7 +54,7 @@ All changes to system prompts require:
 
 ## 3. System Prompt Anatomy
 
-Every Alloy UI system prompt contains the following sections in order:
+Every FerroUI UI system prompt contains the following sections in order:
 
 ### 3.1 Section Overview
 
@@ -73,12 +73,12 @@ Every Alloy UI system prompt contains the following sections in order:
 ### 3.2 Complete Example: Phase 2 UI Generation
 
 ```markdown
-# Alloy UI - Phase 2: UI Generation
+# FerroUI UI - Phase 2: UI Generation
 
 ## 1. ROLE DEFINITION
 
 You are a UI layout engine, not a conversational assistant. Your sole purpose 
-is to generate valid AlloyLayout JSON objects that render user interfaces.
+is to generate valid FerroUILayout JSON objects that render user interfaces.
 
 - Do not engage in conversation
 - Do not ask clarifying questions
@@ -87,7 +87,7 @@ is to generate valid AlloyLayout JSON objects that render user interfaces.
 
 ## 2. OUTPUT CONTRACT
 
-You MUST return a single JSON object conforming to the AlloyLayout schema.
+You MUST return a single JSON object conforming to the FerroUILayout schema.
 
 Requirements:
 - Root object must have: schemaVersion, requestId, locale, layout
@@ -224,12 +224,12 @@ You may ONLY reference tools listed above in TOOL_CALL actions.
 ```typescript
 // config/prompts.ts
 export const promptConfig = {
-  version: process.env.ALLOY_PROMPT_VERSION || '1.0',
+  version: process.env.FERROUI_PROMPT_VERSION || '1.0',
   
   paths: {
-    phase1: `alloy/prompts/v${version}/phase1-data-gathering.md`,
-    phase2: `alloy/prompts/v${version}/phase2-ui-generation.md`,
-    repair: `alloy/prompts/v${version}/repair.md`,
+    phase1: `ferroui/prompts/v${version}/phase1-data-gathering.md`,
+    phase2: `ferroui/prompts/v${version}/phase2-ui-generation.md`,
+    repair: `ferroui/prompts/v${version}/repair.md`,
   },
   
   // Hot-reload in development
@@ -246,14 +246,14 @@ Each deployment pins to an explicit prompt version:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: alloy-engine
+  name: ferroui-engine
 spec:
   template:
     spec:
       containers:
         - name: engine
           env:
-            - name: ALLOY_PROMPT_VERSION
+            - name: FERROUI_PROMPT_VERSION
               value: "1.0"  # Pinned version
 ```
 
@@ -274,7 +274,7 @@ spec:
 ### 5.2 Evaluation Dataset
 
 ```typescript
-// alloy/evals/dataset.ts
+// ferroui/evals/dataset.ts
 export const evalDataset = [
   {
     id: 'eval-001',
@@ -298,7 +298,7 @@ export const evalDataset = [
 
 ```bash
 # Run full evaluation suite
-alloy eval --prompt-version 1.1 --provider openai --model gpt-4
+ferroui eval --prompt-version 1.1 --provider openai --model gpt-4
 
 # Output:
 # Running 48 evaluations...
@@ -321,16 +321,16 @@ If a deployed prompt causes issues:
 
 ```bash
 # 1. Identify the issue
-alloy logs --errors --last 1h
+ferroui logs --errors --last 1h
 
 # 2. Rollback to previous version
-kubectl set env deployment/alloy-engine ALLOY_PROMPT_VERSION=1.0
+kubectl set env deployment/ferroui-engine FERROUI_PROMPT_VERSION=1.0
 
 # 3. Verify rollback
-alloy health check
+ferroui health check
 
 # 4. Create incident report
-alloy incident create --severity high
+ferroui incident create --severity high
 ```
 
 ### 6.2 Hotfix Process

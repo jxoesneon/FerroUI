@@ -25,10 +25,10 @@ Current behavior always replaces the entire layout, causing:
 
 ```typescript
 type LayoutUpdate = 
-  | { type: 'replace'; target: string; component: AlloyComponent }
-  | { type: 'insert'; target: string; position: 'before' | 'after' | 'child'; component: AlloyComponent }
+  | { type: 'replace'; target: string; component: FerroUIComponent }
+  | { type: 'insert'; target: string; position: 'before' | 'after' | 'child'; component: FerroUIComponent }
   | { type: 'remove'; target: string }
-  | { type: 'patch'; target: string; props: Partial<AlloyComponentProps> }
+  | { type: 'patch'; target: string; props: Partial<FerroUIComponentProps> }
   | { type: 'reorder'; target: string; children: string[] };
 ```
 

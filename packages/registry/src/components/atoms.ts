@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { forwardRef, memo } from 'react';
 import { z } from 'zod';
-import { ComponentTier } from '@alloy/schema';
+import { ComponentTier } from '@ferroui/schema';
+import { useTranslation } from '@ferroui/i18n';
 import { registerComponent } from '../registry';
 
 // ─── Text ─────────────────────────────────────────────────────────────────────
@@ -11,17 +12,29 @@ export const TextSchema = z.object({
   aria: z.object({
     label: z.string().optional(),
     hidden: z.boolean().default(false),
-  }).optional(),
+  }),
 }).describe('Renders text content with variant and color.');
 
 const HEADING_MAP: Record<string, keyof React.JSX.IntrinsicElements> = {
   heading1: 'h1', heading2: 'h2', heading3: 'h3',
 };
 
-export const Text: React.FC<z.infer<typeof TextSchema>> = ({ content, variant = 'body', color = 'default' }) => {
-  const Tag = HEADING_MAP[variant] ?? 'p';
-  return React.createElement(Tag, { className: `alloy-text alloy-text--${variant} alloy-text--${color}` }, content);
-};
+export type TextProps = z.infer<typeof TextSchema>;
+
+export const Text = memo(forwardRef<HTMLElement, TextProps>(
+  ({ content, variant = 'body', color = 'default', aria = { hidden: false } }, ref) => {
+    const { t } = useTranslation('components');
+    const Tag = HEADING_MAP[variant] ?? 'p';
+    return React.createElement(Tag, {
+      ref,
+      className: `ferroui-text ferroui-text--${variant} ferroui-text--${color}`,
+      'aria-label': aria?.label ? t(aria.label) : undefined,
+      'aria-hidden': aria?.hidden,
+    }, t(content));
+  }
+));
+
+Text.displayName = 'Text';
 
 registerComponent({ name: 'Text', version: 1, tier: ComponentTier.ATOM, component: Text, schema: TextSchema });
 
@@ -30,47 +43,92 @@ export const IconSchema = z.object({
   name: z.string().describe('Icon identifier'),
   size: z.enum(['sm', 'md', 'lg']).default('md'),
   color: z.string().optional(),
+  isMirrorInRtl: z.boolean().default(false).describe('Whether to mirror the icon in RTL layouts'),
   aria: z.object({
-    label: z.string().optional(),
-    hidden: z.boolean().default(true),
-  }).optional(),
+    label: z.string().optional().describe('Accessibility label'),
+    hidden: z.boolean().default(true).describe('Whether to hide from screen readers'),
+  }),
+}).refine(data => data.aria.hidden || !!data.aria.label, {
+  message: "Icons must have an aria.label if not hidden from screen readers.",
+  path: ["aria", "label"],
 }).describe('Displays an icon by name.');
 
-export const Icon: React.FC<z.infer<typeof IconSchema>> = ({ name, size = 'md' }) => {
-  return React.createElement('span', {
-    className: `alloy-icon alloy-icon--${size}`,
-    'data-icon': name,
-    role: 'img',
-  });
-};
+export type IconProps = z.infer<typeof IconSchema>;
+
+export const Icon = memo(forwardRef<HTMLSpanElement, IconProps>(
+  ({ name, size = 'md', isMirrorInRtl = false, aria = { hidden: true } }, ref) => {
+    const { t, direction } = useTranslation('components');
+    const shouldMirror = isMirrorInRtl && direction === 'rtl';
+
+    return React.createElement('span', {
+      ref,
+      className: `ferroui-icon ferroui-icon--${size}${shouldMirror ? ' ferroui-icon--mirrored' : ''}`,
+      'data-icon': name,
+      role: 'img',
+      style: shouldMirror ? { transform: 'scaleX(-1)' } : undefined,
+      'aria-label': aria?.label ? t(aria.label) : undefined,
+      'aria-hidden': aria?.hidden ? 'true' : undefined,
+    });
+  }
+));
+
+Icon.displayName = 'Icon';
 
 registerComponent({ name: 'Icon', version: 1, tier: ComponentTier.ATOM, component: Icon, schema: IconSchema });
 
 // ─── Badge ────────────────────────────────────────────────────────────────────
 export const BadgeSchema = z.object({
-  label: z.string().describe('Badge text'),
+  content: z.string().describe('Badge text'),
   variant: z.enum(['default', 'primary', 'success', 'warning', 'danger']).default('default'),
   aria: z.object({
     label: z.string().optional(),
     hidden: z.boolean().default(false),
-  }).optional(),
+  }),
 }).describe('Renders a small status badge.');
 
-export const Badge: React.FC<z.infer<typeof BadgeSchema>> = ({ label, variant = 'default' }) => {
-  return React.createElement('span', { className: `alloy-badge alloy-badge--${variant}` }, label);
-};
+export type BadgeProps = z.infer<typeof BadgeSchema>;
+
+export const Badge = memo(forwardRef<HTMLSpanElement, BadgeProps>(
+  ({ content, variant = 'default', aria = { hidden: false } }, ref) => {
+    const { t } = useTranslation('components');
+    return React.createElement('span', {
+      ref,
+      className: `ferroui-badge ferroui-badge--${variant}`,
+      'aria-label': aria?.label ? t(aria.label) : undefined,
+      'aria-hidden': aria?.hidden,
+    }, t(content));
+  }
+));
+
+Badge.displayName = 'Badge';
 
 registerComponent({ name: 'Badge', version: 1, tier: ComponentTier.ATOM, component: Badge, schema: BadgeSchema });
 
 // ─── Divider ──────────────────────────────────────────────────────────────────
 export const DividerSchema = z.object({
   orientation: z.enum(['horizontal', 'vertical']).default('horizontal'),
-  aria: z.object({ hidden: z.boolean().default(true) }).optional(),
+  aria: z.object({
+    label: z.string().optional(),
+    hidden: z.boolean().default(true)
+  }),
 }).describe('A visual separator line.');
 
-export const Divider: React.FC<z.infer<typeof DividerSchema>> = ({ orientation = 'horizontal' }) => {
-  return React.createElement('hr', { className: `alloy-divider alloy-divider--${orientation}`, role: 'separator' });
-};
+export type DividerProps = z.infer<typeof DividerSchema>;
+
+export const Divider = memo(forwardRef<HTMLHRElement, DividerProps>(
+  ({ orientation = 'horizontal', aria = { hidden: true } }, ref) => {
+    const { t } = useTranslation('components');
+    return React.createElement('hr', {
+      ref,
+      className: `ferroui-divider ferroui-divider--${orientation}`,
+      role: 'separator',
+      'aria-label': aria?.label ? t(aria.label) : undefined,
+      'aria-hidden': aria?.hidden,
+    });
+  }
+));
+
+Divider.displayName = 'Divider';
 
 registerComponent({ name: 'Divider', version: 1, tier: ComponentTier.ATOM, component: Divider, schema: DividerSchema });
 
@@ -78,17 +136,25 @@ registerComponent({ name: 'Divider', version: 1, tier: ComponentTier.ATOM, compo
 export const SkeletonSchema = z.object({
   width: z.string().default('100%'),
   height: z.string().default('1rem'),
-  aria: z.object({ label: z.string().default('Loading...') }).optional(),
+  aria: z.object({ label: z.string().default('Loading...') }),
 }).describe('A placeholder skeleton loader.');
 
-export const Skeleton: React.FC<z.infer<typeof SkeletonSchema>> = ({ width = '100%', height = '1rem' }) => {
-  return React.createElement('div', {
-    className: 'alloy-skeleton',
-    style: { width, height },
-    'aria-busy': true,
-    'aria-label': 'Loading...',
-  });
-};
+export type SkeletonProps = z.infer<typeof SkeletonSchema>;
+
+export const Skeleton = memo(forwardRef<HTMLDivElement, SkeletonProps>(
+  ({ width = '100%', height = '1rem', aria = { label: 'Loading...' } }, ref) => {
+    const { t } = useTranslation('components');
+    return React.createElement('div', {
+      ref,
+      className: 'ferroui-skeleton',
+      style: { width, height },
+      'aria-busy': true,
+      'aria-label': aria?.label ? t(aria.label) : undefined,
+    });
+  }
+));
+
+Skeleton.displayName = 'Skeleton';
 
 registerComponent({ name: 'Skeleton', version: 1, tier: ComponentTier.ATOM, component: Skeleton, schema: SkeletonSchema });
 
@@ -98,28 +164,56 @@ export const AvatarSchema = z.object({
   alt: z.string().default('User avatar'),
   initials: z.string().optional().describe('Fallback initials'),
   size: z.enum(['sm', 'md', 'lg']).default('md'),
-  aria: z.object({ label: z.string().optional() }).optional(),
+  aria: z.object({ label: z.string().optional() }),
 }).describe('Displays a user avatar image or initials.');
 
-export const Avatar: React.FC<z.infer<typeof AvatarSchema>> = ({ src, alt = 'User avatar', initials, size = 'md' }) => {
-  if (src) {
-    return React.createElement('img', { src, alt, className: `alloy-avatar alloy-avatar--${size}` });
+export type AvatarProps = z.infer<typeof AvatarSchema>;
+
+export const Avatar = memo(forwardRef<HTMLElement, AvatarProps>(
+  ({ src, alt = 'User avatar', initials, size = 'md', aria = {} }, ref) => {
+    const { t } = useTranslation('components');
+    if (src) {
+      return React.createElement('img', {
+        ref: ref as React.Ref<HTMLImageElement>,
+        src,
+        alt: t(alt),
+        className: `ferroui-avatar ferroui-avatar--${size}`,
+        'aria-label': aria?.label ? t(aria.label) : undefined,
+      });
+    }
+    return React.createElement('span', {
+      ref: ref as React.Ref<HTMLSpanElement>,
+      className: `ferroui-avatar ferroui-avatar--${size} ferroui-avatar--initials`,
+      'aria-label': aria?.label ? t(aria.label) : undefined,
+    }, initials ?? '?');
   }
-  return React.createElement('span', { className: `alloy-avatar alloy-avatar--${size} alloy-avatar--initials` }, initials ?? '?');
-};
+));
+
+Avatar.displayName = 'Avatar';
 
 registerComponent({ name: 'Avatar', version: 1, tier: ComponentTier.ATOM, component: Avatar, schema: AvatarSchema });
 
 // ─── Tag ──────────────────────────────────────────────────────────────────────
 export const TagSchema = z.object({
-  label: z.string().describe('Tag text'),
+  content: z.string().describe('Tag text'),
   color: z.string().optional(),
-  removable: z.boolean().default(false),
-  aria: z.object({ label: z.string().optional() }).optional(),
+  isRemovable: z.boolean().default(false),
+  aria: z.object({ label: z.string().optional() }),
 }).describe('A tag/chip label element.');
 
-export const Tag: React.FC<z.infer<typeof TagSchema>> = ({ label }) => {
-  return React.createElement('span', { className: 'alloy-tag' }, label);
-};
+export type TagProps = z.infer<typeof TagSchema>;
+
+export const Tag = memo(forwardRef<HTMLSpanElement, TagProps>(
+  ({ content, isRemovable = false, aria = {} }, ref) => {
+    const { t } = useTranslation('components');
+    return React.createElement('span', {
+      ref,
+      className: `ferroui-tag${isRemovable ? ' ferroui-tag--removable' : ''}`,
+      'aria-label': aria?.label ? t(aria.label) : undefined,
+    }, t(content));
+  }
+));
+
+Tag.displayName = 'Tag';
 
 registerComponent({ name: 'Tag', version: 1, tier: ComponentTier.ATOM, component: Tag, schema: TagSchema });

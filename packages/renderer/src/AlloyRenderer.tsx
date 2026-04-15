@@ -1,10 +1,10 @@
-import React, { useMemo } from 'react';
-import type { AlloyComponent } from '@alloy/schema';
-import { registry } from '@alloy/registry';
+import React, { useMemo, useState, useCallback, useEffect } from 'react';
+import type { FerroUIComponent } from '@ferroui/schema';
+import { registry } from '@ferroui/registry';
 
-export interface AlloyRendererProps {
-  /** The AlloyLayout root component tree to render. */
-  layout: AlloyComponent;
+export interface FerroUIRendererProps {
+  /** The FerroUILayout root component tree to render. */
+  layout: FerroUIComponent;
   /** Optional fallback component when a type is not found in the registry. */
   fallback?: React.ComponentType<{ type: string; props?: Record<string, unknown> }>;
   /** Optional override map: type → React component (takes priority over registry). */
@@ -24,7 +24,7 @@ const DefaultFallback: React.FC<{ type: string }> = ({ type }) => (
 );
 
 /**
- * Resolves a React component for a given AlloyComponent type.
+ * Resolves a React component for a given FerroUIComponent type.
  * Priority: overrides → registry → fallback.
  */
 function resolveComponent(
@@ -44,44 +44,70 @@ function resolveComponent(
 }
 
 /**
- * Recursively renders an AlloyComponent tree.
+ * Recursively renders an FerroUIComponent tree.
  */
 const RenderNode: React.FC<{
-  node: AlloyComponent;
+  node: FerroUIComponent;
   overrides?: Record<string, React.ComponentType<any>>;
   fallback?: React.ComponentType<{ type: string; props?: Record<string, unknown> }>;
   path?: string;
 }> = ({ node, overrides, fallback, path = 'root' }) => {
-  const Component = resolveComponent(node.type, overrides, fallback);
+  // --- State Machine Runtime (RFC-001) ---
+  const [currentState, setCurrentState] = useState(node.stateMachine?.initial);
+
+  // Listen for state update events for this component
+  useEffect(() => {
+    if (!node.id) return;
+    
+    const handleStateUpdate = (e: any) => {
+      const { componentId, newState } = e.detail;
+      if (componentId === node.id && node.stateMachine?.states[newState]) {
+        setCurrentState(newState);
+      }
+    };
+
+    window.addEventListener('ferroui-state-update', handleStateUpdate);
+    return () => window.removeEventListener('ferroui-state-update', handleStateUpdate);
+  }, [node.id, node.stateMachine]);
+
+  const activeNode = useMemo(() => {
+    if (node.stateMachine && currentState) {
+      const stateDef = node.stateMachine.states[currentState];
+      return stateDef?.render ?? node;
+    }
+    return node;
+  }, [node, currentState]);
+
+  const Component = resolveComponent(activeNode.type, overrides, fallback);
 
   // Build props: merge node.props + aria + action + id
   const componentProps: Record<string, unknown> = {
-    ...node.props,
-    key: node.id ?? path,
+    ...activeNode.props,
+    key: activeNode.id ?? path,
   };
 
   // Pass ARIA props if present
-  if (node.aria) {
-    if (node.aria.label) componentProps['aria-label'] = node.aria.label;
-    if (node.aria.labelledBy) componentProps['aria-labelledby'] = node.aria.labelledBy;
-    if (node.aria.describedBy) componentProps['aria-describedby'] = node.aria.describedBy;
-    if (node.aria.hidden !== undefined) componentProps['aria-hidden'] = node.aria.hidden;
-    if (node.aria.live) componentProps['aria-live'] = node.aria.live;
-    if (node.aria.role) componentProps['role'] = node.aria.role;
+  if (activeNode.aria) {
+    if (activeNode.aria.label) componentProps['aria-label'] = activeNode.aria.label;
+    if (activeNode.aria.labelledBy) componentProps['aria-labelledby'] = activeNode.aria.labelledBy;
+    if (activeNode.aria.describedBy) componentProps['aria-describedby'] = activeNode.aria.describedBy;
+    if (activeNode.aria.hidden !== undefined) componentProps['aria-hidden'] = activeNode.aria.hidden;
+    if (activeNode.aria.live) componentProps['aria-live'] = activeNode.aria.live;
+    if (activeNode.aria.role) componentProps['role'] = activeNode.aria.role;
   }
 
   // Pass action as a data attribute for the action handler layer
-  if (node.action) {
-    componentProps['data-alloy-action'] = JSON.stringify(node.action);
+  if (activeNode.action) {
+    componentProps['data-ferroui-action'] = JSON.stringify(activeNode.action);
   }
 
   // For unknown components, pass the type so the fallback can display it
-  if (!registry.getComponentEntry(node.type) && !overrides?.[node.type]) {
-    componentProps['type'] = node.type;
+  if (!registry.getComponentEntry(activeNode.type) && !overrides?.[activeNode.type]) {
+    componentProps['type'] = activeNode.type;
   }
 
   // Recursively render children
-  const children = node.children?.map((child, index) => (
+  const children = activeNode.children?.map((child: FerroUIComponent, index: number) => (
     <RenderNode
       key={child.id ?? `${path}.${index}`}
       node={child}
@@ -95,21 +121,21 @@ const RenderNode: React.FC<{
 };
 
 /**
- * AlloyRenderer — the core layout renderer.
+ * FerroUIRenderer — the core layout renderer.
  *
- * Takes an AlloyLayout root component and recursively renders it
+ * Takes an FerroUILayout root component and recursively renders it
  * using the component registry, with optional overrides and fallback.
  *
  * @example
  * ```tsx
- * <AlloyRenderer layout={alloyLayout.layout} />
+ * <FerroUIRenderer layout={ferrouiLayout.layout} />
  * ```
  */
-export const AlloyRenderer: React.FC<AlloyRendererProps> = ({ layout, fallback, overrides }) => {
+export const FerroUIRenderer: React.FC<FerroUIRendererProps> = ({ layout, fallback, overrides }) => {
   const memoizedOverrides = useMemo(() => overrides, [overrides]);
 
   return (
-    <div className="alloy-renderer" data-alloy-root>
+    <div className="ferroui-renderer" data-ferroui-root>
       <RenderNode node={layout} overrides={memoizedOverrides} fallback={fallback} />
     </div>
   );

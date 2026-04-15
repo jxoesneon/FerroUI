@@ -3,8 +3,8 @@ import React from 'react';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import * as matchers from '@testing-library/jest-dom/matchers';
-import { AlloyRenderer } from './AlloyRenderer';
-import { registry } from '@alloy/registry';
+import { FerroUIRenderer } from './FerroUIRenderer';
+import { registry } from '@ferroui/registry';
 import { actionRouter } from '../services/ActionRouter';
 
 expect.extend(matchers);
@@ -16,13 +16,13 @@ vi.mock('../services/ActionRouter', () => ({
   },
 }));
 
-describe('AlloyRenderer', () => {
+describe('FerroUIRenderer', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it('renders a missing component fallback', () => {
-    render(<AlloyRenderer component={{ type: 'Unknown', id: '1', props: {} } as any} />);
+    render(<FerroUIRenderer component={{ type: 'Unknown', id: '1', props: {} } as any} />);
     expect(screen.getByText('Unknown')).toBeInTheDocument();
     expect(screen.getByText(/Missing Component/)).toBeInTheDocument();
   });
@@ -40,7 +40,7 @@ describe('AlloyRenderer', () => {
     const action = { type: 'REFRESH', payload: {} } as any;
 
     render(
-      <AlloyRenderer
+      <FerroUIRenderer
         component={{
           type: 'MockButton',
           id: 'btn-1',
@@ -83,7 +83,7 @@ describe('AlloyRenderer', () => {
     });
 
     render(
-      <AlloyRenderer
+      <FerroUIRenderer
         component={{
           type: 'MockContainer',
           id: 'container-1',

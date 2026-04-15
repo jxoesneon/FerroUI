@@ -37,4 +37,4 @@ ENV NODE_ENV=production
 ENV PORT=4000
 
 # Start the engine server
-CMD ["npm", "run", "start", "-w", "@alloy/engine"]
+CMD ["npm", "run", "start", "-w", "@ferroui/engine"]

@@ -18,7 +18,7 @@ Prompt evaluation ensures that system prompts produce high-quality, reliable out
 
 | Criteria | Weight | Description | Excellent (5) | Poor (1) |
 |----------|--------|-------------|---------------|----------|
-| **Schema Validity** | 30% | Output conforms to AlloyLayout schema | 100% valid | < 80% valid |
+| **Schema Validity** | 30% | Output conforms to FerroUILayout schema | 100% valid | < 80% valid |
 | **No Hallucinations** | 25% | No invalid component types | 0 hallucinations | > 5% hallucination rate |
 | **Data Accuracy** | 20% | Correct use of tool results | All data accurate | Fabricated data present |
 | **A11y Compliance** | 15% | Proper ARIA attributes | 100% compliant | Missing required ARIA |
@@ -58,7 +58,7 @@ Overall Score =
 ### 3.2 Example Test Cases
 
 ```typescript
-// alloy/evals/dataset.ts
+// ferroui/evals/dataset.ts
 export const evalDataset: EvalTestCase[] = [
   {
     id: 'basic-001',
@@ -126,29 +126,29 @@ export const evalDataset: EvalTestCase[] = [
 
 ```bash
 # Run full evaluation suite
-alloy eval
+ferroui eval
 
 # Run with specific prompt version
-alloy eval --prompt-version 1.1
+ferroui eval --prompt-version 1.1
 
 # Run with specific provider
-alloy eval --provider openai --model gpt-4
+ferroui eval --provider openai --model gpt-4
 
 # Run specific category
-alloy eval --category security
+ferroui eval --category security
 
 # Run specific test
-alloy eval --test-id basic-001
+ferroui eval --test-id basic-001
 
 # Generate HTML report
-alloy eval --format html --output report.html
+ferroui eval --format html --output report.html
 ```
 
 ### 4.2 Evaluation Output
 
 ```
 ═══════════════════════════════════════════════════════════════
-                    ALLOY EVAL RESULTS
+                    FERROUI EVAL RESULTS
 ═══════════════════════════════════════════════════════════════
 
 Configuration:
@@ -181,7 +181,7 @@ Failed Tests:
   ✗ complex-003: Missing expected component 'ChartPanel'
   ✗ edge-005: StatusBanner variant should be 'warning', got 'info'
 
-Report: ./alloy/evals/report-2025-04-10.html
+Report: ./ferroui/evals/report-2025-04-10.html
 ═══════════════════════════════════════════════════════════════
 ```
 
@@ -194,7 +194,7 @@ name: Prompt Evaluation
 on:
   pull_request:
     paths:
-      - 'alloy/prompts/**'
+      - 'ferroui/prompts/**'
 
 jobs:
   evaluate:
@@ -203,7 +203,7 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: Run Evaluation
-        run: alloy eval --format json --output results.json
+        run: ferroui eval --format json --output results.json
         
       - name: Check Results
         run: |
@@ -281,10 +281,10 @@ Before any prompt change:
 
 ```bash
 # Save baseline
-alloy eval --save-baseline baseline-v1.0.json
+ferroui eval --save-baseline baseline-v1.0.json
 
 # Store in version control
-git add alloy/evals/baselines/
+git add ferroui/evals/baselines/
 git commit -m "chore: add eval baseline for v1.0"
 ```
 
@@ -292,7 +292,7 @@ git commit -m "chore: add eval baseline for v1.0"
 
 ```bash
 # Compare against baseline
-alloy eval --compare-baseline baseline-v1.0.json
+ferroui eval --compare-baseline baseline-v1.0.json
 
 # Output:
 # Regression detected:
@@ -316,7 +316,7 @@ alloy eval --compare-baseline baseline-v1.0.json
 
 ```bash
 # Run load test
-alloy eval --load-test --requests 100 --concurrency 10
+ferroui eval --load-test --requests 100 --concurrency 10
 
 # Output:
 # Total requests: 100

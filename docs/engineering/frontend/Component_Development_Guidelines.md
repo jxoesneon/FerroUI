@@ -9,7 +9,7 @@
 ## 1. Overview
 
 This document provides comprehensive guidelines for developing components in the
-Alloy UI framework. Components are the building blocks of AI-generated layouts
+FerroUI UI framework. Components are the building blocks of AI-generated layouts
 and must adhere to strict standards for type safety, accessibility, and
 performance.
 
@@ -17,7 +17,7 @@ performance.
 
 ## 2. Atomic Design Hierarchy
 
-Alloy UI follows the three-tier Atomic Design hierarchy. Every component must be
+FerroUI UI follows the three-tier Atomic Design hierarchy. Every component must be
 classified into one of these tiers.
 
 ### 2.1 Tier 1 — Atoms
@@ -47,7 +47,7 @@ at compile time.
 // packages/registry/src/atoms/Text/index.tsx
 import { forwardRef } from 'react';
 import { z } from 'zod';
-import { cn } from '@alloy/shared';
+import { cn } from '@ferroui/shared';
 
 // Schema definition
 export const TextSchema = z.object({
@@ -259,7 +259,7 @@ Components are registered in the Component Registry using the
 
 ```typescript
 // packages/registry/src/index.ts
-import { registerComponent } from '@alloy/core';
+import { registerComponent } from '@ferroui/core';
 import { Text, TextSchema } from './atoms/Text';
 import { StatBadge, StatBadgeSchema } from './molecules/StatBadge';
 import { KPIBoard, KPIBoardSchema } from './organisms/KPIBoard';

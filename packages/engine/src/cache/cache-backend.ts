@@ -52,23 +52,17 @@ export class InMemoryCacheBackend implements CacheBackend {
 
 // ─── Redis Backend ────────────────────────────────────────────────────────────
 
-export interface RedisClientLike {
-  get(key: string): Promise<string | null>;
-  set(key: string, value: string, options?: { PX?: number }): Promise<string | null>;
-  del(key: string | string[]): Promise<number>;
-  keys(pattern: string): Promise<string[]>;
-  flushDb?(): Promise<string>;
-}
+import type { Redis } from 'ioredis';
 
 export class RedisCacheBackend implements CacheBackend {
-  constructor(private client: RedisClientLike) {}
+  constructor(private client: Redis) {}
 
   async get(key: string): Promise<string | null> {
     return this.client.get(key);
   }
 
   async set(key: string, value: string, ttlMs: number): Promise<void> {
-    await this.client.set(key, value, { PX: ttlMs });
+    await this.client.set(key, value, 'PX', ttlMs);
   }
 
   async delete(key: string): Promise<void> {
@@ -80,38 +74,34 @@ export class RedisCacheBackend implements CacheBackend {
   }
 
   async clear(): Promise<void> {
-    if (this.client.flushDb) {
-      await this.client.flushDb();
-    }
+    await this.client.flushdb();
   }
 }
 
 // ─── SQLite Backend ───────────────────────────────────────────────────────────
 
-export interface SQLiteDBLike {
-  run(sql: string, ...params: unknown[]): void;
-  get(sql: string, ...params: unknown[]): { value: string; expires_at: number } | undefined;
-  all(sql: string, ...params: unknown[]): Array<{ key: string }>;
-}
+import type { Database } from 'better-sqlite3';
 
 export class SQLiteCacheBackend implements CacheBackend {
-  constructor(private db: SQLiteDBLike) {
-    this.db.run(`
-      CREATE TABLE IF NOT EXISTS alloy_cache (
+  constructor(private db: Database) {
+    this.db.exec(`
+      CREATE TABLE IF NOT EXISTS ferroui_cache (
         key TEXT PRIMARY KEY,
         value TEXT NOT NULL,
         expires_at INTEGER NOT NULL
       )
     `);
     // Create index for expiration cleanup
-    this.db.run(`CREATE INDEX IF NOT EXISTS idx_expires ON alloy_cache(expires_at)`);
+    this.db.exec(`CREATE INDEX IF NOT EXISTS idx_expires ON ferroui_cache(expires_at)`);
   }
 
   async get(key: string): Promise<string | null> {
-    const row = this.db.get('SELECT value, expires_at FROM alloy_cache WHERE key = ?', key);
+    const row = this.db.prepare('SELECT value, expires_at FROM ferroui_cache WHERE key = ?')
+      .get(key) as { value: string; expires_at: number } | undefined;
+
     if (!row) return null;
     if (Date.now() > row.expires_at) {
-      this.db.run('DELETE FROM alloy_cache WHERE key = ?', key);
+      this.db.prepare('DELETE FROM ferroui_cache WHERE key = ?').run(key);
       return null;
     }
     return row.value;
@@ -119,28 +109,31 @@ export class SQLiteCacheBackend implements CacheBackend {
 
   async set(key: string, value: string, ttlMs: number): Promise<void> {
     const expiresAt = Date.now() + ttlMs;
-    this.db.run(
-      'INSERT OR REPLACE INTO alloy_cache (key, value, expires_at) VALUES (?, ?, ?)',
-      key, value, expiresAt,
-    );
+    this.db.prepare(
+      'INSERT OR REPLACE INTO ferroui_cache (key, value, expires_at) VALUES (?, ?, ?)'
+    ).run(key, value, expiresAt);
   }
 
   async delete(key: string): Promise<void> {
-    this.db.run('DELETE FROM alloy_cache WHERE key = ?', key);
+    this.db.prepare('DELETE FROM ferroui_cache WHERE key = ?').run(key);
   }
 
   async keys(pattern?: string): Promise<string[]> {
     // Clean up expired entries first
-    this.db.run('DELETE FROM alloy_cache WHERE expires_at < ?', Date.now());
+    this.db.prepare('DELETE FROM ferroui_cache WHERE expires_at < ?').run(Date.now());
+
     if (!pattern) {
-      return this.db.all('SELECT key FROM alloy_cache').map(r => r.key);
+      return (this.db.prepare('SELECT key FROM ferroui_cache').all() as Array<{ key: string }>)
+        .map(r => r.key);
     }
+
     const likePattern = pattern.replace(/\*/g, '%');
-    return this.db.all('SELECT key FROM alloy_cache WHERE key LIKE ?', likePattern).map(r => r.key);
+    return (this.db.prepare('SELECT key FROM ferroui_cache WHERE key LIKE ?').all(likePattern) as Array<{ key: string }>)
+      .map(r => r.key);
   }
 
   async clear(): Promise<void> {
-    this.db.run('DELETE FROM alloy_cache');
+    this.db.prepare('DELETE FROM ferroui_cache').run();
   }
 }
 
@@ -150,8 +143,8 @@ export type CacheBackendType = 'memory' | 'redis' | 'sqlite';
 
 export interface CacheBackendConfig {
   type: CacheBackendType;
-  redisClient?: RedisClientLike;
-  sqliteDb?: SQLiteDBLike;
+  redisClient?: Redis;
+  sqliteDb?: Database;
 }
 
 export function createCacheBackend(config: CacheBackendConfig): CacheBackend {

@@ -1,4 +1,4 @@
-# AlloyLayout JSON Schema Specification
+# FerroUILayout JSON Schema Specification
 
 **Version:** 1.0  
 **Last Updated:** 2025-04-10  
@@ -9,7 +9,7 @@
 
 ## 1. Overview
 
-The AlloyLayout schema defines the structure of JSON documents produced by the AI orchestration engine and consumed by the client renderer. This specification provides the complete schema definition, validation rules, and examples.
+The FerroUILayout schema defines the structure of JSON documents produced by the AI orchestration engine and consumed by the client renderer. This specification provides the complete schema definition, validation rules, and examples.
 
 ---
 
@@ -18,11 +18,11 @@ The AlloyLayout schema defines the structure of JSON documents produced by the A
 ### 2.1 Root Object
 
 ```typescript
-interface AlloyLayout {
+interface FerroUILayout {
   schemaVersion: string;      // Schema version (e.g., "1.0")
   requestId: string;          // Unique request identifier (UUID)
   locale: string;             // BCP 47 locale tag (e.g., "en-US")
-  layout: AlloyComponent;     // Root component (must be Dashboard)
+  layout: FerroUIComponent;     // Root component (must be Dashboard)
   metadata?: LayoutMetadata;  // Optional metadata
 }
 ```
@@ -30,11 +30,11 @@ interface AlloyLayout {
 ### 2.2 Component Structure
 
 ```typescript
-interface AlloyComponent {
+interface FerroUIComponent {
   type: string;                    // Component type from registry
   id?: string;                     // Optional stable identifier
   props?: Record<string, unknown>; // Component properties
-  children?: AlloyComponent[];     // Child components
+  children?: FerroUIComponent[];     // Child components
   action?: Action;                 // Optional interaction handler
   aria?: AriaProps;                // Accessibility properties
 }
@@ -116,8 +116,8 @@ interface LayoutMetadata {
 ```json
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://alloy.dev/schemas/layout/v1.0.json",
-  "title": "AlloyLayout",
+  "$id": "https://ferroui.dev/schemas/layout/v1.0.json",
+  "title": "FerroUILayout",
   "type": "object",
   "required": ["schemaVersion", "requestId", "locale", "layout"],
   "properties": {
@@ -483,36 +483,36 @@ interface LayoutMetadata {
 ```typescript
 import { z } from 'zod';
 
-export const AlloyLayoutSchema = z.object({
+export const FerroUILayoutSchema = z.object({
   schemaVersion: z.string().regex(/^\d+\.\d+$/),
   requestId: z.string().uuid(),
   locale: z.string().regex(/^[a-z]{2}(-[A-Z]{2})?$/),
-  layout: AlloyComponentSchema,
+  layout: FerroUIComponentSchema,
   metadata: LayoutMetadataSchema.optional(),
 });
 
-export const AlloyComponentSchema: z.ZodType = z.lazy(() =>
+export const FerroUIComponentSchema: z.ZodType = z.lazy(() =>
   z.object({
     type: z.string(),
     id: z.string().optional(),
     props: z.record(z.unknown()).optional(),
-    children: z.array(AlloyComponentSchema).optional(),
+    children: z.array(FerroUIComponentSchema).optional(),
     action: ActionSchema.optional(),
     aria: AriaPropsSchema.optional(),
   })
 );
 
-export type AlloyLayout = z.infer<typeof AlloyLayoutSchema>;
-export type AlloyComponent = z.infer<typeof AlloyComponentSchema>;
+export type FerroUILayout = z.infer<typeof FerroUILayoutSchema>;
+export type FerroUIComponent = z.infer<typeof FerroUIComponentSchema>;
 ```
 
 ### 7.2 Validation Function
 
 ```typescript
-import { AlloyLayoutSchema } from './schema';
+import { FerroUILayoutSchema } from './schema';
 
 export function validateLayout(layout: unknown): ValidationResult {
-  const result = AlloyLayoutSchema.safeParse(layout);
+  const result = FerroUILayoutSchema.safeParse(layout);
   
   if (result.success) {
     return { valid: true, data: result.data };

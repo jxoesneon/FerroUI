@@ -1,5 +1,5 @@
 /**
- * Alloy Evaluation Dataset — PRD-001 §6.2
+ * FerroUI Evaluation Dataset — PRD-001 §6.2
  * Defines the core test cases for evaluating system prompt quality.
  */
 

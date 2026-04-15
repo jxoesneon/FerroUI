@@ -10,7 +10,7 @@
 
 ## 1. Overview
 
-The `alloy` CLI is the primary interface for Alloy UI development. This PRD defines the CLI commands, developer workflows, and experience goals that make Alloy UI the most developer-friendly AI framework.
+The `ferroui` CLI is the primary interface for FerroUI UI development. This PRD defines the CLI commands, developer workflows, and experience goals that make FerroUI UI the most developer-friendly AI framework.
 
 ---
 
@@ -28,12 +28,12 @@ The `alloy` CLI is the primary interface for Alloy UI development. This PRD defi
 
 ### 3.1 Project Commands
 
-#### `alloy create <project-name>`
+#### `ferroui create <project-name>`
 
-Create a new Alloy UI project with all dependencies.
+Create a new FerroUI UI project with all dependencies.
 
 ```bash
-$ alloy create my-dashboard
+$ ferroui create my-dashboard
 ? Select template: (Use arrow keys)
 ❯ Default (React + TypeScript + Node.js)
   Minimal (Core only)
@@ -51,7 +51,7 @@ Creating project...
 
 Next steps:
   cd my-dashboard
-  alloy dev
+  ferroui dev
 ```
 
 **Acceptance Criteria:**
@@ -60,12 +60,12 @@ Next steps:
 - Example components render in playground
 - README includes quickstart instructions
 
-#### `alloy dev`
+#### `ferroui dev`
 
 Start the development environment.
 
 ```bash
-$ alloy dev
+$ ferroui dev
 ✔ Started orchestration engine (port: 3001)
 ✔ Started registry inspector (port: 3002)
 ✔ Started layout playground (port: 3000)
@@ -87,12 +87,12 @@ Watching for changes...
 
 ### 3.2 Code Generation Commands
 
-#### `alloy generate component <name>`
+#### `ferroui generate component <name>`
 
 Generate a new component with all boilerplate.
 
 ```bash
-$ alloy generate component MetricCard
+$ ferroui generate component MetricCard
 ? Component tier: (Use arrow keys)
 ❯ Atom (irreducible primitive)
   Molecule (composition)
@@ -116,12 +116,12 @@ Generated files:
 - A11y tests pass (axe-core)
 - Schema validates correctly
 
-#### `alloy generate tool <name>`
+#### `ferroui generate tool <name>`
 
 Generate a new data tool.
 
 ```bash
-$ alloy generate tool getUserMetrics
+$ ferroui generate tool getUserMetrics
 ? Tool category: (Use arrow keys)
 ❯ Data fetch
   Computation
@@ -145,12 +145,12 @@ Generated files:
 
 ### 3.3 Development Commands
 
-#### `alloy registry inspect`
+#### `ferroui registry inspect`
 
 Open the registry inspector in browser.
 
 ```bash
-$ alloy registry inspect
+$ ferroui registry inspect
 ✔ Started registry inspector at http://localhost:3002
 
 Components: 24
@@ -168,12 +168,12 @@ Tools: 12
 - Search and filter
 - Export component documentation
 
-#### `alloy eval`
+#### `ferroui eval`
 
 Run the prompt evaluation suite.
 
 ```bash
-$ alloy eval
+$ ferroui eval
 Running evaluation suite (v1.2.3) against gpt-4...
 
 Prompt: "Show me user analytics"
@@ -189,7 +189,7 @@ Prompt: "Create a sales dashboard"
   ⚠ Latency: 3.5s (threshold: 3s)
 
 Results: 47/48 passed (97.9%)
-Report: ./alloy/evals/report-2025-04-10.html
+Report: ./ferroui/evals/report-2025-04-10.html
 ```
 
 **Acceptance Criteria:**
@@ -200,12 +200,12 @@ Report: ./alloy/evals/report-2025-04-10.html
 
 ### 3.4 Build & Deploy Commands
 
-#### `alloy build`
+#### `ferroui build`
 
 Build the project for production.
 
 ```bash
-$ alloy build
+$ ferroui build
 ✔ Type checking passed
 ✔ Linting passed
 ✔ Tests passed (142 tests)
@@ -220,12 +220,12 @@ Output:
     └── edge/             # Edge worker bundle
 ```
 
-#### `alloy deploy`
+#### `ferroui deploy`
 
 Deploy to configured target.
 
 ```bash
-$ alloy deploy
+$ ferroui deploy
 ? Deployment target: (Use arrow keys)
 ❯ Vercel
   Netlify
@@ -241,13 +241,13 @@ Deploying to Vercel...
 
 ### 3.5 Utility Commands
 
-#### `alloy doctor`
+#### `ferroui doctor`
 
 Diagnose common issues.
 
 ```bash
-$ alloy doctor
-Checking Alloy UI installation...
+$ ferroui doctor
+Checking FerroUI UI installation...
 
 ✔ Node.js version (20.11.0)
 ✔ pnpm version (8.15.0)
@@ -255,17 +255,17 @@ Checking Alloy UI installation...
 ✔ TypeScript configuration valid
 ✔ ESLint configuration valid
 ⚠ Ollama not detected (optional for local LLM)
-✖ Missing environment variable: ALLOY_API_KEY
+✖ Missing environment variable: FERROUI_API_KEY
 
-Fix: Create .env.local file with ALLOY_API_KEY=your_key
+Fix: Create .env.local file with FERROUI_API_KEY=your_key
 ```
 
-#### `alloy update`
+#### `ferroui update`
 
-Update Alloy UI to latest version.
+Update FerroUI UI to latest version.
 
 ```bash
-$ alloy update
+$ ferroui update
 Current version: 1.2.3
 Latest version: 1.3.0
 
@@ -288,13 +288,13 @@ Changelog:
 
 ```
 1. Install CLI
-   npm install -g @alloy/cli
+   npm install -g @ferroui/cli
 
 2. Create project
-   alloy create my-app
+   ferroui create my-app
 
 3. Start development
-   cd my-app && alloy dev
+   cd my-app && ferroui dev
 
 4. Open playground
    http://localhost:3000
@@ -310,7 +310,7 @@ Changelog:
 
 ```
 1. Start dev server
-   alloy dev
+   ferroui dev
 
 2. Open playground in browser
    http://localhost:3000
@@ -321,12 +321,12 @@ Changelog:
    - Test with various prompts
 
 4. Add new tool
-   alloy generate tool getNewData
+   ferroui generate tool getNewData
    - Implement tool logic
    - Test in playground
 
 5. Run evaluation
-   alloy eval
+   ferroui eval
 
 6. Commit changes
    git commit -m "feat: add new tool"
@@ -336,16 +336,16 @@ Changelog:
 
 ```
 1. Run tests
-   alloy test
+   ferroui test
 
 2. Build for production
-   alloy build
+   ferroui build
 
 3. Deploy
-   alloy deploy
+   ferroui deploy
 
 4. Monitor
-   alloy logs --follow
+   ferroui logs --follow
 ```
 
 ---
@@ -356,7 +356,7 @@ Changelog:
 
 | Error | Cause | Solution |
 |-------|-------|----------|
-| `E001: Component not found` | Typo in component type | Check registry with `alloy registry inspect` |
+| `E001: Component not found` | Typo in component type | Check registry with `ferroui registry inspect` |
 | `E002: Schema validation failed` | Invalid props passed | Review component schema |
 | `E003: Tool timeout` | Tool took too long | Increase timeout or optimize tool |
 | `E004: LLM rate limit` | Too many requests | Enable caching or upgrade plan |
@@ -377,7 +377,7 @@ Changelog:
 │  2. Add database index for faster queries                    │
 │  3. Implement caching in tool                                │
 │                                                              │
-│  Documentation: https://docs.alloy.dev/errors/E003           │
+│  Documentation: https://docs.ferroui.dev/errors/E003           │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -385,7 +385,7 @@ Changelog:
 
 ## 6. Configuration
 
-### 6.1 alloy.config.js
+### 6.1 ferroui.config.js
 
 ```javascript
 module.exports = {

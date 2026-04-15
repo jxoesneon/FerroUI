@@ -1,4 +1,4 @@
-import type { Action } from '@alloy/schema';
+import type { Action } from '@ferroui/schema';
 
 export interface ActionRouterContext {
   refresh: () => void;
@@ -7,7 +7,7 @@ export interface ActionRouterContext {
 }
 
 /**
- * Global Action Router for Alloy UI.
+ * Global Action Router for FerroUI UI.
  * Handles Section 2.3 Actions: NAVIGATE, SHOW_TOAST, REFRESH, TOOL_CALL.
  */
 export class ActionRouter {

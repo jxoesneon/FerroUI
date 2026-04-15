@@ -9,7 +9,7 @@
 
 ## 1. Introduction
 
-This Acceptable Use Policy ("AUP") defines the rules and guidelines for using Alloy UI services. By using Alloy UI, you agree to comply with this policy.
+This Acceptable Use Policy ("AUP") defines the rules and guidelines for using FerroUI UI services. By using FerroUI UI, you agree to comply with this policy.
 
 ---
 
@@ -17,7 +17,7 @@ This Acceptable Use Policy ("AUP") defines the rules and guidelines for using Al
 
 ### 2.1 Illegal Activities
 
-You may not use Alloy UI for:
+You may not use FerroUI UI for:
 - Violating any applicable laws or regulations
 - Infringing intellectual property rights
 - Distributing malware or viruses
@@ -26,7 +26,7 @@ You may not use Alloy UI for:
 
 ### 2.2 Harmful Activities
 
-You may not use Alloy UI to:
+You may not use FerroUI UI to:
 - Harass, abuse, or threaten others
 - Distribute hate speech or discriminatory content
 - Generate or distribute CSAM
@@ -44,7 +44,7 @@ You may not:
 
 ### 2.4 AI-Specific Prohibitions
 
-You may not use Alloy UI to:
+You may not use FerroUI UI to:
 - Generate content that violates platform terms of service
 - Create prompts designed to extract system instructions
 - Attempt to bypass safety filters
@@ -82,13 +82,13 @@ The following are prohibited:
 ### 4.1 User-Generated Content
 
 You are responsible for:
-- All content you input into Alloy UI
+- All content you input into FerroUI UI
 - Ensuring you have rights to use input content
 - Compliance with applicable content regulations
 
 ### 4.2 AI-Generated Content
 
-Alloy UI generates content based on your inputs. You are responsible for:
+FerroUI UI generates content based on your inputs. You are responsible for:
 - Reviewing generated content before use
 - Ensuring generated content meets your standards
 - Not representing AI-generated content as human-created without disclosure
@@ -99,7 +99,7 @@ Alloy UI generates content based on your inputs. You are responsible for:
 
 ### 5.1 Monitoring
 
-Alloy UI reserves the right to:
+FerroUI UI reserves the right to:
 - Monitor usage for policy violations
 - Analyze prompts for security threats
 - Log tool calls for audit purposes
@@ -119,7 +119,7 @@ Violations may result in:
 ### 5.3 Appeal Process
 
 To appeal an enforcement action:
-1. Submit appeal to support@alloy.dev within 14 days
+1. Submit appeal to support@ferroui.dev within 14 days
 2. Include explanation and remediation plan
 3. Allow 7 business days for review
 
@@ -128,7 +128,7 @@ To appeal an enforcement action:
 ## 6. Reporting Violations
 
 To report a violation:
-- Email: abuse@alloy.dev
+- Email: abuse@ferroui.dev
 - Include: Description, evidence, contact information
 - Response: Within 48 hours
 
@@ -142,8 +142,8 @@ This policy may be updated with 30 days notice. Continued use constitutes accept
 
 ## 8. Related Documents
 
-- [Terms of Service](https://alloy.dev/terms)
-- [Privacy Policy](https://alloy.dev/privacy)
+- [Terms of Service](https://ferroui.dev/terms)
+- [Privacy Policy](https://ferroui.dev/privacy)
 - [Security Threat Model](./Security_Threat_Model.md)
 
 ---

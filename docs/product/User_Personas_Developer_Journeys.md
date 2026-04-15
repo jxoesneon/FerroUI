@@ -190,14 +190,14 @@ Pain Points:
 ```
 DISCOVERY
 ├── Reads blog post about AI-generated UIs
-├── Visits alloy.dev website
+├── Visits ferroui.dev website
 ├── Watches 2-minute demo video
 └── Decision: "This looks promising, I'll try it"
 
 ONBOARDING
-├── Runs `npm create alloy-app@latest my-app`
+├── Runs `npm create ferroui-app@latest my-app`
 ├── Project created in 45 seconds
-├── Runs `alloy dev`
+├── Runs `ferroui dev`
 ├── Services start in 25 seconds
 └── Opens http://localhost:3000
 
@@ -209,14 +209,14 @@ FIRST SUCCESS
 └── Reaction: "Wow, that actually worked!"
 
 EXPLORATION
-├── Clicks "View JSON" to see AlloyLayout
+├── Clicks "View JSON" to see FerroUILayout
 ├── Examines component hierarchy
 ├── Opens registry inspector
 ├── Browses available components
 └── Reaction: "I can understand and control this"
 
 CUSTOMIZATION
-├── Runs `alloy generate component MyKpi`
+├── Runs `ferroui generate component MyKpi`
 ├── Implements custom KPI component (15 min)
 ├── Refreshes playground
 ├── Types same prompt
@@ -240,7 +240,7 @@ COMMITMENT
 EVALUATION
 ├── Security team flags "Shadow AI" usage
 ├── Researches governed AI frameworks
-├── Finds Alloy UI security documentation
+├── Finds FerroUI UI security documentation
 ├── Reviews threat model and compliance guide
 └── Decision: "Worth evaluating for enterprise use"
 
@@ -263,7 +263,7 @@ TEAM ROLLOUT
 ├── Collects feedback and issues
 ├── Iterates on configuration
 ├── Expands to additional teams
-└── Result: 5 teams using Alloy UI
+└── Result: 5 teams using FerroUI UI
 
 SCALING
 ├── Monitors usage and costs
@@ -288,7 +288,7 @@ IDENTIFY NEED
 └── Decision: "I'll build a new component"
 
 SCAFFOLDING
-├── Runs `alloy generate component DataGrid`
+├── Runs `ferroui generate component DataGrid`
 ├── Selects "Organism" tier
 ├── Includes Storybook and a11y tests
 ├── Files generated in 3 seconds
@@ -305,7 +305,7 @@ TESTING
 ├── Runs Storybook to verify visually
 ├── Runs axe-core for accessibility
 ├── Tests with screen reader
-├── Runs `alloy eval` with AI prompts
+├── Runs `ferroui eval` with AI prompts
 └── Result: All tests pass
 
 DOCUMENTATION
@@ -346,7 +346,7 @@ ADOPTION
 
 | Stage | Pain Point | Severity | Mitigation |
 |-------|------------|----------|------------|
-| Installation | Node version issues | Medium | `alloy doctor` command |
+| Installation | Node version issues | Medium | `ferroui doctor` command |
 | First Run | Services fail to start | High | Better error messages |
 | First Layout | Layout doesn't match expectation | Medium | Prompt engineering guide |
 | Customization | TypeScript errors | Medium | Better type inference |

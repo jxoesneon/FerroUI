@@ -8,12 +8,12 @@
 
 ## 1. Overview
 
-Design tokens are the visual design atoms of the Alloy UI design system. They
+Design tokens are the visual design atoms of the FerroUI UI design system. They
 are platform-agnostic variables that represent the visual properties of our
 components — colors, typography, spacing, borders, shadows, and more.
 
 This specification defines the token structure, naming conventions, and theming
-capabilities for Alloy UI.
+capabilities for FerroUI UI.
 
 ---
 
@@ -327,12 +327,12 @@ interface Theme {
 
 ```typescript
 // Theme provider
-import { ThemeProvider } from '@alloy/registry';
+import { ThemeProvider } from '@ferroui/registry';
 
 function App() {
   return (
     <ThemeProvider theme="light">
-      <AlloyRenderer />
+      <FerroUIRenderer />
     </ThemeProvider>
   );
 }
@@ -353,7 +353,7 @@ function ThemeToggle() {
 
 ```typescript
 // custom-theme.ts
-import { defineTheme } from '@alloy/registry';
+import { defineTheme } from '@ferroui/registry';
 
 export const acmeTheme = defineTheme({
   name: 'acme',
@@ -370,7 +370,7 @@ export const acmeTheme = defineTheme({
 });
 
 // Registration
-import { registerTheme } from '@alloy/registry';
+import { registerTheme } from '@ferroui/registry';
 registerTheme(acmeTheme);
 ```
 
@@ -384,13 +384,13 @@ Tokens are transformed at build time:
 
 ```bash
 # Generate CSS variables
-alloy tokens build --format css --output tokens.css
+ferroui tokens build --format css --output tokens.css
 
 # Generate Tailwind config
-alloy tokens build --format tailwind --output tailwind.config.js
+ferroui tokens build --format tailwind --output tailwind.config.js
 
 # Generate TypeScript
-alloy tokens build --format typescript --output tokens.ts
+ferroui tokens build --format typescript --output tokens.ts
 ```
 
 ### 7.2 CSS Output
@@ -419,7 +419,7 @@ alloy tokens build --format typescript --output tokens.ts
 ### 7.3 Runtime Access
 
 ```typescript
-import { tokens } from '@alloy/registry';
+import { tokens } from '@ferroui/registry';
 
 // Access token value
 const primaryColor = tokens.get('color.primary.DEFAULT');

@@ -1,7 +1,7 @@
 /**
- * Attribute keys for Alloy UI telemetry as defined in docs/ops/Observability_Telemetry_Dictionary.md
+ * Attribute keys for FerroUI UI telemetry as defined in docs/ops/Observability_Telemetry_Dictionary.md
  */
-export enum AlloyAttributes {
+export enum FerroUIAttributes {
   REQUEST_ID = 'request.id',
   USER_ID = 'user.id',
   PROMPT_HASH = 'prompt.hash',
@@ -17,38 +17,40 @@ export enum AlloyAttributes {
   COMPONENT_COUNT = 'component.count',
   TOKEN_INPUT = 'token.input',
   TOKEN_OUTPUT = 'token.output',
+  SECURITY_INJECTION_DETECTED = 'security.injection_detected',
+  CACHE_STATUS = 'cache.status',
 }
 
 /**
- * Metric names for Alloy UI
+ * Metric names for FerroUI UI
  */
-export enum AlloyMetrics {
+export enum FerroUIMetrics {
   // System Metrics
-  REQUESTS_TOTAL = 'alloy.requests.total',
-  REQUESTS_DURATION = 'alloy.requests.duration',
-  REQUESTS_ERRORS = 'alloy.requests.errors',
-  CACHE_HITS = 'alloy.cache.hits',
-  CACHE_MISSES = 'alloy.cache.misses',
-  CACHE_HIT_RATE = 'alloy.cache.hit_rate',
+  REQUESTS_TOTAL = 'ferroui.requests.total',
+  REQUESTS_DURATION = 'ferroui.requests.duration',
+  REQUESTS_ERRORS = 'ferroui.requests.errors',
+  CACHE_HITS = 'ferroui.cache.hits',
+  CACHE_MISSES = 'ferroui.cache.misses',
+  CACHE_HIT_RATE = 'ferroui.cache.hit_rate',
 
   // LLM Metrics
-  LLM_CALLS = 'alloy.llm.calls',
-  LLM_DURATION = 'alloy.llm.duration',
-  LLM_TOKENS_INPUT = 'alloy.llm.tokens.input',
-  LLM_TOKENS_OUTPUT = 'alloy.llm.tokens.output',
-  LLM_COST = 'alloy.llm.cost',
+  LLM_CALLS = 'ferroui.llm.calls',
+  LLM_DURATION = 'ferroui.llm.duration',
+  LLM_TOKENS_INPUT = 'ferroui.llm.tokens.input',
+  LLM_TOKENS_OUTPUT = 'ferroui.llm.tokens.output',
+  LLM_COST = 'ferroui.llm.cost',
 
   // Tool Metrics
-  TOOLS_CALLS = 'alloy.tools.calls',
-  TOOLS_DURATION = 'alloy.tools.duration',
-  TOOLS_ERRORS = 'alloy.tools.errors',
-  TOOLS_TIMEOUT = 'alloy.tools.timeout',
+  TOOLS_CALLS = 'ferroui.tools.calls',
+  TOOLS_DURATION = 'ferroui.tools.duration',
+  TOOLS_ERRORS = 'ferroui.tools.errors',
+  TOOLS_TIMEOUT = 'ferroui.tools.timeout',
 
   // Validation Metrics
-  VALIDATION_TOTAL = 'alloy.validation.total',
-  VALIDATION_FAILED = 'alloy.validation.failed',
-  VALIDATION_REPAIRS = 'alloy.validation.repairs',
-  VALIDATION_HALLUCINATIONS = 'alloy.validation.hallucinations',
+  VALIDATION_TOTAL = 'ferroui.validation.total',
+  VALIDATION_FAILED = 'ferroui.validation.failed',
+  VALIDATION_REPAIRS = 'ferroui.validation.repairs',
+  VALIDATION_HALLUCINATIONS = 'ferroui.validation.hallucinations',
 }
 
 /**

@@ -9,7 +9,7 @@
 ## 1. Overview
 
 This document outlines disaster recovery (DR) and business continuity (BC)
-procedures for Alloy UI.
+procedures for FerroUI UI.
 
 ---
 
@@ -54,12 +54,12 @@ procedures for Alloy UI.
 ```bash
 # Automated hourly backup
 pg_dump $DATABASE_URL | gzip > backup-$(date +%Y%m%d-%H%M%S).sql.gz
-aws s3 cp backup-*.sql.gz s3://alloy-backups/database/
+aws s3 cp backup-*.sql.gz s3://ferroui-backups/database/
 
 # Point-in-time recovery
 aws rds restore-db-instance-to-point-in-time \
-  --source-db-instance-identifier alloy-primary \
-  --target-db-instance-identifier alloy-recovery \
+  --source-db-instance-identifier ferroui-primary \
+  --target-db-instance-identifier ferroui-recovery \
   --restore-time 2025-04-10T12:00:00Z
 ```
 
@@ -92,13 +92,13 @@ aws route53 change-resource-record-sets \
 
 # 2. Promote read replica to primary
 aws rds promote-read-replica \
-  --db-instance-identifier alloy-secondary
+  --db-instance-identifier ferroui-secondary
 
 # 3. Scale up secondary
-kubectl scale deployment alloy-ui --replicas=5 --context secondary
+kubectl scale deployment ferroui-ui --replicas=5 --context secondary
 
 # 4. Verify health
-curl https://app.alloy.dev/health/ready
+curl https://app.ferroui.dev/health/ready
 ```
 
 ---
@@ -109,32 +109,32 @@ curl https://app.alloy.dev/health/ready
 
 ```bash
 # 1. Verify backup exists
-aws s3 ls s3://alloy-backups/database/ | tail -5
+aws s3 ls s3://ferroui-backups/database/ | tail -5
 
 # 2. Restore database
 aws rds restore-db-instance-from-s3 \
-  --db-instance-identifier alloy-recovery \
+  --db-instance-identifier ferroui-recovery \
   --source-engine postgres \
-  --s3-bucket-name alloy-backups \
+  --s3-bucket-name ferroui-backups \
   --s3-prefix database/backup-20250410-120000.sql.gz
 
 # 3. Update connection string
-kubectl set env deployment/alloy-ui DATABASE_URL=$RECOVERY_URL
+kubectl set env deployment/ferroui-ui DATABASE_URL=$RECOVERY_URL
 
 # 4. Redeploy application
-kubectl rollout restart deployment/alloy-ui
+kubectl rollout restart deployment/ferroui-ui
 
 # 5. Verify
 kubectl get pods
-kubectl logs deployment/alloy-ui
+kubectl logs deployment/ferroui-ui
 ```
 
 ### 6.2 Configuration Recovery
 
 ```bash
 # Restore from Git
-git clone https://github.com/alloyui/alloy.git
-cd alloy
+git clone https://github.com/ferrouiui/ferroui.git
+cd ferroui
 kubectl apply -f k8s/
 
 # Restore secrets

@@ -1,8 +1,8 @@
-export { AlloyRenderer } from './AlloyRenderer';
-export type { AlloyRendererProps } from './AlloyRenderer';
+export { FerroUIRenderer } from './FerroUIRenderer';
+export type { FerroUIRendererProps } from './FerroUIRenderer';
 
 export { ActionHandler } from './ActionHandler';
 export type { ActionHandlerProps } from './ActionHandler';
 
-export { useAlloyStream } from './useAlloyStream';
-export type { AlloyStreamState, UseAlloyStreamOptions } from './useAlloyStream';
+export { useFerroUIStream } from './useFerroUIStream';
+export type { FerroUIStreamState, UseFerroUIStreamOptions } from './useFerroUIStream';

@@ -1,4 +1,4 @@
-name: Alloy CI
+name: FerroUI CI
 
 on:
   push:

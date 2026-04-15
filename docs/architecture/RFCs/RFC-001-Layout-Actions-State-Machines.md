@@ -9,11 +9,11 @@
 
 ## Summary
 
-This RFC proposes an extension to the AlloyLayout schema to support **Layout Actions** — client-side state machines that enable imperative UI patterns not expressible in static JSON. This addresses the limitation identified in the whitepaper regarding multi-step wizards and drag-and-drop reordering.
+This RFC proposes an extension to the FerroUILayout schema to support **Layout Actions** — client-side state machines that enable imperative UI patterns not expressible in static JSON. This addresses the limitation identified in the whitepaper regarding multi-step wizards and drag-and-drop reordering.
 
 ## Motivation
 
-The current AlloyLayout model is purely declarative. While this works well for dashboards and forms, it cannot express:
+The current FerroUILayout model is purely declarative. While this works well for dashboards and forms, it cannot express:
 - Multi-step wizards with validation between steps
 - Drag-and-drop list reordering
 - Expandable/collapsible sections with state
@@ -36,7 +36,7 @@ interface StateMachineDefinition {
 interface StateDefinition {
   on?: Record<string, Transition>;
   actions?: string[];
-  render: AlloyComponent;
+  render: FerroUIComponent;
 }
 
 interface Transition {

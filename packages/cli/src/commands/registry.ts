@@ -27,7 +27,7 @@ registryCommand
       let inspectorEntry: string;
       try {
         const _require = createRequire(import.meta.url);
-        inspectorEntry = _require.resolve('@alloy/registry/dist/inspector.js');
+        inspectorEntry = _require.resolve('@ferroui/registry/dist/inspector.js');
       } catch {
         // Fallback: relative path from monorepo
         inspectorEntry = path.resolve(__dirname, '../../../registry/dist/inspector.js');

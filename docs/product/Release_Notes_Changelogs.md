@@ -1,4 +1,4 @@
-# Alloy UI Release Notes & Changelogs
+# FerroUI UI Release Notes & Changelogs
 
 ---
 
@@ -6,7 +6,7 @@
 
 ### 🎉 General Availability Release
 
-We're thrilled to announce the general availability of Alloy UI — the AI-powered server-driven UI meta-framework that lets you build dynamic interfaces from natural language.
+We're thrilled to announce the general availability of FerroUI UI — the AI-powered server-driven UI meta-framework that lets you build dynamic interfaces from natural language.
 
 ### ✨ New Features
 
@@ -24,12 +24,12 @@ We're thrilled to announce the general availability of Alloy UI — the AI-power
 - **Hallucination Detection** — Multi-layer defense against invalid component names
 
 #### Developer Experience
-- **alloy CLI** — Complete development toolkit
-  - `alloy create` — Project scaffolding
-  - `alloy dev` — Development server with hot reload
-  - `alloy generate` — Component and tool scaffolding
-  - `alloy eval` — Prompt evaluation suite
-  - `alloy registry inspect` — Browser-based component explorer
+- **ferroui CLI** — Complete development toolkit
+  - `ferroui create` — Project scaffolding
+  - `ferroui dev` — Development server with hot reload
+  - `ferroui generate` — Component and tool scaffolding
+  - `ferroui eval` — Prompt evaluation suite
+  - `ferroui registry inspect` — Browser-based component explorer
 - **Layout Playground** — Test prompts and see full pipeline output
 - **Registry Inspector** — Visual component explorer with live previews
 
@@ -48,19 +48,19 @@ We're thrilled to announce the general availability of Alloy UI — the AI-power
 ### 📦 Packages
 
 ```
-@alloy/core@1.0.0         # Core orchestration engine
-@alloy/react@1.0.0        # React renderer and hooks
-@alloy/cli@1.0.0          # Command-line interface
-@alloy/schema@1.0.0       # Zod schemas and validators
-@alloy/telemetry@1.0.0    # OpenTelemetry integration
-@alloy/i18n@1.0.0         # Internationalization utilities
+@ferroui/core@1.0.0         # Core orchestration engine
+@ferroui/react@1.0.0        # React renderer and hooks
+@ferroui/cli@1.0.0          # Command-line interface
+@ferroui/schema@1.0.0       # Zod schemas and validators
+@ferroui/telemetry@1.0.0    # OpenTelemetry integration
+@ferroui/i18n@1.0.0         # Internationalization utilities
 ```
 
 ### 🚀 Getting Started
 
 ```bash
 # Create new project
-npm create alloy-app@latest my-app
+npm create ferroui-app@latest my-app
 cd my-app
 
 # Start development
@@ -86,7 +86,7 @@ npm run dev
 
 - CVE-2025-XXXX: Prompt injection via tool output (mitigated)
 - All dependencies audited with `npm audit`
-- Security advisory: https://github.com/alloyui/alloy/security
+- Security advisory: https://github.com/ferrouiui/ferroui/security
 
 ### 🙏 Contributors
 
@@ -165,7 +165,7 @@ Thank you to all contributors who made this release possible:
 
 ### Changes
 - Renamed `ComponentLibrary` to `Registry`
-- Updated AlloyLayout schema to v1.0
+- Updated FerroUILayout schema to v1.0
 - Improved CLI output formatting
 
 ### Bug Fixes
@@ -194,7 +194,7 @@ Thank you to all contributors who made this release possible:
 
 ## Changelog Format
 
-All notable changes to Alloy UI are documented in this file.
+All notable changes to FerroUI UI are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -244,18 +244,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ```bash
 # Update packages
-npm install @alloy/core@latest @alloy/react@latest
+npm install @ferroui/core@latest @ferroui/react@latest
 
 # Run migration tool
-npx @alloy/migrate@latest
+npx @ferroui/migrate@latest
 
 # Update configuration
-# See: https://docs.alloy.dev/migration/v1
+# See: https://docs.ferroui.dev/migration/v1
 ```
 
 ### Breaking Changes in 1.0
 
-1. `AlloyLayout.schema` renamed to `AlloyLayout.schemaVersion`
+1. `FerroUILayout.schema` renamed to `FerroUILayout.schemaVersion`
 2. `registerComponent()` signature changed
 3. `TOOL_CALL` action payload format updated
 4. Minimum Node.js version: 18.0.0
@@ -264,10 +264,10 @@ npx @alloy/migrate@latest
 
 ## Support
 
-- Documentation: https://docs.alloy.dev
-- GitHub Issues: https://github.com/alloyui/alloy/issues
-- Discord: https://discord.gg/alloyui
-- Email: support@alloy.dev
+- Documentation: https://docs.ferroui.dev
+- GitHub Issues: https://github.com/ferrouiui/ferroui/issues
+- Discord: https://discord.gg/ferrouiui
+- Email: support@ferroui.dev
 
 ---
 

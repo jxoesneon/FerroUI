@@ -22,12 +22,12 @@ function run(cmd: string, args: string[], cwd: string, label: string): boolean {
 }
 
 export const buildCommand = new Command('build')
-  .description('Build the Alloy project for production.')
+  .description('Build the FerroUI project for production.')
   .option('-o, --output <dir>', 'Output directory', 'dist')
   .option('--skip-typecheck', 'Skip TypeScript type checking')
   .option('--skip-tests', 'Skip running tests')
   .action(async (options) => {
-    console.log(chalk.bold.cyan('\n✦ Alloy UI Production Build\n'));
+    console.log(chalk.bold.cyan('\n✦ FerroUI UI Production Build\n'));
 
     const cwd = process.cwd();
     const outputDir = path.resolve(cwd, options.output);
@@ -101,7 +101,7 @@ export const buildCommand = new Command('build')
     }
 
     // ── Step 3: Generate manifest ────────────────────────────────────────────
-    const manifestSpinner = ora('Generating alloy-manifest.json...').start();
+    const manifestSpinner = ora('Generating ferroui-manifest.json...').start();
     await fs.ensureDir(outputDir);
 
     const manifest = {
@@ -113,8 +113,8 @@ export const buildCommand = new Command('build')
       ),
     };
 
-    await fs.writeJson(path.join(outputDir, 'alloy-manifest.json'), manifest, { spaces: 2 });
-    manifestSpinner.succeed(chalk.green('Generated alloy-manifest.json'));
+    await fs.writeJson(path.join(outputDir, 'ferroui-manifest.json'), manifest, { spaces: 2 });
+    manifestSpinner.succeed(chalk.green('Generated ferroui-manifest.json'));
 
     console.log(`
 ${chalk.bold('Output:')}  ${chalk.dim(outputDir)}

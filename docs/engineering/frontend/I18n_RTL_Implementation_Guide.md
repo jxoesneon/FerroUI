@@ -8,10 +8,10 @@
 
 ## 1. Overview
 
-Alloy UI layouts must be locale-aware. Because the AI generates layouts at
+FerroUI UI layouts must be locale-aware. Because the AI generates layouts at
 runtime, internationalization cannot rely on static string extraction workflows.
 This guide covers the implementation of internationalization (i18n) and
-right-to-left (RTL) language support in Alloy UI.
+right-to-left (RTL) language support in FerroUI UI.
 
 ---
 
@@ -80,7 +80,7 @@ User Request
                                                │
                                                ▼
                                       ┌──────────────┐
-                                      │  AlloyLayout  │
+                                      │  FerroUILayout  │
                                       │   { locale,   │
                                       │     layout }   │
                                       └──────┬───────┘
@@ -137,7 +137,7 @@ packages/i18n/locales/
 
 ```typescript
 // Component template strings use keys
-import { useTranslation } from '@alloy/i18n';
+import { useTranslation } from '@ferroui/i18n';
 
 function SubmitButton() {
   const { t } = useTranslation('components');
@@ -255,7 +255,7 @@ module.exports = {
 
 ```typescript
 // packages/registry/src/components/Card.tsx
-import { cn } from '@alloy/shared';
+import { cn } from '@ferroui/shared';
 
 interface CardProps {
   children: React.ReactNode;
@@ -294,16 +294,16 @@ Some icons need to be mirrored in RTL:
 
 ```typescript
 // Icon component with RTL support
-import { useLocale } from '@alloy/i18n';
+import { useLocale } from '@ferroui/i18n';
 
 interface IconProps {
   name: string;
-  mirrorInRtl?: boolean;
+  isMirrorInRtl?: boolean;
 }
 
-export function Icon({ name, mirrorInRtl = false }: IconProps) {
+export function Icon({ name, isMirrorInRtl = false }: IconProps) {
   const { direction } = useLocale();
-  const shouldMirror = mirrorInRtl && direction === 'rtl';
+  const shouldMirror = isMirrorInRtl && direction === 'rtl';
 
   return (
     <svg
@@ -316,7 +316,7 @@ export function Icon({ name, mirrorInRtl = false }: IconProps) {
 }
 
 // Usage
-<Icon name="arrow-left" mirrorInRtl /> // Mirrors in RTL
+<Icon name="arrow-left" isMirrorInRtl /> // Mirrors in RTL
 <Icon name="home" /> // Never mirrors
 ```
 
@@ -327,7 +327,7 @@ export function Icon({ name, mirrorInRtl = false }: IconProps) {
 ### 6.1 Date Formatting
 
 ```typescript
-import { useLocale } from '@alloy/i18n';
+import { useLocale } from '@ferroui/i18n';
 
 function formatDate(date: Date, locale: string): string {
   return new Intl.DateTimeFormat(locale, {
@@ -454,7 +454,7 @@ export const RTL = {
 ```typescript
 // RTL rendering test
 import { render } from '@testing-library/react';
-import { LocaleProvider } from '@alloy/i18n';
+import { LocaleProvider } from '@ferroui/i18n';
 import { Card } from './Card';
 
 describe('Card RTL', () => {

@@ -29,11 +29,11 @@
 
 ### 2.1 Installation Issues
 
-#### Issue: `npm create alloy-app` fails
+#### Issue: `npm create ferroui-app` fails
 
 **Symptoms:**
 ```
-Error: Command failed: npm create alloy-app@latest
+Error: Command failed: npm create ferroui-app@latest
 ```
 
 **Solutions:**
@@ -49,14 +49,14 @@ Error: Command failed: npm create alloy-app@latest
 
 3. Try with npx
    ```bash
-   npx create-alloy-app@latest my-app
+   npx create-ferroui-app@latest my-app
    ```
 
 ---
 
 ### 2.2 Runtime Issues
 
-#### Issue: `alloy dev` fails to start
+#### Issue: `ferroui dev` fails to start
 
 **Symptoms:**
 ```
@@ -71,7 +71,7 @@ Error: Port 3000 already in use
 
 2. Use different port
    ```bash
-   alloy dev --port 3001
+   ferroui dev --port 3001
    ```
 
 ---
@@ -86,11 +86,11 @@ Error: Port 3000 already in use
 1. Check LLM provider status
 2. Switch to backup provider
    ```bash
-   export ALLOY_DEFAULT_PROVIDER=anthropic
+   export FERROUI_DEFAULT_PROVIDER=anthropic
    ```
 3. Increase timeout
    ```javascript
-   // alloy.config.js
+   // ferroui.config.js
    module.exports = {
      tools: {
        timeout: 10000, // 10 seconds
@@ -145,7 +145,7 @@ Error: Component "MyComponent" not found in registry
 
 2. Switch to faster provider
    ```bash
-   export ALLOY_DEFAULT_PROVIDER=openai
+   export FERROUI_DEFAULT_PROVIDER=openai
    ```
 
 3. Enable optimistic streaming
@@ -211,7 +211,7 @@ Error: 429 Rate limit exceeded
 **Solutions:**
 1. Update to latest prompt version
    ```bash
-   export ALLOY_PROMPT_VERSION=1.2.1
+   export FERROUI_PROMPT_VERSION=1.2.1
    ```
 
 2. Enable stricter validation
@@ -231,20 +231,20 @@ Error: 429 Rate limit exceeded
 ### 3.1 Enable Debug Logging
 
 ```bash
-DEBUG=alloy* alloy dev
+DEBUG=ferroui* ferroui dev
 ```
 
 ### 3.2 View Logs
 
 ```bash
 # Follow logs
-alloy logs --follow
+ferroui logs --follow
 
 # Filter by level
-alloy logs --level error
+ferroui logs --level error
 
 # Last 100 lines
-alloy logs --tail 100
+ferroui logs --tail 100
 ```
 
 ---
@@ -254,9 +254,9 @@ alloy logs --tail 100
 If the above solutions don't resolve your issue:
 
 1. Check [End User FAQ](./End_User_FAQ.md)
-2. Search [GitHub Discussions](https://github.com/alloyui/alloy/discussions)
-3. Join [Discord](https://discord.gg/alloyui)
-4. Contact support: support@alloy.dev
+2. Search [GitHub Discussions](https://github.com/ferrouiui/ferroui/discussions)
+3. Join [Discord](https://discord.gg/ferrouiui)
+4. Contact support: support@ferroui.dev
 
 ---
 

@@ -19,7 +19,7 @@ As the component registry evolves, breaking changes are inevitable. We need a ve
 Implement **explicit component versioning** in the registry:
 
 1. **Version Suffix:** Components are registered with version suffix: `DataCard@1`, `DataCard@2`
-2. **Schema Reference:** AlloyLayout JSON includes `schemaVersion` field
+2. **Schema Reference:** FerroUILayout JSON includes `schemaVersion` field
 3. **Resolution:** Renderer resolves correct version from schema
 4. **Deprecation:** Old versions marked deprecated but remain available for N releases
 
@@ -62,7 +62,7 @@ interface RegistryEntry {
   name: string;
   version: number;
   status: 'draft' | 'active' | 'deprecated' | 'removed';
-  component: React.ComponentType<AlloyComponentProps>;
+  component: React.ComponentType<FerroUIComponentProps>;
   schema: ZodSchema;
   deprecatedSince?: string;
   migrationPath?: string;

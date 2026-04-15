@@ -25,11 +25,14 @@ export class ToolRegistry {
   /**
    * Registers a new tool in the system
    */
-  public register(tool: ToolDefinition): void {
+  public register<TParams extends z.ZodTypeAny, TResult extends z.ZodTypeAny>(
+    tool: ToolDefinition<TParams, TResult>
+  ): ToolDefinition<TParams, TResult> {
     if (this.tools.has(tool.name)) {
       throw new Error(`Tool with name "${tool.name}" is already registered.`);
     }
     this.tools.set(tool.name, tool);
+    return tool;
   }
 
   /**
@@ -60,8 +63,8 @@ export class ToolRegistry {
  */
 export function registerTool<TParams extends z.ZodTypeAny, TResult extends z.ZodTypeAny>(
   tool: ToolDefinition<TParams, TResult>
-): void {
-  ToolRegistry.getInstance().register(tool);
+): ToolDefinition<TParams, TResult> {
+  return ToolRegistry.getInstance().register(tool);
 }
 
 /**
@@ -90,6 +93,14 @@ export function getToolsForUser(userPermissions: string[]): ToolManifest[] {
       $refStrategy: 'none'
     })
   }));
+}
+
+/**
+ * Checks if a tool is marked as sensitive
+ */
+export function isToolSensitive(toolName: string): boolean {
+  const tool = ToolRegistry.getInstance().get(toolName);
+  return tool?.sensitive === true;
 }
 
 /**

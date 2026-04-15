@@ -1,19 +1,29 @@
 {
-  "name": "@alloy/registry",
+  "name": "@ferroui/registry",
   "version": "0.1.0",
   "private": true,
+  "description": "Component registry for FerroUI UI, managing the mapping of FerroUILayout JSON to React components.",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "engines": {
+    "node": ">=25"
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
     "start:inspector": "node dist/inspector.js",
     "test": "vitest run"
   },
+  "keywords": [
+    "ferroui",
+    "registry",
+    "components"
+  ],
   "dependencies": {
-    "@alloy/schema": "workspace:*",
+    "@ferroui/i18n": "workspace:*",
+    "@ferroui/schema": "workspace:*",
     "react": "^19.2.5",
     "zod": "^4.3.6"
   },

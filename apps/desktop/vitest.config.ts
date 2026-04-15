@@ -9,8 +9,8 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@alloy/registry': resolve(__dirname, '../../packages/registry/src'),
-      '@alloy/schema': resolve(__dirname, '../../packages/schema/src'),
+      '@ferroui/registry': resolve(__dirname, '../../packages/registry/src'),
+      '@ferroui/schema': resolve(__dirname, '../../packages/schema/src'),
     },
   },
   test: {

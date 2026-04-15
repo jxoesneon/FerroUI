@@ -2,20 +2,21 @@ import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { rateLimit } from 'express-rate-limit';
-import { AlloyEngine } from './engine';
+import { FerroUIEngine } from './engine';
 import { RequestContext, EngineChunk } from './types';
 import { AnthropicProvider } from './providers/anthropic';
 import { OpenAIProvider } from './providers/openai';
 import { LlmProvider } from './providers/base';
 import { auditLogger, AuditEventType } from './audit/audit-logger';
-import { getPrometheusMetrics } from '@alloy/telemetry';
+import { getPrometheusMetrics, recordRequestCompletion } from '@ferroui/telemetry';
 import { sessionStore } from './session/session-store';
 import { createAuthMiddleware } from './auth/jwt';
+import { semanticCache } from './cache/semantic-cache';
 
 /**
- * Alloy Engine Server
+ * FerroUI Engine Server
  * 
- * Exposes the AlloyEngine via an SSE (Server-Sent Events) endpoint.
+ * Exposes the FerroUIEngine via an SSE (Server-Sent Events) endpoint.
  * This server implements the Dual-Phase Pipeline specification for streaming
  * UI generation based on user prompts and tool calls.
  */
@@ -29,6 +30,7 @@ const CIRCUIT_BREAKER_THRESHOLD = 3;
 let consecutiveFailures = 0;
 let circuitOpen = false;
 let serverReady = true;
+let lastFailure: string | null = null;
 
 function recordSuccess(): void {
   consecutiveFailures = 0;
@@ -37,6 +39,7 @@ function recordSuccess(): void {
 
 function recordFailure(): void {
   consecutiveFailures++;
+  lastFailure = new Date().toISOString();
   if (consecutiveFailures >= CIRCUIT_BREAKER_THRESHOLD) {
     circuitOpen = true;
   }
@@ -68,7 +71,7 @@ export function createServer(options: { provider?: LlmProvider; port?: number } 
   const app = express();
   const port = options.port || process.env.PORT || 4000;
   const provider = options.provider || new AnthropicProvider(); // Default to Anthropic
-  const engine = new AlloyEngine(provider);
+  const engine = new FerroUIEngine(provider);
 
   app.use(cors());
   app.use(express.json({ limit: '64kb' }));  // Limit payload size
@@ -149,22 +152,45 @@ export function createServer(options: { provider?: LlmProvider; port?: number } 
   });
 
   /**
+   * Cache Invalidation Endpoint — Semantic Caching spec §6
+   */
+  app.post('/admin/cache/invalidate', async (req: Request, res: Response) => {
+    const { toolName, params, pattern } = req.body;
+
+    try {
+      if (pattern) {
+        await semanticCache.invalidatePattern(pattern);
+        return res.status(200).json({ status: 'pattern_invalidated', pattern });
+      }
+
+      if (toolName) {
+        await semanticCache.invalidate(toolName, params);
+        return res.status(200).json({ status: 'tool_invalidated', toolName, params });
+      }
+
+      res.status(400).json({ error: 'Missing toolName or pattern' });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  /**
    * Prometheus metrics endpoint — Observability spec §6
    */
-  app.get('/metrics', (_req, res) => {
+  app.get('/metrics', async (_req, res) => {
     res.setHeader('Content-Type', 'text/plain; version=0.0.4');
-    res.status(200).send(getPrometheusMetrics());
+    res.status(200).send(await getPrometheusMetrics());
   });
 
   /**
    * Circuit breaker state endpoint — Observability spec §6
    */
   app.get('/health/circuit', (_req, res) => {
-    res.status(circuitOpen ? 503 : 200).json({
-      status: circuitOpen ? 'open' : 'closed',
-      consecutiveFailures,
+    res.status(200).json({
+      state: circuitOpen ? 'OPEN' : 'CLOSED',
+      failures: consecutiveFailures,
       threshold: CIRCUIT_BREAKER_THRESHOLD,
-      timestamp: new Date().toISOString(),
+      lastFailure,
     });
   });
 
@@ -183,6 +209,51 @@ export function createServer(options: { provider?: LlmProvider; port?: number } 
   });
 
   /**
+   * State Update Endpoint (RFC-001)
+   * 
+   * Persists component-level state changes to the SessionStore.
+   */
+  app.post('/api/ferroui/state-update', async (req: Request, res: Response) => {
+    const { context, componentId, newState } = req.body;
+
+    if (!context || !context.userId || !context.requestId) {
+      return res.status(400).json({ error: 'Missing or invalid context' });
+    }
+
+    if (!componentId || !newState) {
+      return res.status(400).json({ error: 'Missing componentId or newState' });
+    }
+
+    try {
+      const session = await sessionStore.get(context.requestId);
+      if (!session) {
+        return res.status(404).json({ error: 'Session not found' });
+      }
+
+      // Update the generic state object in the session
+      const currentState = session.state || {};
+      const updatedState = { ...currentState, [componentId]: newState };
+
+      await sessionStore.set(context.requestId, {
+        ...session,
+        state: updatedState,
+      });
+
+      auditLogger.log({
+        type: AuditEventType.SESSION_UPDATED,
+        requestId: context.requestId,
+        userId: context.userId,
+        componentId,
+        newState,
+      });
+
+      res.status(200).json({ status: 'success', state: updatedState });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  /**
    * Main Engine Process Endpoint (SSE)
    * 
    * Expects:
@@ -191,7 +262,7 @@ export function createServer(options: { provider?: LlmProvider; port?: number } 
    *   "context": RequestContext
    * }
    */
-  app.post('/api/alloy/process', async (req: Request, res: Response) => {
+  app.post('/api/ferroui/process', async (req: Request, res: Response) => {
     // Reject new work while circuit is open
     if (circuitOpen) {
       res.status(503).json({
@@ -226,6 +297,7 @@ export function createServer(options: { provider?: LlmProvider; port?: number } 
     res.setHeader('Connection', 'keep-alive');
     res.flushHeaders(); // Ensure headers are sent immediately
 
+    const requestStart = Date.now();
     let pipelineSucceeded = false;
 
     try {
@@ -240,12 +312,20 @@ export function createServer(options: { provider?: LlmProvider; port?: number } 
 
       if (pipelineSucceeded) {
         recordSuccess();
+        recordRequestCompletion(Date.now() - requestStart, true, { 
+          'request.id': context.requestId,
+          'user.id': context.userId 
+        });
       }
       
       console.log(`[Engine] Successfully completed process for RequestID: ${context.requestId}`);
     } catch (error) {
       console.error(`[Engine] Error processing request ${context.requestId}:`, error);
       recordFailure();
+      recordRequestCompletion(Date.now() - requestStart, false, { 
+        'request.id': context.requestId,
+        'user.id': context.userId 
+      });
       
       const errorChunk: EngineChunk = {
         type: 'error',
@@ -263,7 +343,7 @@ export function createServer(options: { provider?: LlmProvider; port?: number } 
   });
 
   const server = app.listen(port, () => {
-    console.log(`[Alloy] Engine Server listening on port ${port} (Provider: ${provider.id})`);
+    console.log(`[FerroUI] Engine Server listening on port ${port} (Provider: ${provider.id})`);
   });
 
   return { app, server };

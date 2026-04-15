@@ -8,7 +8,7 @@
 
 ## 1. Overview
 
-This guide covers containerizing and deploying Alloy UI as a web SaaS application using Docker and Kubernetes.
+This guide covers containerizing and deploying FerroUI UI as a web SaaS application using Docker and Kubernetes.
 
 ---
 
@@ -59,14 +59,14 @@ ENV PORT=3000
 
 # Create non-root user
 RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 alloy
+RUN adduser --system --uid 1001 ferroui
 
 # Copy built application
-COPY --from=builder --chown=alloy:nodejs /app/apps/web/dist ./dist
-COPY --from=builder --chown=alloy:nodejs /app/apps/web/package.json ./
-COPY --from=builder --chown=alloy:nodejs /app/node_modules ./node_modules
+COPY --from=builder --chown=ferroui:nodejs /app/apps/web/dist ./dist
+COPY --from=builder --chown=ferroui:nodejs /app/apps/web/package.json ./
+COPY --from=builder --chown=ferroui:nodejs /app/node_modules ./node_modules
 
-USER alloy
+USER ferroui
 
 EXPOSE 3000
 
@@ -79,13 +79,13 @@ CMD ["node", "dist/server.js"]
 
 ```bash
 # Build
-docker build -t alloy-ui:latest .
+docker build -t ferroui-ui:latest .
 
 # Tag
-docker tag alloy-ui:latest registry.example.com/alloy-ui:v1.0.0
+docker tag ferroui-ui:latest registry.example.com/ferroui-ui:v1.0.0
 
 # Push
-docker push registry.example.com/alloy-ui:v1.0.0
+docker push registry.example.com/ferroui-ui:v1.0.0
 ```
 
 ---
@@ -99,9 +99,9 @@ docker push registry.example.com/alloy-ui:v1.0.0
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: alloy-ui
+  name: ferroui-ui
   labels:
-    app: alloy-ui
+    app: ferroui-ui
 ```
 
 ### 3.2 ConfigMap
@@ -111,14 +111,14 @@ metadata:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: alloy-ui-config
-  namespace: alloy-ui
+  name: ferroui-ui-config
+  namespace: ferroui-ui
 data:
-  ALLOY_PROMPT_VERSION: "1.0"
-  ALLOY_DEFAULT_PROVIDER: "openai"
-  ALLOY_LOG_LEVEL: "info"
-  ALLOY_CACHE_ENABLED: "true"
-  ALLOY_TELEMETRY_ENABLED: "true"
+  FERROUI_PROMPT_VERSION: "1.0"
+  FERROUI_DEFAULT_PROVIDER: "openai"
+  FERROUI_LOG_LEVEL: "info"
+  FERROUI_CACHE_ENABLED: "true"
+  FERROUI_TELEMETRY_ENABLED: "true"
   REDIS_URL: "redis://redis:6379"
 ```
 
@@ -129,8 +129,8 @@ data:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: alloy-ui-secrets
-  namespace: alloy-ui
+  name: ferroui-ui-secrets
+  namespace: ferroui-ui
 type: Opaque
 stringData:
   OPENAI_API_KEY: "sk-..."
@@ -146,31 +146,31 @@ stringData:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: alloy-ui
-  namespace: alloy-ui
+  name: ferroui-ui
+  namespace: ferroui-ui
   labels:
-    app: alloy-ui
+    app: ferroui-ui
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: alloy-ui
+      app: ferroui-ui
   template:
     metadata:
       labels:
-        app: alloy-ui
+        app: ferroui-ui
     spec:
       containers:
-        - name: alloy-ui
-          image: registry.example.com/alloy-ui:v1.0.0
+        - name: ferroui-ui
+          image: registry.example.com/ferroui-ui:v1.0.0
           ports:
             - containerPort: 3000
               name: http
           envFrom:
             - configMapRef:
-                name: alloy-ui-config
+                name: ferroui-ui-config
             - secretRef:
-                name: alloy-ui-secrets
+                name: ferroui-ui-secrets
           resources:
             requests:
               memory: "512Mi"
@@ -205,11 +205,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: alloy-ui
-  namespace: alloy-ui
+  name: ferroui-ui
+  namespace: ferroui-ui
 spec:
   selector:
-    app: alloy-ui
+    app: ferroui-ui
   ports:
     - port: 80
       targetPort: 3000
@@ -224,8 +224,8 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: alloy-ui
-  namespace: alloy-ui
+  name: ferroui-ui
+  namespace: ferroui-ui
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
@@ -233,17 +233,17 @@ metadata:
 spec:
   tls:
     - hosts:
-        - app.alloy.dev
-      secretName: alloy-ui-tls
+        - app.ferroui.dev
+      secretName: ferroui-ui-tls
   rules:
-    - host: app.alloy.dev
+    - host: app.ferroui.dev
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: alloy-ui
+                name: ferroui-ui
                 port:
                   number: 80
 ```
@@ -255,13 +255,13 @@ spec:
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: alloy-ui
-  namespace: alloy-ui
+  name: ferroui-ui
+  namespace: ferroui-ui
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: alloy-ui
+    name: ferroui-ui
   minReplicas: 3
   maxReplicas: 20
   metrics:
@@ -302,7 +302,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: redis
-  namespace: alloy-ui
+  namespace: ferroui-ui
 spec:
   replicas: 1
   selector:
@@ -328,7 +328,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: redis
-  namespace: alloy-ui
+  namespace: ferroui-ui
 spec:
   selector:
     app: redis
@@ -352,9 +352,9 @@ kubectl apply -f k8s/ingress.yaml
 kubectl apply -f k8s/hpa.yaml
 
 # Verify
-kubectl get pods -n alloy-ui
-kubectl get svc -n alloy-ui
-kubectl get ingress -n alloy-ui
+kubectl get pods -n ferroui-ui
+kubectl get svc -n ferroui-ui
+kubectl get ingress -n ferroui-ui
 ```
 
 ---
@@ -368,12 +368,12 @@ kubectl get ingress -n alloy-ui
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: alloy-ui
-  namespace: alloy-ui
+  name: ferroui-ui
+  namespace: ferroui-ui
 spec:
   selector:
     matchLabels:
-      app: alloy-ui
+      app: ferroui-ui
   endpoints:
     - port: http
       path: /metrics
@@ -386,10 +386,10 @@ spec:
 
 | Issue | Command |
 |-------|---------|
-| Pod not starting | `kubectl logs -n alloy-ui deployment/alloy-ui` |
-| High memory usage | `kubectl top pod -n alloy-ui` |
-| Slow responses | `kubectl describe hpa -n alloy-ui` |
-| Ingress issues | `kubectl describe ingress -n alloy-ui` |
+| Pod not starting | `kubectl logs -n ferroui-ui deployment/ferroui-ui` |
+| High memory usage | `kubectl top pod -n ferroui-ui` |
+| Slow responses | `kubectl describe hpa -n ferroui-ui` |
+| Ingress issues | `kubectl describe ingress -n ferroui-ui` |
 
 ---
 

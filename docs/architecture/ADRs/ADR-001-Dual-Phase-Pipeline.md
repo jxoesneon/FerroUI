@@ -9,7 +9,7 @@
 
 ## Context
 
-Early prototypes of Alloy UI used a single LLM call that mixed data gathering with UI generation. This approach led to:
+Early prototypes of FerroUI UI used a single LLM call that mixed data gathering with UI generation. This approach led to:
 - Layouts rendered with fabricated data when tools failed
 - Inconsistent UI states due to stale data
 - Difficult debugging of data vs. presentation issues
@@ -18,7 +18,7 @@ Early prototypes of Alloy UI used a single LLM call that mixed data gathering wi
 
 We will enforce a strict **dual-phase pipeline** that separates:
 1. **Phase 1: Data Gathering** — LLM makes tool calls, collects real data
-2. **Phase 2: UI Generation** — With all data in context, LLM produces ONLY AlloyLayout JSON
+2. **Phase 2: UI Generation** — With all data in context, LLM produces ONLY FerroUILayout JSON
 
 ## Consequences
 

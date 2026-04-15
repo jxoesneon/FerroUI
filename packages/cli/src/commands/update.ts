@@ -6,12 +6,12 @@ import { execSync } from 'child_process';
 import { createRequire } from 'module';
 
 /**
- * `alloy update`
- * Checks for the latest version of the alloy CLI package and upgrades it.
+ * `ferroui update`
+ * Checks for the latest version of the ferroui CLI package and upgrades it.
  * Implements PRD-002 §3.5 — Utility Commands.
  */
 export const updateCommand = new Command('update')
-  .description('Update Alloy UI CLI to the latest version.')
+  .description('Update FerroUI UI CLI to the latest version.')
   .option('--yes', 'Skip confirmation prompt')
   .option('--pkg-manager <manager>', 'Package manager to use: pnpm | npm | yarn', 'pnpm')
   .action(async (options) => {
@@ -31,7 +31,7 @@ export const updateCommand = new Command('update')
       }
 
       // Query npm registry for the latest published version
-      const raw = execSync('npm view alloy version --json 2>/dev/null || echo "null"', {
+      const raw = execSync('npm view ferroui version --json 2>/dev/null || echo "null"', {
         encoding: 'utf-8',
         stdio: ['ignore', 'pipe', 'ignore'],
       }).trim();
@@ -57,8 +57,8 @@ export const updateCommand = new Command('update')
           type: 'confirm',
           name: 'confirmed',
           message: latestVersion !== 'unknown'
-            ? `Update alloy from ${chalk.bold(currentVersion)} → ${chalk.bold(latestVersion)}?`
-            : 'Reinstall the latest version of alloy?',
+            ? `Update ferroui from ${chalk.bold(currentVersion)} → ${chalk.bold(latestVersion)}?`
+            : 'Reinstall the latest version of ferroui?',
           initial: true,
         },
         { onCancel: () => { console.log(chalk.yellow('\nCancelled.')); process.exit(0); } }
@@ -75,14 +75,14 @@ export const updateCommand = new Command('update')
 
     switch (mgr) {
       case 'yarn':
-        installCmd = 'yarn global add alloy@latest';
+        installCmd = 'yarn global add ferroui@latest';
         break;
       case 'npm':
-        installCmd = 'npm install -g alloy@latest';
+        installCmd = 'npm install -g ferroui@latest';
         break;
       case 'pnpm':
       default:
-        installCmd = 'pnpm add -g alloy@latest';
+        installCmd = 'pnpm add -g ferroui@latest';
         break;
     }
 
@@ -90,17 +90,17 @@ export const updateCommand = new Command('update')
 
     try {
       execSync(installCmd, { stdio: 'ignore' });
-      installSpinner.succeed(chalk.green('Alloy CLI updated successfully!'));
+      installSpinner.succeed(chalk.green('FerroUI CLI updated successfully!'));
 
       // Verify new version
       try {
-        const newVersion = execSync('alloy --version', { encoding: 'utf-8' }).trim();
+        const newVersion = execSync('ferroui --version', { encoding: 'utf-8' }).trim();
         console.log(chalk.dim(`  Installed version: ${newVersion}`));
       } catch {
         // Version check is best-effort
       }
 
-      console.log(chalk.dim('\n  Run `alloy --help` to see what\'s new.\n'));
+      console.log(chalk.dim('\n  Run `ferroui --help` to see what\'s new.\n'));
     } catch (error: any) {
       installSpinner.fail(chalk.red('Update failed.'));
       console.error(chalk.dim(error.message));

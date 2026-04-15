@@ -1,9 +1,9 @@
 import { useState, useCallback, useRef } from 'react';
-import type { AlloyComponent } from '@alloy/schema';
+import type { FerroUIComponent } from '@ferroui/schema';
 
-export interface AlloyStreamState {
+export interface FerroUIStreamState {
   /** Current layout tree (may be partial during streaming). */
-  layout: AlloyComponent | null;
+  layout: FerroUIComponent | null;
   /** Whether the stream is actively receiving data. */
   loading: boolean;
   /** Error from the stream or pipeline. */
@@ -16,27 +16,27 @@ export interface AlloyStreamState {
   cacheHit: boolean;
 }
 
-export interface UseAlloyStreamOptions {
-  /** Engine endpoint URL. Defaults to /api/alloy/process. */
+export interface UseFerroUIStreamOptions {
+  /** Engine endpoint URL. Defaults to /api/ferroui/process. */
   endpoint?: string;
   /** Additional headers (e.g., Authorization). */
   headers?: Record<string, string>;
 }
 
 /**
- * React hook for streaming AlloyLayout from the engine SSE endpoint.
+ * React hook for streaming FerroUILayout from the engine SSE endpoint.
  *
  * @example
  * ```tsx
- * const { layout, loading, error, send } = useAlloyStream();
+ * const { layout, loading, error, send } = useFerroUIStream();
  * send('Show me a dashboard of recent tickets', context);
  * ```
  */
-export function useAlloyStream(options: UseAlloyStreamOptions = {}) {
-  const endpoint = options.endpoint ?? '/api/alloy/process';
+export function useFerroUIStream(options: UseFerroUIStreamOptions = {}) {
+  const endpoint = options.endpoint ?? '/api/ferroui/process';
   const abortRef = useRef<AbortController | null>(null);
 
-  const [state, setState] = useState<AlloyStreamState>({
+  const [state, setState] = useState<FerroUIStreamState>({
     layout: null,
     loading: false,
     error: null,

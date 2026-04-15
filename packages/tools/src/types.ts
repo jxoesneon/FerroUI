@@ -32,7 +32,7 @@ export interface ToolLogger {
 
 /**
  * Generic Telemetry interface for tools
- * Matches patterns from @alloy/telemetry
+ * Matches patterns from @ferroui/telemetry
  */
 export interface ToolTelemetry {
   recordEvent(name: string, attributes?: Record<string, string | number | boolean>): void;
@@ -59,6 +59,7 @@ export interface ToolDefinition<TParams extends z.ZodTypeAny = any, TResult exte
   parameters: TParams;        // Zod schema for input parameters
   returns: TResult;           // Zod schema for return value
   ttl?: number;               // Cache TTL in seconds (0 = disabled)
+  sensitive?: boolean;         // If true, bypasses semantic cache (PII protection)
   requiredPermissions?: string[]; // Permissions needed for execution
   dataClassification?: 'shared' | 'user-specific'; // Caching scope
   timeout?: number;           // Max execution time in ms

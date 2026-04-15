@@ -37,4 +37,4 @@ ENV NODE_ENV=production
 ENV PORT=3002
 
 # Start the registry inspector
-CMD ["npm", "run", "start:inspector", "-w", "@alloy/registry"]
+CMD ["npm", "run", "start:inspector", "-w", "@ferroui/registry"]

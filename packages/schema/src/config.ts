@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
 /**
- * alloy.config.ts schema — mirrors PRD-002 §6.1 alloy.config.js specification.
+ * ferroui.config.ts schema — mirrors PRD-002 §6.1 ferroui.config.js specification.
  */
-export const AlloyConfigSchema = z.object({
+export const FerroUIConfigSchema = z.object({
   framework: z.object({
     schemaVersion: z.string().default('1.0'),
     defaultProvider: z.enum(['openai', 'anthropic', 'google', 'ollama']).default('openai'),
@@ -47,4 +47,4 @@ export const AlloyConfigSchema = z.object({
   }).optional(),
 });
 
-export type AlloyConfig = z.infer<typeof AlloyConfigSchema>;
+export type FerroUIConfig = z.infer<typeof FerroUIConfigSchema>;

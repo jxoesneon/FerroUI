@@ -9,12 +9,12 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@alloy/engine': resolve(__dirname, '../../packages/engine/src'),
-      '@alloy/registry': resolve(__dirname, '../../packages/registry/src'),
-      '@alloy/schema': resolve(__dirname, '../../packages/schema/src'),
-      '@alloy/tools': resolve(__dirname, '../../packages/tools/src'),
-      '@alloy/telemetry': resolve(__dirname, '../../packages/telemetry/src'),
-      '@alloy/i18n': resolve(__dirname, '../../packages/i18n/src'),
+      '@ferroui/engine': resolve(__dirname, '../../packages/engine/src'),
+      '@ferroui/registry': resolve(__dirname, '../../packages/registry/src'),
+      '@ferroui/schema': resolve(__dirname, '../../packages/schema/src'),
+      '@ferroui/tools': resolve(__dirname, '../../packages/tools/src'),
+      '@ferroui/telemetry': resolve(__dirname, '../../packages/telemetry/src'),
+      '@ferroui/i18n': resolve(__dirname, '../../packages/i18n/src'),
       'zod': resolve(__dirname, '../../node_modules/zod'),
     },
   },

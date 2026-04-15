@@ -1,0 +1,23 @@
+{
+  "input": {
+    "background": {
+      "DEFAULT": { "$value": "{color.background.DEFAULT}", "$type": "color" },
+      "disabled": { "$value": "{color.background.subtle}", "$type": "color" }
+    },
+    "border": {
+      "DEFAULT": { "$value": "{color.border.DEFAULT}", "$type": "color" },
+      "focus": { "$value": "{color.primary.DEFAULT}", "$type": "color" },
+      "error": { "$value": "{color.danger.DEFAULT}", "$type": "color" }
+    },
+    "text": {
+      "DEFAULT": { "$value": "{color.text.primary}", "$type": "color" },
+      "placeholder": { "$value": "{color.text.muted}", "$type": "color" }
+    },
+    "radius": { "$value": "{radius.md}", "$type": "dimension" },
+    "padding": {
+      "x": { "$value": "{spacing.md}", "$type": "dimension" },
+      "y": { "$value": "{spacing.sm}", "$type": "dimension" }
+    },
+    "fontSize": { "$value": "{typography.body.size}", "$type": "fontSize" }
+  }
+}

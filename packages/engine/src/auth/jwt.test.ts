@@ -4,7 +4,7 @@ import type { Request, Response, NextFunction } from 'express';
 
 function makeReq(overrides: Partial<Request> = {}): Request & { auth?: JwtPayload } {
   return {
-    path: '/api/alloy/process',
+    path: '/api/ferroui/process',
     headers: {},
     cookies: {},
     ...overrides,
@@ -60,8 +60,8 @@ describe('JWT auth middleware', () => {
 
   it('attaches payload from cookie', () => {
     const token = signToken({ sub: 'u2', userId: 'u2', permissions: ['admin'] }, { secret: SECRET });
-    const middleware = createAuthMiddleware({ secret: SECRET, cookieName: 'alloy_session' });
-    const req = makeReq({ cookies: { alloy_session: token } });
+    const middleware = createAuthMiddleware({ secret: SECRET, cookieName: 'ferroui_session' });
+    const req = makeReq({ cookies: { ferroui_session: token } });
     const res = makeRes();
     const next = vi.fn() as NextFunction;
     middleware(req as Request, res, next);

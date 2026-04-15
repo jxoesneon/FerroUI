@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Architecture — Alloy UI Docs</title>
+    <title>System Architecture — FerroUI UI Docs</title>
     <link rel="stylesheet" href="./style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -40,11 +40,11 @@
     <div class="background-glow"></div>
     <nav class="glass-nav">
         <div class="nav-content">
-            <a href="./index.html" class="logo">ALLOY<span>UI</span></a>
+            <a href="./index.html" class="logo">FERROUI<span>UI</span></a>
             <div class="nav-links">
                 <a href="./index.html" class="nav-link">Home</a>
                 <a href="./api/index.html" class="nav-link">API</a>
-                <a href="https://github.com/jxoesneon/Alloy" class="nav-link">GitHub</a>
+                <a href="https://github.com/jxoesneon/FerroUI" class="nav-link">GitHub</a>
             </div>
         </div>
     </nav>
@@ -52,7 +52,7 @@
     <main class="content-area">
         <a href="./index.html" class="back-link">&larr; Back to Overview</a>
         <div class="glass-card" style="padding: 5rem; border-radius: 40px; border: 1px solid rgba(255,255,255,0.08);">
-            <h1>Alloy UI System Architecture Document</h1>
+            <h1>FerroUI UI System Architecture Document</h1>
 
 <strong>Version:</strong> 1.0  
 <strong>Last Updated:</strong> 2025-04-10  
@@ -63,7 +63,7 @@
 
 <h2>1. Executive Summary</h2>
 
-<p>Alloy UI is a production-grade, open meta-framework for building AI-driven applications where the user interface is synthesized at runtime in response to natural language intent. This document formalizes the complete architecture covering the dual-phase orchestration pipeline, atomic component model, LLM strategy layer, schema governance, security, observability, accessibility, internationalization, and developer ergonomics.</p>
+<p>FerroUI UI is a production-grade, open meta-framework for building AI-driven applications where the user interface is synthesized at runtime in response to natural language intent. This document formalizes the complete architecture covering the dual-phase orchestration pipeline, atomic component model, LLM strategy layer, schema governance, security, observability, accessibility, internationalization, and developer ergonomics.</p>
 
 <hr class="doc-hr">
 
@@ -73,13 +73,13 @@
 
 <div class="table-wrapper"><table class="api-table"><tr><th>Goal</th><th>Description</th></tr><tr><td>Developer-First Ergonomics</td><td>Registering a new component or tool requires fewer than 20 lines of code</td></tr><tr><td>Predictability Over Creativity</td><td>AI is constrained to a typed schema; hallucination surface area is minimized by design</td></tr><tr><td>Platform Agnosticism</td><td>Targets web browsers, Tauri desktop shells, and server-side rendering without code changes</td></tr><tr><td>LLM Agnosticism</td><td>Swapping between OpenAI, Anthropic, Google, or local Ollama requires a single configuration change</td></tr><tr><td>Production-Grade Reliability</td><td>Self-healing loop, circuit breakers, and fallback UIs ensure graceful degradation</td></tr><tr><td>Accessibility by Default</td><td>Every component ships with correct ARIA roles and keyboard navigation</td></tr><tr><td>Observable by Default</td><td>Every pipeline stage emits structured traces compatible with OpenTelemetry</td></tr></table></div>
 
-<h3>2.2 What Alloy UI Is NOT</h3><ul class="doc-list"><li><strong>Not a low-code visual editor</strong> — There is no drag-and-drop canvas</li></ul><ul class="doc-list"><li><strong>Not a chatbot framework</strong> — The LLM produces structured JSON, not prose</li></ul><ul class="doc-list"><li><strong>Not a design system</strong> — Alloy UI consumes a design system through its component registry</li></ul><ul class="doc-list"><li><strong>Not a no-code platform</strong> — Developers write typed components and tool functions in real code</li></ul>
+<h3>2.2 What FerroUI UI Is NOT</h3><ul class="doc-list"><li><strong>Not a low-code visual editor</strong> — There is no drag-and-drop canvas</li></ul><ul class="doc-list"><li><strong>Not a chatbot framework</strong> — The LLM produces structured JSON, not prose</li></ul><ul class="doc-list"><li><strong>Not a design system</strong> — FerroUI UI consumes a design system through its component registry</li></ul><ul class="doc-list"><li><strong>Not a no-code platform</strong> — Developers write typed components and tool functions in real code</li></ul>
 
 <hr class="doc-hr">
 
 <h2>3. Four-Layer Runtime Architecture</h2>
 
-<p>Alloy UI is organized into four distinct runtime layers. Each layer has a single responsibility and communicates with adjacent layers through versioned, typed contracts.</p>
+<p>FerroUI UI is organized into four distinct runtime layers. Each layer has a single responsibility and communicates with adjacent layers through versioned, typed contracts.</p>
 
 <p>``<code></p>
 <p>┌─────────────────────────────────────────────────────────────┐</p>
@@ -101,14 +101,14 @@
 
 <h2>4. Layer 1 — Client Renderer</h2>
 
-<p>The renderer is intentionally "dumb." It knows nothing about data, users, or business logic. It receives a fully validated AlloyLayout JSON tree and paints it using the component registry.</p>
+<p>The renderer is intentionally "dumb." It knows nothing about data, users, or business logic. It receives a fully validated FerroUILayout JSON tree and paints it using the component registry.</p>
 
 <h3>4.1 Component Registry</h3>
 
 <p>The registry is a compile-time dictionary mapping string identifiers to React components:</p>
 
 </code>`<code>typescript
-<p>type ComponentRegistry = Record<string, React.ComponentType<AlloyComponentProps>>;</p>
+<p>type ComponentRegistry = Record<string, React.ComponentType<FerroUIComponentProps>>;</p>
 </code>`<code>
 
 <p>Registry entries are versioned. A component registered as </code>DataCard<code> and later breaking-changed becomes </code>DataCard@2<code>. The renderer resolves the correct version from the schema's </code>schemaVersion<code> field.</p>
@@ -127,13 +127,13 @@
 
 <div class="table-wrapper"><table class="api-table"><tr><th>Action Type</th><th>Description</th><th>Payload</th></tr><tr><td>NAVIGATE</td><td>Push a route into the application router</td><td></code>{ path: string, params?: object }<code></td></tr><tr><td>SHOW_TOAST</td><td>Display a transient notification</td><td></code>{ message: string, variant: "info"\</td><td>"success"\</td><td>"warning"\</td><td>"error" }<code></td></tr><tr><td>REFRESH</td><td>Re-run the current orchestration pipeline</td><td>Same original prompt</td></tr><tr><td>TOOL_CALL</td><td>Invoke a registered backend tool directly</td><td></code>{ tool: string, args: object }<code></td></tr></table></div>
 
-<strong>Convention:</strong> Direct </code>fetch()<code> calls from component code are forbidden — enforced via ESLint rule </code>alloy/no-direct-fetch<code>.
+<strong>Convention:</strong> Direct </code>fetch()<code> calls from component code are forbidden — enforced via ESLint rule </code>ferroui/no-direct-fetch<code>.
 
 <hr class="doc-hr">
 
 <h2>5. Layer 2 — Orchestration Engine</h2>
 
-<p>The orchestration engine is the heart of Alloy UI. It can be deployed as:<ul class="doc-list"><li>TypeScript (Node.js / Bun) service</li></ul><ul class="doc-list"><li>Embedded in a Tauri Rust binary</li></ul><ul class="doc-list"><li>Edge deployment on Cloudflare Workers with Durable Objects</li></ul></p>
+<p>The orchestration engine is the heart of FerroUI UI. It can be deployed as:<ul class="doc-list"><li>TypeScript (Node.js / Bun) service</li></ul><ul class="doc-list"><li>Embedded in a Tauri Rust binary</li></ul><ul class="doc-list"><li>Edge deployment on Cloudflare Workers with Durable Objects</li></ul></p>
 
 <h3>5.1 The Dual-Phase Pipeline</h3>
 
@@ -159,7 +159,7 @@
 <p>2. <strong>CONTEXT RESOLUTION</strong> — Resolve user identity, permissions, ambient state</p>
 <p>3. <strong>PHASE 1: DATA GATHERING</strong> — LLM makes tool calls; engine executes against Tool Registry</p>
 <p>4. <strong>LOADING SIGNAL</strong> — Stream skeleton loading layout immediately</p>
-<p>5. <strong>PHASE 2: UI GENERATION</strong> — LLM produces ONLY valid AlloyLayout JSON</p>
+<p>5. <strong>PHASE 2: UI GENERATION</strong> — LLM produces ONLY valid FerroUILayout JSON</p>
 <p>6. <strong>VALIDATION & SELF-HEALING</strong> — Full validation suite runs; repair loop fires on failure</p>
 <p>7. <strong>STREAMING DELIVERY</strong> — Validated JSON streamed chunk-by-chunk to renderer</p>
 
@@ -197,7 +197,7 @@
 
 <h3>6.3 Hot-Swapping</h3>
 
-<p>The active provider can be changed via privileged </code>TOOL_CALL<code> action (</code>tool: "alloy.setProvider"<code>) without restarting the server. Transition is atomic: in-flight requests complete against old provider; new requests use new provider.</p>
+<p>The active provider can be changed via privileged </code>TOOL_CALL<code> action (</code>tool: "ferroui.setProvider"<code>) without restarting the server. Transition is atomic: in-flight requests complete against old provider; new requests use new provider.</p>
 
 <hr class="doc-hr">
 
@@ -230,9 +230,9 @@
 
 <hr class="doc-hr">
 
-<h2>8. The Alloy Component Model</h2>
+<h2>8. The FerroUI Component Model</h2>
 
-<p>Alloy UI enforces a three-tier Atomic hierarchy that is machine-validated.</p>
+<p>FerroUI UI enforces a three-tier Atomic hierarchy that is machine-validated.</p>
 
 <h3>8.1 Tier Definitions</h3>
 
@@ -246,7 +246,7 @@
 
 <div class="table-wrapper"><table class="api-table"><tr><th>Rule</th><th>Violation Handling</th></tr><tr><td>Block-level components MUST NOT appear as children of inline-level components</td><td>Self-healing loop fires</td></tr><tr><td>Atoms MUST NOT declare children</td><td>Structural error flagged</td></tr><tr><td>Dashboard MUST appear exactly once, as root</td><td>Invalid if multiple or nested</td></tr><tr><td>Unknown component types flagged as hallucinated</td><td>Immediate rejection</td></tr><tr><td>All required props must be present</td><td>Repair triggered, not silent fallback</td></tr></table></div>
 
-<h3>8.3 The AlloyLayout JSON Schema</h3>
+<h3>8.3 The FerroUILayout JSON Schema</h3>
 
 </code>`<code>json
 <p>{</p>
@@ -334,18 +334,18 @@
 <p>packages/</p>
 <p>  engine/        — Core orchestration engine</p>
 <p>  registry/      — Component registry and Atomic library</p>
-<p>  schema/        — AlloyLayout Zod schemas</p>
+<p>  schema/        — FerroUILayout Zod schemas</p>
 <p>  tools/         — Tool registration helpers</p>
 <p>  telemetry/     — OTel instrumentation</p>
 <p>  i18n/          — Locale bundles</p>
-<p>alloy/</p>
+<p>ferroui/</p>
 <p>  prompts/       — Versioned system prompt files</p>
 <p>  evals/         — Automated prompt evaluation suite</p>
 </code>``
 
 <hr class="doc-hr">
 
-<h2>11. Related Documents</h2><ul class="doc-list"><li><a href="./Monorepo_Architecture_Package_Governance.md" class="doc-inline-link">Monorepo Architecture & Package Governance</a></li></ul><ul class="doc-list"><li><a href="../engineering/frontend/Component_Development_Guidelines.md" class="doc-inline-link">Component Development Guidelines</a></li></ul><ul class="doc-list"><li><a href="../engineering/frontend/Design_Token_Theming_Specification.md" class="doc-inline-link">Design Token & Theming Specification</a></li></ul><ul class="doc-list"><li><a href="../engineering/backend/Tool_Registration_API_Reference.md" class="doc-inline-link">Tool Registration API Reference</a></li></ul><ul class="doc-list"><li><a href="../engineering/backend/AlloyLayout_JSON_Schema_Specification.md" class="doc-inline-link">AlloyLayout JSON Schema Specification</a></li></ul><ul class="doc-list"><li><a href="../security/Security_Threat_Model.md" class="doc-inline-link">Security Threat Model</a></li></ul><ul class="doc-list"><li><a href="../ops/Observability_Telemetry_Dictionary.md" class="doc-inline-link">Observability & Telemetry Dictionary</a></li></ul>
+<h2>11. Related Documents</h2><ul class="doc-list"><li><a href="./Monorepo_Architecture_Package_Governance.md" class="doc-inline-link">Monorepo Architecture & Package Governance</a></li></ul><ul class="doc-list"><li><a href="../engineering/frontend/Component_Development_Guidelines.md" class="doc-inline-link">Component Development Guidelines</a></li></ul><ul class="doc-list"><li><a href="../engineering/frontend/Design_Token_Theming_Specification.md" class="doc-inline-link">Design Token & Theming Specification</a></li></ul><ul class="doc-list"><li><a href="../engineering/backend/Tool_Registration_API_Reference.md" class="doc-inline-link">Tool Registration API Reference</a></li></ul><ul class="doc-list"><li><a href="../engineering/backend/FerroUILayout_JSON_Schema_Specification.md" class="doc-inline-link">FerroUILayout JSON Schema Specification</a></li></ul><ul class="doc-list"><li><a href="../security/Security_Threat_Model.md" class="doc-inline-link">Security Threat Model</a></li></ul><ul class="doc-list"><li><a href="../ops/Observability_Telemetry_Dictionary.md" class="doc-inline-link">Observability & Telemetry Dictionary</a></li></ul>
 
 <hr class="doc-hr">
 
@@ -357,7 +357,7 @@
     </main>
 
     <footer class="glass-footer">
-        <p>&copy; 2026 Alloy Project Team. Built with Liquid Mercury standards.</p>
+        <p>&copy; 2026 FerroUI Project Team. Built with Liquid Mercury standards.</p>
     </footer>
 </body>
 </html>

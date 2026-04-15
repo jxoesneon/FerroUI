@@ -1,7 +1,7 @@
 # Component API Reference
 
 ### Dashboard
-The root container for all Alloy layouts.
+The root container for all FerroUI layouts.
 
 ### KPIBoard
 A grid of key performance indicators.

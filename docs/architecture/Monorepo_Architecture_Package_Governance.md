@@ -9,14 +9,14 @@
 
 ## 1. Overview
 
-This document defines the monorepo structure, package governance policies, and dependency management strategies for the Alloy UI project. Alloy UI uses a Turborepo + pnpm monorepo architecture to manage multiple applications and shared packages.
+This document defines the monorepo structure, package governance policies, and dependency management strategies for the FerroUI UI project. FerroUI UI uses a Turborepo + pnpm monorepo architecture to manage multiple applications and shared packages.
 
 ---
 
 ## 2. Repository Structure
 
 ```
-alloy-ui/
+ferroui-ui/
 ├── apps/                          # Deployable applications
 │   ├── web/                       # React web application (SaaS)
 │   ├── desktop/                   # Tauri desktop application
@@ -25,14 +25,14 @@ alloy-ui/
 ├── packages/                      # Shared packages
 │   ├── engine/                    # Core orchestration engine
 │   ├── registry/                  # Component registry & Atomic library
-│   ├── schema/                    # AlloyLayout Zod schemas
+│   ├── schema/                    # FerroUILayout Zod schemas
 │   ├── tools/                     # Tool registration helpers
 │   ├── telemetry/                 # OpenTelemetry instrumentation
 │   ├── i18n/                      # Internationalization utilities
 │   ├── shared/                    # Shared utilities and types
 │   └── config/                    # Shared configuration (eslint, tsconfig, etc.)
 │
-├── alloy/                         # AI-specific artifacts
+├── ferroui/                         # AI-specific artifacts
 │   ├── prompts/                   # Versioned system prompts
 │   └── evals/                     # Prompt evaluation suite
 │
@@ -67,7 +67,7 @@ alloy-ui/
 |---------|---------|--------------|
 | `engine` | Orchestration engine core | `schema`, `telemetry` |
 | `registry` | Component registry & Atomic components | `schema`, `shared` |
-| `schema` | Zod schemas for AlloyLayout | `shared` |
+| `schema` | Zod schemas for FerroUILayout | `shared` |
 | `tools` | Tool registration & built-in tools | `schema`, `telemetry` |
 | `telemetry` | OpenTelemetry instrumentation | `shared` |
 | `i18n` | Locale resolution & string externalization | `shared` |
@@ -110,28 +110,21 @@ shared (leaf)
 
 | Category | Strategy | Rationale |
 |----------|----------|-----------|
-| Runtime dependencies | Exact versions (`1.2.3`) | Reproducible builds |
-| Dev dependencies | Caret range (`^1.2.3`) | Accept patches/minor |
-| Peer dependencies | Exact + wide range | Compatibility |
+| Runtime dependencies | Latest stable version | Modern feature access & security |
+| Dev dependencies | Latest stable version | Modern tooling |
+| Peer dependencies | Wide compatible range | Interoperability |
 
-**Key Runtime Dependencies:**
+**Key Runtime Dependencies Policy:**
 
-```yaml
-# Production-critical dependencies
-react: "18.3.1"
-react-dom: "18.3.1"
-zod: "3.23.8"
-@opentelemetry/api: "1.9.0"
-framer-motion: "11.0.0"
-```
+All production-critical dependencies (e.g., `react`, `zod`, `framer-motion`) must be kept at the **latest available stable version**. Version pinning is discouraged unless a specific breaking change requires a temporary hold.
 
 ### 4.3 Dependency Update Policy
 
 | Frequency | Action | Owner |
 |-----------|--------|-------|
-| Weekly | Automated security updates via Dependabot | Platform Team |
-| Monthly | Minor version batch updates | Platform Team |
-| Quarterly | Major version evaluation and migration | Architecture Team |
+| Continuous | Automated updates via Dependabot / Agentic Audits | Platform Team |
+| Weekly | Minor/Patch batch updates | Platform Team |
+| Monthly | Major version evaluation and migration | Architecture Team |
 | On-demand | Critical security patches | Security Team |
 
 ---
@@ -140,7 +133,7 @@ framer-motion: "11.0.0"
 
 ### 5.1 Versioning Strategy
 
-Alloy UI follows **Semantic Versioning** (SemVer) for all packages:
+FerroUI UI follows **Semantic Versioning** (SemVer) for all packages:
 
 ```
 MAJOR.MINOR.PATCH
@@ -244,7 +237,7 @@ jobs:
       - uses: pnpm/action-setup@v2
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '25'
           cache: 'pnpm'
       
       - run: pnpm install --frozen-lockfile
@@ -259,9 +252,9 @@ jobs:
 
 | Tool | Purpose | Configuration |
 |------|---------|---------------|
-| ESLint | Code linting | `@alloy/config/eslint` |
-| Prettier | Code formatting | `@alloy/config/prettier` |
-| TypeScript | Type checking | `@alloy/config/typescript` |
+| ESLint | Code linting | `@ferroui/config/eslint` |
+| Prettier | Code formatting | `@ferroui/config/prettier` |
+| TypeScript | Type checking | `@ferroui/config/typescript` |
 
 ### 7.2 Pre-commit Hooks
 
@@ -356,7 +349,7 @@ The following are prohibited in production code:
 Every package must include:
 
 ```markdown
-# @alloy/[package-name]
+# @ferroui/[package-name]
 
 ## Installation
 ## Usage

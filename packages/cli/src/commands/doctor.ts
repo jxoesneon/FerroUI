@@ -34,15 +34,15 @@ function semverMeetsMin(version: string, min: number[]): boolean {
 }
 
 /**
- * `alloy doctor` — PRD-002 §3.5
- * Diagnose common issues with the Alloy UI development environment.
+ * `ferroui doctor` — PRD-002 §3.5
+ * Diagnose common issues with the FerroUI UI development environment.
  */
 export const doctorCommand = new Command('doctor')
-  .description('Diagnose common issues with the Alloy UI environment.')
+  .description('Diagnose common issues with the FerroUI UI environment.')
   .option('--json', 'Output results as JSON')
   .action(async (options) => {
     if (!options.json) {
-      console.log(chalk.bold.cyan('\n✦ Alloy UI Doctor\n'));
+      console.log(chalk.bold.cyan('\n✦ FerroUI UI Doctor\n'));
       console.log(chalk.dim('Checking your development environment...\n'));
     }
 
@@ -102,7 +102,7 @@ export const doctorCommand = new Command('doctor')
       name: 'tsconfig.json',
       passed: hasTsConfig,
       value: hasTsConfig ? 'found' : 'missing',
-      fix: !hasTsConfig ? 'Run: alloy create <name> — or add tsconfig.json manually' : undefined,
+      fix: !hasTsConfig ? 'Run: ferroui create <name> — or add tsconfig.json manually' : undefined,
     });
 
     // ── ESLint ────────────────────────────────────────────────────────────────
@@ -132,7 +132,7 @@ export const doctorCommand = new Command('doctor')
       passed: hasEnv,
       value: hasEnv ? 'found' : 'missing',
       warning: !hasEnv,
-      fix: !hasEnv ? 'Create .env.local: cp .env.local.example .env.local (or alloy create)' : undefined,
+      fix: !hasEnv ? 'Create .env.local: cp .env.local.example .env.local (or ferroui create)' : undefined,
     });
     results.push({
       name: 'LLM API key (OPENAI or ANTHROPIC)',
@@ -154,12 +154,12 @@ export const doctorCommand = new Command('doctor')
       fix: !ollamaRunning ? 'Optional: install Ollama from https://ollama.ai for zero data-egress mode' : undefined,
     });
 
-    // ── Alloy schema package ──────────────────────────────────────────────────
-    const schemaDir = path.join(cwd, 'node_modules/@alloy/schema');
+    // ── FerroUI schema package ──────────────────────────────────────────────────
+    const schemaDir = path.join(cwd, 'node_modules/@ferroui/schema');
     const monoSchemaDir = path.join(__dirname, '../../../../packages/schema/dist');
     const hasSchema = fs.existsSync(schemaDir) || fs.existsSync(monoSchemaDir);
     results.push({
-      name: '@alloy/schema package',
+      name: '@ferroui/schema package',
       passed: hasSchema,
       value: hasSchema ? 'found' : 'missing',
       fix: !hasSchema ? 'Run: pnpm install (or pnpm build in the monorepo)' : undefined,
@@ -191,9 +191,9 @@ export const doctorCommand = new Command('doctor')
     console.log('');
 
     if (hasFailure) {
-      console.log(chalk.red('✖ Some checks failed. Resolve the issues above before running alloy dev.\n'));
+      console.log(chalk.red('✖ Some checks failed. Resolve the issues above before running ferroui dev.\n'));
       process.exit(1);
     } else {
-      console.log(chalk.green('✔ Environment looks good! Run `alloy dev` to start building.\n'));
+      console.log(chalk.green('✔ Environment looks good! Run `ferroui dev` to start building.\n'));
     }
   });

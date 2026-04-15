@@ -12,7 +12,7 @@
 AI-Powered UI Generation Market
 │
 ├── Server-Driven UI (SDUI) Frameworks
-│   ├── Alloy UI (us)
+│   ├── FerroUI UI (us)
 │   ├── Vercel AI SDK
 │   ├── LangChain/LangGraph UI
 │   └── Streamlit
@@ -42,7 +42,7 @@ AI-Powered UI Generation Market
 
 ### 2.1 Core Framework Features
 
-| Feature | Alloy UI | Vercel AI SDK | LangChain UI | Retool | Streamlit |
+| Feature | FerroUI UI | Vercel AI SDK | LangChain UI | Retool | Streamlit |
 |---------|----------|---------------|--------------|--------|-----------|
 | **AI-Generated UI** | ✅ Native | ✅ Via components | ⚠️ Limited | ❌ No | ❌ No |
 | **Type Safety** | ✅ End-to-end | ⚠️ Partial | ⚠️ Partial | ❌ No | ⚠️ Python only |
@@ -55,7 +55,7 @@ AI-Powered UI Generation Market
 
 ### 2.2 AI & LLM Features
 
-| Feature | Alloy UI | Vercel AI SDK | LangChain UI | Retool | Streamlit |
+| Feature | FerroUI UI | Vercel AI SDK | LangChain UI | Retool | Streamlit |
 |---------|----------|---------------|--------------|--------|-----------|
 | **Multi-Provider** | ✅ 5+ providers | ✅ 5+ providers | ✅ 10+ providers | ⚠️ Limited | ⚠️ Via integration |
 | **Provider Hot-Swap** | ✅ Runtime | ❌ Restart | ❌ Restart | N/A | N/A |
@@ -66,7 +66,7 @@ AI-Powered UI Generation Market
 
 ### 2.3 Developer Experience
 
-| Feature | Alloy UI | Vercel AI SDK | LangChain UI | Retool | Streamlit |
+| Feature | FerroUI UI | Vercel AI SDK | LangChain UI | Retool | Streamlit |
 |---------|----------|---------------|--------------|--------|-----------|
 | **CLI Tooling** | ✅ Comprehensive | ⚠️ Basic | ⚠️ Basic | ❌ GUI only | ⚠️ Basic |
 | **Code Generation** | ✅ Component + Tool | ❌ No | ❌ No | ✅ Visual | ❌ No |
@@ -77,7 +77,7 @@ AI-Powered UI Generation Market
 
 ### 2.4 Deployment & Platform
 
-| Feature | Alloy UI | Vercel AI SDK | LangChain UI | Retool | Streamlit |
+| Feature | FerroUI UI | Vercel AI SDK | LangChain UI | Retool | Streamlit |
 |---------|----------|---------------|--------------|--------|-----------|
 | **Web Deployment** | ✅ Containerized | ✅ Vercel | ⚠️ Self-hosted | ✅ Cloud | ✅ Cloud |
 | **Desktop Deployment** | ✅ Tauri | ❌ No | ❌ No | ❌ No | ❌ No |
@@ -87,7 +87,7 @@ AI-Powered UI Generation Market
 
 ### 2.5 Quality & Compliance
 
-| Feature | Alloy UI | Vercel AI SDK | LangChain UI | Retool | Streamlit |
+| Feature | FerroUI UI | Vercel AI SDK | LangChain UI | Retool | Streamlit |
 |---------|----------|---------------|--------------|--------|-----------|
 | **Accessibility (a11y)** | ✅ WCAG 2.1 AA | ⚠️ Developer | ⚠️ Developer | ⚠️ Partial | ⚠️ Partial |
 | **i18n Support** | ✅ Built-in | ⚠️ Developer | ⚠️ Developer | ✅ Built-in | ⚠️ Limited |
@@ -115,7 +115,7 @@ AI-Powered UI Generation Market
 - Vercel-centric (though works elsewhere)
 
 **Differentiation:**
-- Alloy UI provides complete UI generation framework
+- FerroUI UI provides complete UI generation framework
 - Built-in validation and self-healing
 - Multi-platform (not just web)
 
@@ -134,7 +134,7 @@ AI-Powered UI Generation Market
 - Steep learning curve
 
 **Differentiation:**
-- Alloy UI is purpose-built for UI generation
+- FerroUI UI is purpose-built for UI generation
 - Simpler mental model for UI developers
 - Integrated component registry
 
@@ -153,7 +153,7 @@ AI-Powered UI Generation Market
 - Expensive at scale
 
 **Differentiation:**
-- Alloy UI is code-first, not low-code
+- FerroUI UI is code-first, not low-code
 - AI-generated layouts from natural language
 - No vendor lock-in (open source)
 
@@ -172,7 +172,7 @@ AI-Powered UI Generation Market
 - Not suitable for production UIs
 
 **Differentiation:**
-- Alloy UI is production-grade
+- FerroUI UI is production-grade
 - Full TypeScript/React ecosystem
 - Better performance and scalability
 
@@ -185,7 +185,7 @@ AI-Powered UI Generation Market
 ```
                     High Customization
                            │
-         Alloy UI ◆        │
+         FerroUI UI ◆        │
                            │
      ──────────────────────┼──────────────────────
      Low AI Integration     │     High AI Integration
@@ -202,10 +202,10 @@ AI-Powered UI Generation Market
 
 | Segment | Primary Need | Best Fit | Why |
 |---------|--------------|----------|-----|
-| Startups (10-50) | Speed to market | Alloy UI, Streamlit | Type safety + AI generation |
-| Mid-market (50-500) | Balance of speed and control | Alloy UI, Retool | Production-grade + flexible |
-| Enterprise (500+) | Governance and compliance | Alloy UI, Retool | Security + observability |
-| AI-native products | Cutting-edge AI features | Alloy UI, LangChain | Advanced AI capabilities |
+| Startups (10-50) | Speed to market | FerroUI UI, Streamlit | Type safety + AI generation |
+| Mid-market (50-500) | Balance of speed and control | FerroUI UI, Retool | Production-grade + flexible |
+| Enterprise (500+) | Governance and compliance | FerroUI UI, Retool | Security + observability |
+| AI-native products | Cutting-edge AI features | FerroUI UI, LangChain | Advanced AI capabilities |
 | Internal tools | Rapid prototyping | Retool, Streamlit | Fastest time to basic UI |
 
 ---
@@ -251,7 +251,7 @@ AI-Powered UI Generation Market
 
 | Product | Model | Starting Price | Notes |
 |---------|-------|----------------|-------|
-| **Alloy UI** | Open Source + Enterprise | Free | Enterprise support available |
+| **FerroUI UI** | Open Source + Enterprise | Free | Enterprise support available |
 | Vercel AI SDK | Open Source + Vercel | Free | Vercel hosting costs apply |
 | LangChain | Open Source + LangSmith | Free | LangSmith has usage-based pricing |
 | Retool | SaaS + Self-hosted | $10/user/mo | Enterprise: custom pricing |

@@ -1,24 +1,36 @@
-import React from 'react';
+import React, { forwardRef, memo } from 'react';
 import { z } from 'zod';
-import { ComponentTier } from '@alloy/schema';
+import { ComponentTier } from '@ferroui/schema';
+import { useTranslation } from '@ferroui/i18n';
 import { registerComponent } from '../registry';
 
 // ─── StatBadge ────────────────────────────────────────────────────────────────
 export const StatBadgeSchema = z.object({
-  label: z.string().describe('Metric label'),
+  title: z.string().describe('Metric label'),
   value: z.union([z.string(), z.number()]).describe('Metric value'),
   trend: z.enum(['up', 'down', 'flat']).optional(),
   trendColor: z.enum(['success', 'danger', 'muted']).optional(),
-  aria: z.object({ label: z.string().optional() }).optional(),
+  aria: z.object({ label: z.string() }),
 }).describe('Displays a single statistic with optional trend.');
 
-export const StatBadge: React.FC<z.infer<typeof StatBadgeSchema>> = ({ label, value, trend }) => {
-  return React.createElement('div', { className: 'alloy-stat-badge' },
-    React.createElement('span', { className: 'alloy-stat-badge__label' }, label),
-    React.createElement('span', { className: 'alloy-stat-badge__value' }, String(value)),
-    trend ? React.createElement('span', { className: `alloy-stat-badge__trend alloy-stat-badge__trend--${trend}` }) : null,
-  );
-};
+export type StatBadgeProps = z.infer<typeof StatBadgeSchema>;
+
+export const StatBadge = memo(forwardRef<HTMLDivElement, StatBadgeProps>(
+  ({ title, value, trend, aria = { label: '' } }, ref) => {
+    const { t } = useTranslation('components');
+    return React.createElement('div', {
+      ref,
+      className: 'ferroui-stat-badge',
+      'aria-label': aria?.label ? t(aria.label) : undefined,
+    },
+      React.createElement('span', { className: 'ferroui-stat-badge__label' }, t(title)),
+      React.createElement('span', { className: 'ferroui-stat-badge__value' }, String(value)),
+      trend ? React.createElement('span', { className: `ferroui-stat-badge__trend ferroui-stat-badge__trend--${trend}` }) : null,
+    );
+  }
+));
+
+StatBadge.displayName = 'StatBadge';
 
 registerComponent({ name: 'StatBadge', version: 1, tier: ComponentTier.MOLECULE, component: StatBadge, schema: StatBadgeSchema });
 
@@ -28,77 +40,147 @@ export const UserAvatarSchema = z.object({
   src: z.string().optional().describe('Avatar image URL'),
   subtitle: z.string().optional().describe('Secondary text (e.g., role)'),
   size: z.enum(['sm', 'md', 'lg']).default('md'),
-  aria: z.object({ label: z.string().optional() }).optional(),
+  aria: z.object({ label: z.string() }),
 }).describe('Avatar with name and optional subtitle.');
 
-export const UserAvatar: React.FC<z.infer<typeof UserAvatarSchema>> = ({ name, src, subtitle, size = 'md' }) => {
-  return React.createElement('div', { className: `alloy-user-avatar alloy-user-avatar--${size}` },
-    React.createElement('img', { src: src ?? '', alt: name, className: 'alloy-user-avatar__image' }),
-    React.createElement('div', { className: 'alloy-user-avatar__info' },
-      React.createElement('span', { className: 'alloy-user-avatar__name' }, name),
-      subtitle ? React.createElement('span', { className: 'alloy-user-avatar__subtitle' }, subtitle) : null,
-    ),
-  );
-};
+export type UserAvatarProps = z.infer<typeof UserAvatarSchema>;
+
+export const UserAvatar = memo(forwardRef<HTMLDivElement, UserAvatarProps>(
+  ({ name, src, subtitle, size = 'md', aria = { label: '' } }, ref) => {
+    const { t } = useTranslation('components');
+    return React.createElement('div', {
+      ref,
+      className: `ferroui-user-avatar ferroui-user-avatar--${size}`,
+      'aria-label': aria?.label ? t(aria.label) : undefined,
+    },
+      React.createElement('img', { src: src ?? '', alt: name, className: 'ferroui-user-avatar__image' }),
+      React.createElement('div', { className: 'ferroui-user-avatar__info' },
+        React.createElement('span', { className: 'ferroui-user-avatar__name' }, name),
+        subtitle ? React.createElement('span', { className: 'ferroui-user-avatar__subtitle' }, t(subtitle)) : null,
+      ),
+    );
+  }
+));
+
+UserAvatar.displayName = 'UserAvatar';
 
 registerComponent({ name: 'UserAvatar', version: 1, tier: ComponentTier.MOLECULE, component: UserAvatar, schema: UserAvatarSchema });
 
 // ─── MetricRow ────────────────────────────────────────────────────────────────
 export const MetricRowSchema = z.object({
-  label: z.string().describe('Row label'),
+  title: z.string().describe('Row label'),
   value: z.union([z.string(), z.number()]).describe('Row value'),
   unit: z.string().optional(),
-  aria: z.object({ label: z.string().optional() }).optional(),
+  aria: z.object({ label: z.string() }),
 }).describe('A single-row metric display.');
 
-export const MetricRow: React.FC<z.infer<typeof MetricRowSchema>> = ({ label, value, unit }) => {
-  return React.createElement('div', { className: 'alloy-metric-row' },
-    React.createElement('span', { className: 'alloy-metric-row__label' }, label),
-    React.createElement('span', { className: 'alloy-metric-row__value' }, `${value}${unit ? ` ${unit}` : ''}`),
-  );
-};
+export type MetricRowProps = z.infer<typeof MetricRowSchema>;
+
+export const MetricRow = memo(forwardRef<HTMLDivElement, MetricRowProps>(
+  ({ title, value, unit, aria = { label: '' } }, ref) => {
+    const { t } = useTranslation('components');
+    return React.createElement('div', {
+      ref,
+      className: 'ferroui-metric-row',
+      'aria-label': aria?.label ? t(aria.label) : undefined,
+    },
+      React.createElement('span', { className: 'ferroui-metric-row__label' }, t(title)),
+      React.createElement('span', { className: 'ferroui-metric-row__value' }, `${value}${unit ? ` ${t(unit)}` : ''}`),
+    );
+  }
+));
+
+MetricRow.displayName = 'MetricRow';
 
 registerComponent({ name: 'MetricRow', version: 1, tier: ComponentTier.MOLECULE, component: MetricRow, schema: MetricRowSchema });
 
 // ─── ActionButton ─────────────────────────────────────────────────────────────
 export const ActionButtonSchema = z.object({
-  label: z.string().describe('Button text'),
+  content: z.string().describe('Button text'),
   variant: z.enum(['primary', 'secondary', 'ghost', 'danger']).default('primary'),
-  disabled: z.boolean().default(false),
-  loading: z.boolean().default(false),
+  isDisabled: z.boolean().default(false),
+  isLoading: z.boolean().default(false),
   icon: z.string().optional(),
-  aria: z.object({ label: z.string().optional() }).optional(),
+  aria: z.object({ label: z.string() }),
 }).describe('An interactive button with variants.');
 
-export const ActionButton: React.FC<z.infer<typeof ActionButtonSchema>> = ({ label, variant = 'primary', disabled = false }) => {
-  return React.createElement('button', {
-    className: `alloy-action-button alloy-action-button--${variant}`,
-    disabled,
-    type: 'button',
-  }, label);
-};
+export type ActionButtonProps = z.infer<typeof ActionButtonSchema> & { onClick?: () => void };
+
+export const ActionButton = memo(forwardRef<HTMLButtonElement, ActionButtonProps>(
+  ({ content, variant = 'primary', isDisabled = false, aria = { label: '' }, onClick }, ref) => {
+    const { t } = useTranslation('components');
+
+    const handleKeyDown = (event: React.KeyboardEvent) => {
+      if (isDisabled) return;
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        onClick?.();
+      }
+    };
+
+    return React.createElement('button', {
+      ref,
+      className: `ferroui-action-button ferroui-action-button--${variant}`,
+      disabled: isDisabled,
+      type: 'button',
+      onClick,
+      onKeyDown: handleKeyDown,
+      'aria-label': aria?.label ? t(aria.label) : undefined,
+    }, t(content));
+  }
+));
+
+ActionButton.displayName = 'ActionButton';
 
 registerComponent({ name: 'ActionButton', version: 1, tier: ComponentTier.MOLECULE, component: ActionButton, schema: ActionButtonSchema });
 
 // ─── FormField ────────────────────────────────────────────────────────────────
 export const FormFieldSchema = z.object({
   name: z.string().describe('Field name'),
-  label: z.string().describe('Field label'),
+  title: z.string().describe('Field label'),
   type: z.enum(['text', 'email', 'password', 'number', 'textarea', 'select']).default('text'),
   placeholder: z.string().optional(),
-  required: z.boolean().default(false),
+  isRequired: z.boolean().default(false),
+  autoComplete: z.string().optional(),
   error: z.string().optional(),
   options: z.array(z.object({ value: z.string(), label: z.string() })).optional(),
-  aria: z.object({ label: z.string().optional(), describedBy: z.string().optional() }).optional(),
+  aria: z.object({ label: z.string(), describedBy: z.string().optional() }),
 }).describe('A single form input with label and error display.');
 
-export const FormField: React.FC<z.infer<typeof FormFieldSchema>> = ({ name, label, type = 'text', placeholder, required = false, error }) => {
-  return React.createElement('div', { className: `alloy-form-field ${error ? 'alloy-form-field--error' : ''}` },
-    React.createElement('label', { htmlFor: name, className: 'alloy-form-field__label' }, label, required ? ' *' : ''),
-    React.createElement('input', { id: name, name, type, placeholder, required, className: 'alloy-form-field__input', 'aria-invalid': !!error }),
-    error ? React.createElement('p', { className: 'alloy-form-field__error', role: 'alert' }, error) : null,
-  );
-};
+export type FormFieldProps = z.infer<typeof FormFieldSchema>;
+
+export const FormField = memo(forwardRef<HTMLDivElement, FormFieldProps>(
+  ({ name, title, type = 'text', placeholder, isRequired = false, autoComplete, error, aria = { label: '' } }, ref) => {
+    const { t } = useTranslation('components');
+    const errorId = `${name}-error`;
+    const describedBy = [error ? errorId : undefined, aria?.describedBy].filter(Boolean).join(' ');
+
+    return React.createElement('div', {
+      ref,
+      className: `ferroui-form-field ${error ? 'ferroui-form-field--error' : ''}`,
+      'aria-label': aria?.label ? t(aria.label) : undefined,
+    },
+      React.createElement('label', { htmlFor: name, className: 'ferroui-form-field__label' }, t(title), isRequired ? ' *' : ''),
+      React.createElement('input', {
+        id: name,
+        name,
+        type,
+        placeholder: placeholder ? t(placeholder) : undefined,
+        required: isRequired,
+        autoComplete,
+        className: 'ferroui-form-field__input',
+        'aria-invalid': !!error,
+        'aria-describedby': describedBy || undefined,
+      }),
+      error ? React.createElement('div', { className: 'ferroui-form-field__error-container' },
+        React.createElement('span', { className: 'ferroui-form-field__error-icon', 'aria-hidden': 'true' }, '⚠'),
+        React.createElement('p', { id: errorId, className: 'ferroui-form-field__error', role: 'alert' }, t(error))
+      ) : null,
+    );
+  }
+));
+
+FormField.displayName = 'FormField';
 
 registerComponent({ name: 'FormField', version: 1, tier: ComponentTier.MOLECULE, component: FormField, schema: FormFieldSchema });
 
@@ -106,13 +188,29 @@ registerComponent({ name: 'FormField', version: 1, tier: ComponentTier.MOLECULE,
 export const SearchBarSchema = z.object({
   placeholder: z.string().default('Search...'),
   value: z.string().optional(),
-  aria: z.object({ label: z.string().default('Search') }).optional(),
+  aria: z.object({ label: z.string().default('Search') }),
 }).describe('A search input bar.');
 
-export const SearchBar: React.FC<z.infer<typeof SearchBarSchema>> = ({ placeholder = 'Search...' }) => {
-  return React.createElement('div', { className: 'alloy-search-bar', role: 'search' },
-    React.createElement('input', { type: 'search', placeholder, className: 'alloy-search-bar__input', 'aria-label': 'Search' }),
-  );
-};
+export type SearchBarProps = z.infer<typeof SearchBarSchema>;
+
+export const SearchBar = memo(forwardRef<HTMLDivElement, SearchBarProps>(
+  ({ placeholder = 'Search...', aria = { label: 'Search' } }, ref) => {
+    const { t } = useTranslation('components');
+    return React.createElement('div', {
+      ref,
+      className: 'ferroui-search-bar',
+      role: 'search',
+    },
+      React.createElement('input', {
+        type: 'search',
+        placeholder: t(placeholder),
+        className: 'ferroui-search-bar__input',
+        'aria-label': aria?.label ? t(aria.label) : undefined,
+      }),
+    );
+  }
+));
+
+SearchBar.displayName = 'SearchBar';
 
 registerComponent({ name: 'SearchBar', version: 1, tier: ComponentTier.MOLECULE, component: SearchBar, schema: SearchBarSchema });

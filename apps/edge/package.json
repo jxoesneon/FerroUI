@@ -1,17 +1,29 @@
 {
-  "name": "@alloy/edge",
+  "name": "@ferroui/edge",
   "version": "0.1.0",
   "private": true,
+  "description": "Edge computing worker for FerroUI UI, designed for Cloudflare Workers.",
   "type": "module",
   "main": "src/index.ts",
+  "engines": {
+    "node": ">=25"
+  },
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
     "build": "wrangler build",
     "test": "vitest run"
   },
+  "keywords": [
+    "ferroui",
+    "edge",
+    "cloudflare",
+    "workers"
+  ],
   "dependencies": {
-    "@alloy/engine": "workspace:*"
+    "@ferroui/engine": "workspace:*",
+    "@google/generative-ai": "^0.24.1",
+    "hono": "^4.12.12"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260413.1",

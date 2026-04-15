@@ -8,7 +8,7 @@
 
 ## 1. Overview
 
-This guide covers deploying Alloy UI to Cloudflare Workers for edge computing.
+This guide covers deploying FerroUI UI to Cloudflare Workers for edge computing.
 Edge deployment provides:
 
 - Global low latency (<50ms cold start)
@@ -43,7 +43,7 @@ wrangler login
 ### 3.1 wrangler.toml
 
 ```toml
-name = "alloy-edge"
+name = "ferroui-edge"
 main = "src/index.ts"
 compatibility_date = "2025-04-10"
 
@@ -63,8 +63,8 @@ id = "your-kv-namespace-id"
 
 # Environment variables
 [vars]
-ALLOY_PROMPT_VERSION = "1.0"
-ALLOY_DEFAULT_PROVIDER = "openai"
+FERROUI_PROMPT_VERSION = "1.0"
+FERROUI_DEFAULT_PROVIDER = "openai"
 
 # Secrets (set via wrangler secret)
 # OPENAI_API_KEY
@@ -224,7 +224,7 @@ wrangler deploy
 ### 4.3 Verify Deployment
 
 ```bash
-curl https://alloy-edge.your-subdomain.workers.dev/health
+curl https://ferroui-edge.your-subdomain.workers.dev/health
 # Should return: OK
 ```
 
@@ -247,7 +247,7 @@ curl https://alloy-edge.your-subdomain.workers.dev/health
 async function getCachedOrGenerate(
   key: string,
   env: Env
-): Promise<AlloyLayout> {
+): Promise<FerroUILayout> {
   // L1: Memory (in-worker)
   if (memoryCache.has(key)) {
     return memoryCache.get(key)!;

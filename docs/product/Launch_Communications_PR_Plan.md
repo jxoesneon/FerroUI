@@ -22,7 +22,7 @@
 ### 1.2 Key Messages
 
 **Primary Message:**
-> "Alloy UI is the first production-grade framework for building AI-driven interfaces. Register components and tools in TypeScript; the AI assembles, validates, and streams layouts on demand."
+> "FerroUI UI is the first production-grade framework for building AI-driven interfaces. Register components and tools in TypeScript; the AI assembles, validates, and streams layouts on demand."
 
 **Supporting Messages:**
 1. **For Developers:** "Ship AI-powered features in hours, not weeks"
@@ -74,24 +74,24 @@
 
 ### 3.1 Launch Blog Post
 
-**Title:** "Introducing Alloy UI: AI-Powered Server-Driven UI Framework"
+**Title:** "Introducing FerroUI UI: AI-Powered Server-Driven UI Framework"
 
 **Outline:**
 1. The problem with current approaches
-2. Introducing Alloy UI
+2. Introducing FerroUI UI
 3. Key features and differentiators
 4. Quick start example
 5. What's next
 
 **Platforms:**
-- alloy.dev/blog (primary)
+- ferroui.dev/blog (primary)
 - Medium (cross-post)
 - Dev.to (cross-post)
 - Hashnode (cross-post)
 
 ### 3.2 Demo Video
 
-**Title:** "Build an AI Dashboard in 5 Minutes with Alloy UI"
+**Title:** "Build an AI Dashboard in 5 Minutes with FerroUI UI"
 
 **Content:**
 - 0:00-0:30 — Introduction and problem statement
@@ -110,7 +110,7 @@
 
 | # | Title | Platform | Date |
 |---|-------|----------|------|
-| 1 | Getting Started with Alloy UI | Blog + Video | Apr 17 |
+| 1 | Getting Started with FerroUI UI | Blog + Video | Apr 17 |
 | 2 | Building Custom Components | Blog + Video | Apr 24 |
 | 3 | Integrating with Your Database | Blog | May 1 |
 | 4 | Deploying to Production | Blog + Video | May 8 |
@@ -120,7 +120,7 @@
 
 **Twitter/X Thread (Launch Day):**
 ```
-🚀 Today we're launching Alloy UI — the first production-grade framework for AI-driven interfaces.
+🚀 Today we're launching FerroUI UI — the first production-grade framework for AI-driven interfaces.
 
 Here's what makes it different 🧵
 
@@ -129,7 +129,7 @@ Here's what makes it different 🧵
 
 **LinkedIn Post:**
 ```
-Excited to announce the launch of Alloy UI! After 18 months of development, we're ready to share our vision for the future of AI-powered interfaces.
+Excited to announce the launch of FerroUI UI! After 18 months of development, we're ready to share our vision for the future of AI-powered interfaces.
 
 #AI #WebDevelopment #OpenSource
 ```
@@ -141,7 +141,7 @@ Excited to announce the launch of Alloy UI! After 18 months of development, we'r
 ### 4.1 Discord Server Structure
 
 ```
-Alloy UI Community
+FerroUI UI Community
 ├── #announcements — Official updates
 ├── #general — General discussion
 ├── #help — Support questions

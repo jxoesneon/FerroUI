@@ -8,7 +8,7 @@ import * as path from 'path';
 export class PromptLoader {
   private baseDir: string;
 
-  constructor(version: string = process.env.ALLOY_PROMPT_VERSION || '1.0') {
+  constructor(version: string = process.env.FERROUI_PROMPT_VERSION || '1.0') {
     // Points to packages/engine/prompts/v[version]
     // Current file location: packages/engine/src/prompts/loader.ts
     this.baseDir = path.resolve(__dirname, '../../../prompts', `v${version}`);

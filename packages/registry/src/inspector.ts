@@ -41,7 +41,7 @@ export function startRegistryInspector(port: number = 3000): http.Server {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Alloy Component Registry Inspector</title>
+  <title>FerroUI Component Registry Inspector</title>
   <style>
     body { 
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
@@ -119,7 +119,7 @@ export function startRegistryInspector(port: number = 3000): http.Server {
   </style>
 </head>
 <body>
-  <h1>Alloy Registry Inspector</h1>
+  <h1>FerroUI Registry Inspector</h1>
   <p class="subtitle">Real-time view of registered UI components and their architectural tiers.</p>
   
   <div class="stats">
@@ -182,8 +182,29 @@ export function startRegistryInspector(port: number = 3000): http.Server {
   return server;
 }
 
-// Start if run directly (checking for ES module main entry)
-if (process.argv[1].endsWith('inspector.ts') || process.argv[1].endsWith('inspector.js')) {
+/**
+ * Safe check to see if this module is being run as the main Node.js process.
+ */
+function isMainNodeProcess(): boolean {
+  try {
+    // Check if we are in a Node environment at all
+    if (typeof process === 'undefined' || !process.argv || !process.argv[1]) {
+      return false;
+    }
+    
+    const mainPath = process.argv[1];
+    return (
+      mainPath.endsWith('inspector.ts') || 
+      mainPath.endsWith('inspector.js') || 
+      mainPath.endsWith('inspector')
+    );
+  } catch {
+    return false;
+  }
+}
+
+// Start if run directly as a Node.js process
+if (isMainNodeProcess()) {
   const args = process.argv.slice(2);
   const portArgIdx = args.indexOf('--port');
   const port = portArgIdx !== -1 ? parseInt(args[portArgIdx + 1], 10) : 3002;

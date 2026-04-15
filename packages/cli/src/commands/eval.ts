@@ -28,7 +28,7 @@ interface EvalResult {
 }
 
 /**
- * Loads eval cases from alloy/evals/ directory or returns built-in defaults.
+ * Loads eval cases from ferroui/evals/ directory or returns built-in defaults.
  */
 async function loadEvalCases(evalsDir: string, singlePrompt?: string): Promise<EvalCase[]> {
   if (singlePrompt) {
@@ -59,11 +59,12 @@ async function loadEvalCases(evalsDir: string, singlePrompt?: string): Promise<E
 }
 
 /**
- * Calls the Alloy engine and evaluates the response.
+ * Calls the FerroUI engine and evaluates the response.
  */
 async function runEvalCase(
   evalCase: EvalCase,
-  engineUrl: string
+  engineUrl: string,
+  options: { promptVersion?: string; provider?: string } = {}
 ): Promise<EvalResult> {
   const latencyThresholdMs = evalCase.latencyThresholdMs ?? 5000;
   const start = Date.now();
@@ -83,11 +84,13 @@ async function runEvalCase(
   };
 
   try {
-    const response = await fetch(`${engineUrl}/api/alloy/process`, {
+    const response = await fetch(`${engineUrl}/api/ferroui/process`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         prompt: evalCase.prompt,
+        version: options.promptVersion,
+        provider: options.provider,
         context: {
           userId: 'eval-user',
           requestId: `eval-${Date.now()}`,
@@ -200,7 +203,7 @@ async function generateHtmlReport(results: EvalResult[], outputPath: string): Pr
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Alloy Eval Report — ${now}</title>
+  <title>FerroUI Eval Report — ${now}</title>
   <style>
     * { box-sizing: border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 2rem; background: #f8fafc; color: #1e293b; }
@@ -226,7 +229,7 @@ async function generateHtmlReport(results: EvalResult[], outputPath: string): Pr
   </style>
 </head>
 <body>
-  <h1>Alloy Eval Report</h1>
+  <h1>FerroUI Eval Report</h1>
   <p class="meta">Generated: ${now} · Suite: ${total} prompts</p>
 
   <div class="summary">
@@ -256,16 +259,18 @@ async function generateHtmlReport(results: EvalResult[], outputPath: string): Pr
  * Eval Command — PRD-002 §3.3
  */
 export const evalCommand = new Command('eval')
-  .description('Run the prompt evaluation suite against the Alloy engine.')
+  .description('Run the prompt evaluation suite against the FerroUI engine.')
   .option('-p, --prompt <prompt>', 'Evaluate a single prompt instead of the full suite')
   .option('-u, --engine-url <url>', 'Engine base URL', 'http://localhost:3001')
-  .option('-o, --output <path>', 'HTML report output path', `alloy/evals/report-${new Date().toISOString().slice(0, 10)}.html`)
+  .option('-o, --output <path>', 'HTML report output path', `ferroui/evals/report-${new Date().toISOString().slice(0, 10)}.html`)
+  .option('--prompt-version <version>', 'Specific prompt version to use (e.g., v1, v2)')
+  .option('--provider <name>', 'Specific LLM provider to use (e.g., openai, anthropic)')
   .option('--no-report', 'Skip HTML report generation')
   .option('--ci', 'Exit with code 1 if pass rate < 95% (for CI pipelines)')
   .action(async (options) => {
-    console.log(chalk.bold.blue('\n📊 Alloy UI Evaluation Suite\n'));
+    console.log(chalk.bold.blue('\n📊 FerroUI UI Evaluation Suite\n'));
 
-    const evalsDir = path.resolve(process.cwd(), 'alloy/evals');
+    const evalsDir = path.resolve(process.cwd(), 'ferroui/evals');
     const evalCases = await loadEvalCases(evalsDir, options.prompt);
 
     console.log(chalk.dim(`Engine:     ${options.engineUrl}`));
@@ -277,7 +282,10 @@ export const evalCommand = new Command('eval')
 
     for (const evalCase of evalCases) {
       const spinner = ora(`  ${evalCase.description ?? evalCase.prompt.slice(0, 50)}...`).start();
-      const result = await runEvalCase(evalCase, options.engineUrl);
+      const result = await runEvalCase(evalCase, options.engineUrl, {
+        promptVersion: options.promptVersion,
+        provider: options.provider
+      });
       results.push(result);
 
       if (result.passed) {

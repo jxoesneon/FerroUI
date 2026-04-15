@@ -1,15 +1,33 @@
 import { LlmProvider } from '../providers/base';
 import { RequestContext, EngineChunk, EngineConfig, LlmRequest } from '../types';
-import { getToolsForUser, executeTool, registerCacheHandler } from '@alloy/tools';
-import { validateLayout } from '@alloy/schema';
-import { registry } from '@alloy/registry';
+import { getToolsForUser, executeTool, registerCacheHandler, isToolSensitive } from '@ferroui/tools';
+import { validateLayout } from '@ferroui/schema';
+import { registry } from '@ferroui/registry';
 import { repairLayout } from '../validation/repair';
 import { semanticCache } from '../cache/semantic-cache';
-import { tracer, PipelinePhase, setCommonAttributes, withLlmCall, withToolCall, recordCacheHit, recordCacheMiss } from '@alloy/telemetry';
+import { tracer, PipelinePhase, setCommonAttributes, withLlmCall, withToolCall, recordCacheHit, recordCacheMiss } from '@ferroui/telemetry';
 import { auditLogger, AuditEventType } from '../audit/audit-logger';
 import CryptoJS from 'crypto-js';
 
 const MAX_TOOL_CALLS_PER_REQUEST = 10;
+
+/**
+ * Detects potential prompt injection attempts in user input
+ */
+function detectPromptInjection(prompt: string): boolean {
+  const patterns = [
+    /ignore previous instructions/i,
+    /system prompt/i,
+    /you are now a/i,
+    /instead of your usual/i,
+    /new rules/i,
+    /bypass/i,
+    /jailbreak/i,
+    /DAN mode/i,
+    /output ONLY/i, // Suspicious if trying to force specific output formats to bypass checks
+  ];
+  return patterns.some(pattern => pattern.test(prompt));
+}
 
 // Link semantic cache to tool registry for invalidation
 registerCacheHandler({
@@ -50,6 +68,13 @@ export async function* runDualPhasePipeline(
   const pipelineStart = Date.now();
   yield { type: 'phase', phase: 1, content: 'Starting Phase 1: Data Gathering' };
 
+  // Security: Check for prompt injection
+  const isSuspicious = detectPromptInjection(prompt);
+  if (isSuspicious) {
+    console.warn(`[Security] Potential prompt injection detected in request ${context.requestId}`);
+    // We don't block yet, but we will bypass cache and use extra caution
+  }
+
   auditLogger.log({
     type: AuditEventType.REQUEST_START,
     requestId: context.requestId,
@@ -57,6 +82,7 @@ export async function* runDualPhasePipeline(
     promptHash: CryptoJS.SHA256(prompt.trim().toLowerCase()).toString(),
     permissions: context.permissions,
     locale: context.locale,
+    isSuspicious,
   });
 
   const availableTools = getToolsForUser(context.permissions);
@@ -66,11 +92,12 @@ export async function* runDualPhasePipeline(
   const phase1Span = tracer.startSpan(PipelinePhase.DATA_GATHERING);
   setCommonAttributes(phase1Span, { 
     requestId: context.requestId, 
-    userId: context.userId 
+    userId: context.userId,
+    securityInjectionDetected: isSuspicious
   });
 
   const phase1SystemPrompt = `
-# Alloy UI - Phase 1: Data Gathering
+# FerroUI UI - Phase 1: Data Gathering
 
 You are a data retrieval agent. Your goal is to identify and call the necessary tools 
 to fulfill the user's request.
@@ -107,6 +134,7 @@ ${toolManifest}
 
   const toolOutputs: Record<string, any> = {};
   const cacheToolOutputs: Record<string, any> = {};
+  let hasSensitiveData = false;
 
   // Enforce tool call budget — Security spec §2.1
   const budgetedToolCalls = toolCalls.slice(0, MAX_TOOL_CALLS_PER_REQUEST);
@@ -115,6 +143,9 @@ ${toolManifest}
   }
 
   for (const call of budgetedToolCalls) {
+    if (isToolSensitive(call.name)) {
+      hasSensitiveData = true;
+    }
     yield { type: 'tool_call', toolCall: { name: call.name, args: call.args } };
     const toolStart = Date.now();
     try {
@@ -168,19 +199,31 @@ ${toolManifest}
     }
   }
 
-  phase1Span.end();
-
   // 3. CACHE CHECK
-  if (config.cacheEnabled) {
+  // Security: Bypass cache if sensitive data is involved or prompt is suspicious
+  const shouldBypassCache = hasSensitiveData || isSuspicious;
+  
+  if (config.cacheEnabled && !shouldBypassCache) {
     const cachedLayout = await semanticCache.get(prompt, context.permissions, context.userId, cacheToolOutputs);
     if (cachedLayout) {
       recordCacheHit();
+      setCommonAttributes(phase1Span, { 
+        requestId: context.requestId, 
+        userId: context.userId,
+        securityInjectionDetected: isSuspicious,
+        cacheStatus: 'HIT'
+      });
+      phase1Span.end();
       yield { type: 'layout_chunk', layout: cachedLayout };
       yield { type: 'complete', content: 'Layout served from semantic cache' };
       return;
     }
     recordCacheMiss();
+  } else if (config.cacheEnabled && shouldBypassCache) {
+    console.log(`[Cache] Bypassing cache for request ${context.requestId} (Sensitive: ${hasSensitiveData}, Suspicious: ${isSuspicious})`);
   }
+
+  phase1Span.end();
 
   // 4. PHASE 2: UI GENERATION
   yield { type: 'phase', phase: 2, content: 'Starting Phase 2: UI Generation' };
@@ -188,7 +231,9 @@ ${toolManifest}
   const phase2Span = tracer.startSpan(PipelinePhase.UI_GENERATION);
   setCommonAttributes(phase2Span, { 
     requestId: context.requestId, 
-    userId: context.userId 
+    userId: context.userId,
+    securityInjectionDetected: isSuspicious,
+    cacheStatus: shouldBypassCache ? 'BYPASS' : 'MISS'
   });
 
   const processedOutputs = redactPII(JSON.stringify(toolOutputs, null, 2));
@@ -205,9 +250,9 @@ ${toolManifest}
   const componentManifest = JSON.stringify(registeredComponents, null, 2);
 
   const phase2SystemPrompt = `
-# Alloy UI - Phase 2: UI Generation
+# FerroUI UI - Phase 2: UI Generation
 
-You are a UI layout engine. Use the following data to generate a valid AlloyLayout.
+You are a UI layout engine. Use the following data to generate a valid FerroUILayout.
 
 ## DATA CONTEXT
 <tool_output>
@@ -222,12 +267,13 @@ ${componentManifest}
 You may ONLY use components listed above. If a component is not listed, do NOT use it.
 
 ## INSTRUCTIONS
-- Output ONLY valid JSON according to AlloyLayout schema.
+- Output ONLY valid JSON according to FerroUILayout schema.
 - Root component must be "Dashboard".
+- Root component props: { "heading": "..." }
 - Use the data provided above.
 - Do not invent data that was not returned by tool outputs.
 - Ensure all components have "aria" props for accessibility.
-- schemaVersion must be "1.0".
+- schemaVersion must be "1.1.0".
 - requestId must be "${context.requestId}".
 - locale must be "${context.locale}".
 `;
@@ -279,7 +325,8 @@ You may ONLY use components listed above. If a component is not listed, do NOT u
   }
 
   // Final success!
-  if (config.cacheEnabled) {
+  // Security: Do not cache results containing sensitive data or from suspicious prompts
+  if (config.cacheEnabled && !shouldBypassCache) {
     await semanticCache.set(prompt, context.permissions, context.userId, cacheToolOutputs, finalLayout, 'INTERNAL');
   }
 
@@ -291,6 +338,8 @@ You may ONLY use components listed above. If a component is not listed, do NOT u
     userId: context.userId,
     success: true,
     durationMs: Date.now() - pipelineStart,
+    hasSensitiveData,
+    isSuspicious,
   });
 
   yield { type: 'layout_chunk', layout: finalLayout };

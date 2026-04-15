@@ -1,0 +1,42 @@
+{
+  "light": {
+    "spacing": {
+      "xs": { "$value": "{space.1}", "$type": "dimension" },
+      "sm": { "$value": "{space.2}", "$type": "dimension" },
+      "md": { "$value": "{space.4}", "$type": "dimension" },
+      "lg": { "$value": "{space.6}", "$type": "dimension" },
+      "xl": { "$value": "{space.8}", "$type": "dimension" },
+      "2xl": { "$value": "{space.12}", "$type": "dimension" }
+    }
+  },
+  "dark": {
+    "spacing": {
+      "xs": { "$value": "{space.1}", "$type": "dimension" },
+      "sm": { "$value": "{space.2}", "$type": "dimension" },
+      "md": { "$value": "{space.4}", "$type": "dimension" },
+      "lg": { "$value": "{space.6}", "$type": "dimension" },
+      "xl": { "$value": "{space.8}", "$type": "dimension" },
+      "2xl": { "$value": "{space.12}", "$type": "dimension" }
+    }
+  },
+  "enterprise": {
+    "spacing": {
+      "xs": { "$value": "{space.1}", "$type": "dimension" },
+      "sm": { "$value": "{space.2}", "$type": "dimension" },
+      "md": { "$value": "{space.4}", "$type": "dimension" },
+      "lg": { "$value": "{space.6}", "$type": "dimension" },
+      "xl": { "$value": "{space.8}", "$type": "dimension" },
+      "2xl": { "$value": "{space.12}", "$type": "dimension" }
+    }
+  },
+  "high-contrast": {
+    "spacing": {
+      "xs": { "$value": "{space.1}", "$type": "dimension" },
+      "sm": { "$value": "{space.2}", "$type": "dimension" },
+      "md": { "$value": "{space.4}", "$type": "dimension" },
+      "lg": { "$value": "{space.6}", "$type": "dimension" },
+      "xl": { "$value": "{space.8}", "$type": "dimension" },
+      "2xl": { "$value": "{space.12}", "$type": "dimension" }
+    }
+  }
+}

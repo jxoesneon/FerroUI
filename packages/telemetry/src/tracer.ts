@@ -3,27 +3,27 @@ import { BasicTracerProvider, ConsoleSpanExporter, SimpleSpanProcessor, BatchSpa
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { resourceFromAttributes } from '@opentelemetry/resources';
 import { ATTR_SERVICE_NAME } from '@opentelemetry/semantic-conventions';
-import { AlloyAttributes } from './types';
+import { FerroUIAttributes } from './types';
 
-const INSTRUMENTATION_NAME = '@alloy/telemetry';
+const INSTRUMENTATION_NAME = '@ferroui/telemetry';
 const INSTRUMENTATION_VERSION = '0.1.0';
 
 /**
- * Returns the Alloy UI tracer
+ * Returns the FerroUI UI tracer
  */
 export function getTracer(): Tracer {
   return trace.getTracer(INSTRUMENTATION_NAME, INSTRUMENTATION_VERSION);
 }
 
 /**
- * Default Alloy UI tracer
+ * Default FerroUI UI tracer
  */
 export const tracer = getTracer();
 
 /**
  * Initializes the telemetry SDK with a console exporter
  */
-export function initializeTelemetry(serviceName: string = 'alloy-ui') {
+export function initializeTelemetry(serviceName: string = 'ferroui-ui') {
   const spanProcessors: SpanProcessor[] = [];
   
   const otlpEndpoint = process.env.OTEL_EXPORTER_OTLP_ENDPOINT;
@@ -51,7 +51,7 @@ export function initializeTelemetry(serviceName: string = 'alloy-ui') {
 }
 
 /**
- * Creates a span with Alloy UI standard attributes
+ * Creates a span with FerroUI UI standard attributes
  */
 export function startSpan(
   name: string,
@@ -97,10 +97,18 @@ export function setCommonAttributes(
     userId?: string;
     promptHash?: string;
     schemaVersion?: string;
+    securityInjectionDetected?: boolean;
+    cacheStatus?: 'HIT' | 'MISS' | 'BYPASS';
   }
 ) {
-  if (attributes.requestId) span.setAttribute(AlloyAttributes.REQUEST_ID, attributes.requestId);
-  if (attributes.userId) span.setAttribute(AlloyAttributes.USER_ID, attributes.userId);
-  if (attributes.promptHash) span.setAttribute(AlloyAttributes.PROMPT_HASH, attributes.promptHash);
-  if (attributes.schemaVersion) span.setAttribute(AlloyAttributes.SCHEMA_VERSION, attributes.schemaVersion);
+  if (attributes.requestId) span.setAttribute(FerroUIAttributes.REQUEST_ID, attributes.requestId);
+  if (attributes.userId) span.setAttribute(FerroUIAttributes.USER_ID, attributes.userId);
+  if (attributes.promptHash) span.setAttribute(FerroUIAttributes.PROMPT_HASH, attributes.promptHash);
+  if (attributes.schemaVersion) span.setAttribute(FerroUIAttributes.SCHEMA_VERSION, attributes.schemaVersion);
+  if (attributes.securityInjectionDetected !== undefined) {
+    span.setAttribute(FerroUIAttributes.SECURITY_INJECTION_DETECTED, attributes.securityInjectionDetected);
+  }
+  if (attributes.cacheStatus) {
+    span.setAttribute(FerroUIAttributes.CACHE_STATUS, attributes.cacheStatus);
+  }
 }

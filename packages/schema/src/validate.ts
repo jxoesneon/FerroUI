@@ -2,7 +2,7 @@ import { validateLayout } from './index';
 import * as fs from 'fs';
 
 /**
- * CLI Wrapper for AlloyLayout Validation
+ * CLI Wrapper for FerroUILayout Validation
  * Usage: cat layout.json | node validate.js
  */
 export function main() {
@@ -18,10 +18,10 @@ export function main() {
     const result = validateLayout(layout);
 
     if (result.valid) {
-      console.log('✔ AlloyLayout is valid.');
+      console.log('✔ FerroUILayout is valid.');
       process.exit(0);
     } else {
-      console.error('✖ AlloyLayout validation failed:');
+      console.error('✖ FerroUILayout validation failed:');
       result.errors?.forEach((err) => {
         console.error(`  - [${err.path}]: ${err.message}${err.rule ? ` (${err.rule})` : ''}`);
       });
