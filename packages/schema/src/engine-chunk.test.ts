@@ -24,6 +24,7 @@ describe('EngineChunkSchema', () => {
           id: 'root',
           props: {},
           children: [],
+          aria: { label: 'Dashboard Root' },
         },
       },
     };

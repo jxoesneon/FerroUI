@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { ActionSchema } from '../src/types';
+import { ActionSchema } from '../types';
 
 describe('ActionSchema', () => {
   it('should validate a NAVIGATE action', () => {
@@ -14,7 +14,7 @@ describe('ActionSchema', () => {
   it('should validate a STATE_UPDATE action', () => {
     const action = {
       type: 'STATE_UPDATE',
-      payload: { componentId: 'comp-1', newState: 'expanded' }
+      payload: { id: 'comp-1', state: { expanded: true } }
     };
     const result = ActionSchema.safeParse(action);
     expect(result.success).toBe(true);
