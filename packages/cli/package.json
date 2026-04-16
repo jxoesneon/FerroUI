@@ -2,6 +2,7 @@
   "name": "@ferroui/cli",
   "version": "1.0.0",
   "description": "The primary interface for FerroUI development, providing CLI commands for project management.",
+  "type": "module",
   "main": "dist/index.js",
   "bin": {
     "ferroui": "bin/ferroui.js"
@@ -12,7 +13,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
-    "dev": "ts-node src/index.ts",
+    "dev": "node --experimental-strip-types src/index.ts",
     "test": "vitest run"
   },
   "keywords": [

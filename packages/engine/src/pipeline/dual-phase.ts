@@ -1,7 +1,7 @@
 import { LlmProvider } from '../providers/base';
 import { RequestContext, EngineChunk, EngineConfig, LlmRequest } from '../types';
-import { getToolsForUser, executeTool, registerCacheHandler, isToolSensitive } from '@ferroui/tools';
-import { validateLayout } from '@ferroui/schema';
+import { getToolsForUser, executeTool, registerCacheHandler, isToolSensitive, ToolLogger } from '@ferroui/tools';
+import { validateLayout, FerroUILayout } from '@ferroui/schema';
 import { registry } from '@ferroui/registry';
 import { repairLayout } from '../validation/repair';
 import { semanticCache } from '../cache/semantic-cache';
@@ -9,7 +9,25 @@ import { tracer, PipelinePhase, setCommonAttributes, withLlmCall, withToolCall, 
 import { auditLogger, AuditEventType } from '../audit/audit-logger';
 import CryptoJS from 'crypto-js';
 
-const MAX_TOOL_CALLS_PER_REQUEST = 10;
+const MAX_TOOL_CALLS_PER_REQUEST = 8;
+
+/**
+ * Interface for tool calls returned by the Phase 1 LLM
+ */
+interface ToolCall {
+  name: string;
+  args: Record<string, unknown>;
+}
+
+/**
+ * Adapter for console to match ToolLogger interface
+ */
+const toolLogger: ToolLogger = {
+  debug: (msg, ctx) => console.debug(msg, ctx ?? ''),
+  info: (msg, ctx) => console.info(msg, ctx ?? ''),
+  warn: (msg, ctx) => console.warn(msg, ctx ?? ''),
+  error: (msg, ctx) => console.error(msg, ctx ?? ''),
+};
 
 /**
  * Detects potential prompt injection attempts in user input
@@ -58,12 +76,18 @@ function escapeXml(text: string): string {
 }
 
 export async function* runDualPhasePipeline(
-  provider: LlmProvider,
-  prompt: string,
+  initialProvider: LlmProvider,
+  inputPrompt: string,
   context: RequestContext,
   config: EngineConfig
 ): AsyncGenerator<EngineChunk, void, undefined> {
   
+  // Wrapper to allow atomic provider swapping during execution
+  const providerRef = { current: initialProvider };
+
+  // Security: Redact PII from initial user prompt before any processing
+  const prompt = redactPII(inputPrompt);
+
   // 1. CONTEXT RESOLUTION (Already passed in context)
   const pipelineStart = Date.now();
   yield { type: 'phase', phase: 1, content: 'Starting Phase 1: Data Gathering' };
@@ -120,11 +144,11 @@ ${toolManifest}
   };
 
   const phase1Response = await withLlmCall(
-    { providerId: provider.id, model: provider.id },
-    async () => provider.completePrompt(phase1Request),
+    { providerId: providerRef.current.id, model: providerRef.current.id },
+    async () => providerRef.current.completePrompt(phase1Request),
   );
   
-  let toolCalls: any[] = [];
+  let toolCalls: ToolCall[] = [];
   try {
     const parsed = JSON.parse(phase1Response.content);
     toolCalls = parsed.toolCalls || [];
@@ -162,10 +186,16 @@ ${toolManifest}
             prompt: prompt, 
             timestamp: new Date() 
           },
-          logger: console as any,
+          logger: toolLogger,
           telemetry: {
             recordEvent: () => {},
             recordMetric: () => {}
+          },
+          // Pass handle to swap provider if ferroui.setProvider is called
+          engine: {
+            setProvider: (newProvider: LlmProvider) => {
+              providerRef.current = newProvider;
+            }
           }
         });
       });
@@ -284,7 +314,7 @@ You may ONLY use components listed above. If a component is not listed, do NOT u
     temperature: 0.2,
   };
 
-  const streamingLayout = provider.processPrompt(phase2Request);
+  const streamingLayout = providerRef.current.processPrompt(phase2Request);
   let fullContent = '';
   
   for await (const chunk of streamingLayout) {
@@ -293,7 +323,7 @@ You may ONLY use components listed above. If a component is not listed, do NOT u
   }
 
   // 5. VALIDATION & SELF-HEALING
-  let layoutJson: any;
+  let layoutJson: FerroUILayout | null;
   try {
     const jsonMatch = fullContent.match(/\{[\s\S]*\}/);
     layoutJson = JSON.parse(jsonMatch ? jsonMatch[0] : fullContent);
@@ -302,11 +332,11 @@ You may ONLY use components listed above. If a component is not listed, do NOT u
   }
 
   if (!layoutJson) {
-     layoutJson = await repairLayout(provider, prompt, fullContent, [{
+     layoutJson = await repairLayout(providerRef.current, prompt, fullContent, [{
        path: 'root',
        message: 'Initial response was not valid JSON',
        code: 'invalid_json'
-     }], context, 1, config.maxRepairAttempts);
+     }], context, 1, config.maxRepairAttempts) as FerroUILayout;
   }
 
   const validationResult = validateLayout(layoutJson);
@@ -314,14 +344,14 @@ You may ONLY use components listed above. If a component is not listed, do NOT u
 
   if (!validationResult.valid) {
     finalLayout = await repairLayout(
-      provider,
+      providerRef.current,
       prompt,
       layoutJson,
       validationResult.errors!,
       context,
       1,
       config.maxRepairAttempts
-    );
+    ) as FerroUILayout;
   }
 
   // Final success!

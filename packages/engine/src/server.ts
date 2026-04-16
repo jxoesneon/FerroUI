@@ -78,6 +78,19 @@ export function createServer(options: { provider?: LlmProvider; port?: number } 
   app.use(cookieParser());
   app.use(securityHeaders);
 
+  /**
+   * Request timeout middleware (F-026).
+   * Enforces a 30s limit on all incoming requests to prevent resource exhaustion.
+   */
+  app.use((_req, res, next) => {
+    res.setTimeout(30000, () => {
+      if (!res.headersSent) {
+        res.status(408).json({ error: 'Request timeout — processing took longer than 30s' });
+      }
+    });
+    next();
+  });
+
   // Apply rate limiting to all requests
   const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes

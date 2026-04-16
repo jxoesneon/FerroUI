@@ -2,6 +2,17 @@
 
 Telemetry and observability utilities for FerroUI, integrating OpenTelemetry for tracing and metrics.
 
+```mermaid
+graph LR
+    E[FerroUI Engine] --> T[FerroUI Telemetry]
+    R[FerroUI Renderer] --> T
+    T --> O[OpenTelemetry Collector]
+    subgraph FerroUI Observability
+        T
+        O
+    end
+```
+
 ## Installation
 
 ```bash
@@ -11,8 +22,16 @@ pnpm add @ferroui/telemetry
 ## Usage
 
 ```typescript
-import { tracer } from '@ferroui/telemetry';
-const span = tracer.startSpan('operation');
+import { tracer, ferrouiMetrics, withSpan } from '@ferroui/telemetry';
+
+// Tracing Example
+await withSpan('my-operation', async (span) => {
+  // perform logic
+  span.setAttribute('component', 'renderer');
+});
+
+// Metrics Example
+ferrouiMetrics.counter('my_counter', { description: 'Counts something' }).add(1);
 ```
 
 ## API Reference

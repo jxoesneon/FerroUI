@@ -2,6 +2,13 @@ import { RequestContext, EngineChunk, EngineConfig } from './types';
 import { LlmProvider } from './providers/base';
 import { runDualPhasePipeline } from './pipeline/dual-phase';
 import { tracer } from '@ferroui/telemetry';
+import { registerTool } from '@ferroui/tools';
+import { z } from 'zod';
+import { OpenAIProvider } from './providers/openai';
+import { AnthropicProvider } from './providers/anthropic';
+import { GoogleProvider } from './providers/google';
+import { OllamaProvider } from './providers/ollama';
+import { LlamaCppProvider } from './providers/llama-cpp';
 
 export class FerroUIEngine {
   private provider: LlmProvider;
@@ -15,6 +22,55 @@ export class FerroUIEngine {
       toolTimeoutMs: 3000,
       ...config,
     };
+
+    this.registerSystemTools();
+  }
+
+  /**
+   * Registers privileged system tools for engine control.
+   */
+  private registerSystemTools(): void {
+    registerTool({
+      name: 'ferroui.setProvider',
+      description: 'Changes the active LLM provider for the engine. Privileged tool.',
+      parameters: z.object({
+        providerId: z.enum(['openai', 'anthropic', 'google', 'ollama', 'llama-cpp']),
+        options: z.record(z.any()).optional(),
+      }),
+      returns: z.object({
+        success: z.boolean(),
+        currentProvider: z.string(),
+      }),
+      requiredPermissions: ['system.admin', 'engine.control'],
+      sensitive: true,
+      execute: async (params) => {
+        let newProvider: LlmProvider;
+        switch (params.providerId) {
+          case 'openai':
+            newProvider = new OpenAIProvider(params.options);
+            break;
+          case 'anthropic':
+            newProvider = new AnthropicProvider(params.options);
+            break;
+          case 'google':
+            newProvider = new GoogleProvider(params.options);
+            break;
+          case 'ollama':
+            newProvider = new OllamaProvider(params.options);
+            break;
+          case 'llama-cpp':
+            newProvider = new LlamaCppProvider(params.options);
+            break;
+          default:
+            throw new Error(`Unknown provider ID: ${params.providerId}`);
+        }
+        this.setProvider(newProvider);
+        return {
+          success: true,
+          currentProvider: this.provider.id,
+        };
+      },
+    });
   }
 
   /**

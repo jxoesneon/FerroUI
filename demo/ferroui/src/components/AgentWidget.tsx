@@ -50,7 +50,7 @@ export const AgentWidget: React.FC<AgentWidgetProps> = ({ phase, onExpand, onSub
         <motion.form
           key="input-bar"
           onSubmit={handleSubmit}
-          className="fixed left-1/2 bottom-12 z-50 flex items-center rounded-full backdrop-blur-xl border border-cyan-400/50 overflow-hidden relative"
+          className="fixed inset-inline-start-/2 bottom-12 z-50 flex items-center rounded-full backdrop-blur-xl border border-cyan-400/50 overflow-hidden relative"
           style={{
             translateX: '-50%',
             width: '600px',
@@ -66,7 +66,7 @@ export const AgentWidget: React.FC<AgentWidgetProps> = ({ phase, onExpand, onSub
           {/* Liquid mercury reflection highlight */}
           <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
 
-          <div className="pl-6 pr-3 py-4 flex items-center justify-center relative z-10">
+          <div className="ps- pe- py-4 flex items-center justify-center relative z-10">
             <Sparkles className="text-cyan-400 w-5 h-5" />
           </div>
 
@@ -82,7 +82,7 @@ export const AgentWidget: React.FC<AgentWidgetProps> = ({ phase, onExpand, onSub
 
           <button
             type="submit"
-            className="mr-2 p-3 rounded-full hover:bg-white/10 transition-colors relative z-10 text-purple-400 hover:text-cyan-300"
+            className="me- p-3 rounded-full hover:bg-white/10 transition-colors relative z-10 text-purple-400 hover:text-cyan-300"
           >
             <ChevronRight className="w-6 h-6" />
           </button>

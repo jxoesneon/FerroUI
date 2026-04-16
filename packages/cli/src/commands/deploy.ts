@@ -80,6 +80,13 @@ async function deployWeb(spinner: ReturnType<typeof ora>, distDir: string, env: 
 }
 
 async function deployEdge(spinner: ReturnType<typeof ora>, env: string, dryRun: boolean, wranglerConfig: string | undefined, cwd: string): Promise<void> {
+  const hasWrangler = await commandExists('wrangler');
+  if (!hasWrangler) {
+    spinner.fail(chalk.red('Wrangler CLI not found.'));
+    console.log(chalk.dim('\n  Install with:\n    pnpm add -g wrangler'));
+    process.exit(1);
+  }
+
   const appsEdge = path.resolve(cwd, 'apps/edge');
   const deployDir = await fs.pathExists(appsEdge) ? appsEdge : cwd;
 
@@ -95,6 +102,13 @@ async function deployEdge(spinner: ReturnType<typeof ora>, env: string, dryRun: 
 }
 
 async function deployDesktop(spinner: ReturnType<typeof ora>, dryRun: boolean, cwd: string): Promise<void> {
+  const hasPnpm = await commandExists('pnpm');
+  if (!hasPnpm) {
+    spinner.fail(chalk.red('pnpm not found.'));
+    console.log(chalk.dim('\n  Install with:\n    npm install -g pnpm'));
+    process.exit(1);
+  }
+
   const appsDesktop = path.resolve(cwd, 'apps/desktop');
   const deployDir = await fs.pathExists(appsDesktop) ? appsDesktop : cwd;
 
@@ -105,8 +119,13 @@ async function deployDesktop(spinner: ReturnType<typeof ora>, dryRun: boolean, c
   }
 
   spinner.text = 'Building Tauri desktop app...';
-  await execa('pnpm', ['tauri', 'build'], { cwd: deployDir, stdio: 'inherit' });
-  spinner.succeed(chalk.green('Desktop app built! Installers in apps/desktop/src-tauri/target/release/bundle/'));
+  try {
+    await execa('pnpm', ['tauri', 'build'], { cwd: deployDir, stdio: 'inherit' });
+    spinner.succeed(chalk.green('Desktop app built! Installers in apps/desktop/src-tauri/target/release/bundle/'));
+  } catch (error) {
+    spinner.fail(chalk.red('Tauri build failed. Ensure @tauri-apps/cli is installed.'));
+    throw error;
+  }
 }
 
 async function commandExists(cmd: string): Promise<boolean> {

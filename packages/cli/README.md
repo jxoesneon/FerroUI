@@ -1,37 +1,62 @@
 # @ferroui/cli
 
-The primary interface for FerroUI development, providing CLI commands for project management.
+The FerroUI CLI is the Swiss Army knife for developers building applications with the FerroUI ecosystem. It provides scaffolding, system health checks, and orchestration management.
+
+## Architecture
+
+```mermaid
+graph TD
+    A[User Command] --> B[CLI Runner]
+    B --> C[Command Actions]
+    C --> D[Registry Inspector]
+    C --> E[Engine Controller]
+    C --> F[Code Generator]
+    C --> G[System Doctor]
+```
+
+## Features
+
+- **Command-Line Interface**: Simple, human-friendly commands for common tasks.
+- **Dynamic Scaffolding**: Generate boilerplate for components and tools using pre-built templates.
+- **System Doctor**: Validates the local environment, dependencies, and configuration.
+- **Registry Inspection**: CLI-based tools for exploring the registered components and their schemas.
 
 ## Installation
 
 ```bash
-pnpm add -g @ferroui/cli
+# Global install
+npm install -g @ferroui/cli
+
+# Project-level install
+pnpm add -D @ferroui/cli
 ```
 
 ## Usage
 
+### Create a New App
+
 ```bash
-ferroui create my-project
+ferroui create my-new-app
+```
+
+### Run the Development Server
+
+```bash
 ferroui dev
-ferroui build
+```
+
+### Check System Health
+
+```bash
+ferroui doctor
+```
+
+### Generate a Component
+
+```bash
+ferroui generate component MyOrganism
 ```
 
 ## API Reference
 
-The CLI provides the following commands:
-- `create`: Scaffold a new FerroUI project.
-- `dev`: Start the development server with HMR.
-- `generate`: Generate components or tools from templates.
-- `build`: Build the project for production.
-- `deploy`: Deploy the project to a target provider.
-
-## Configuration
-
-Configuration is managed via `ferroui.config.ts` in the project root.
-
-## Examples
-
-```bash
-# Create a new project
-ferroui create my-app --template default
-```
+The CLI is primarily used as a binary, but its internal command handlers are also available as modules.

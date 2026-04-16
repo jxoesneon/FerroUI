@@ -161,8 +161,91 @@ const HTML_TEMPLATE = (title: string, content: string, depth = 0) => {
 `;
 };
 
+interface ComponentInfo {
+  name: string;
+  tier: string;
+  description: string;
+}
+
+interface ToolInfo {
+  name: string;
+  description: string;
+}
+
+async function scanComponents(): Promise<ComponentInfo[]> {
+  const componentsDir = path.join(ROOT, 'packages/registry/src/components');
+  const files = await fs.readdir(componentsDir);
+  const results: ComponentInfo[] = [];
+
+  for (const file of files) {
+    if (!file.endsWith('.ts') || file === 'index.ts') continue;
+    
+    const content = await fs.readFile(path.join(componentsDir, file), 'utf-8');
+    
+    // Regex to find registerComponent calls
+    // Example: registerComponent({ name: 'Text', version: 1, tier: ComponentTier.ATOM, ... });
+    const regRegex = /registerComponent\(\{\s*name:\s*'(\w+)',\s*version:\s*\d+,\s*tier:\s*ComponentTier\.(\w+)/g;
+    let match;
+    
+    while ((match = regRegex.exec(content)) !== null) {
+      const name = match[1];
+      const tierMatch = match[2];
+      const tier = tierMatch.charAt(0) + tierMatch.slice(1).toLowerCase(); // ATOM -> Atom
+      
+      // Try to find description in the corresponding schema
+      // Example: export const TextSchema = z.object({...}).describe('...');
+      const schemaRegex = new RegExp(`export const ${name}Schema = [\\s\\S]*?\\.describe\\('([^']+)'\\)`, 'm');
+      const schemaMatch = schemaRegex.exec(content);
+      const description = schemaMatch ? schemaMatch[1] : 'No description provided.';
+      
+      results.push({ name, tier, description });
+    }
+  }
+  
+  return results;
+}
+
+async function scanTools(): Promise<ToolInfo[]> {
+  const toolsDir = path.join(ROOT, 'packages/tools/src');
+  const engineDir = path.join(ROOT, 'packages/engine/src');
+  const results: ToolInfo[] = [];
+
+  const scanDir = async (dir: string) => {
+    try {
+      const files = await fs.readdir(dir);
+      for (const file of files) {
+        const fullPath = path.join(dir, file);
+        const stat = await fs.stat(fullPath);
+        if (stat.isDirectory()) {
+          await scanDir(fullPath);
+          continue;
+        }
+        if (!file.endsWith('.ts')) continue;
+        
+        const content = await fs.readFile(fullPath, 'utf-8');
+        
+        // Regex to find registerTool calls
+        // Example: registerTool({ name: 'ferroui.setProvider', description: '...', ... });
+        const toolRegex = /registerTool\(\{\s*name:\s*'([\w.]+)',\s*description:\s*'([^']+)'/g;
+        let match;
+        
+        while ((match = toolRegex.exec(content)) !== null) {
+          results.push({ name: match[1], description: match[2] });
+        }
+      }
+    } catch (e) {
+      // Ignore if directory doesn't exist
+    }
+  };
+
+  await scanDir(toolsDir);
+  await scanDir(engineDir);
+  
+  return results;
+}
+
 async function generateApiDocs() {
-  console.log('🚀 Starting high-fidelity portal generation (Artifact Clean-up)...');
+  console.log('🚀 Starting dynamic documentation generation...');
   
   await fs.mkdir(API_DIR, { recursive: true });
 
@@ -176,23 +259,17 @@ async function generateApiDocs() {
   const cliMd = await fs.readFile(path.join(ROOT, 'docs/dev-experience/CLI_Usage_Guide.md'), 'utf-8');
   await fs.writeFile(path.join(OUTPUT_DIR, 'cli.html'), HTML_TEMPLATE('CLI Usage Guide', mdToHtml(cliMd), 0));
 
-  // 3. API Documentation
-  const components = [
-    { name: 'Dashboard', tier: 'Organism', description: 'The root container for all FerroUI layouts.' },
-    { name: 'KPIBoard', tier: 'Organism', description: 'A grid of key performance indicators.' },
-    { name: 'DataTable', tier: 'Organism', description: 'A powerful, interactive data table.' },
-    { name: 'ChartPanel', tier: 'Organism', description: 'Visualizes data using various chart types.' },
-    { name: 'StatBadge', tier: 'Molecule', description: 'Displays a single metric with an optional trend.' },
-    { name: 'ActionButton', tier: 'Molecule', description: 'A button that triggers a system action.' },
-    { name: 'Text', tier: 'Atom', description: 'Basic text primitive with variant support.' },
-    { name: 'Icon', tier: 'Atom', description: 'Renders a design system icon.' },
-    { name: 'Badge', tier: 'Atom', description: 'A small visual indicator for status or counts.' }
-  ];
+  // 3. Dynamic Component API Documentation
+  console.log('🔍 Scanning for components...');
+  const components = await scanComponents();
+  console.log(`✅ Found ${components.length} components.`);
 
   let componentsHtml = '<h1>Component API Reference</h1><p>Welcome to the automated component registry documentation.</p>';
   for (const tier of ['Organism', 'Molecule', 'Atom']) {
-    componentsHtml += `<h2>${tier}s</h2>`;
     const tierComponents = components.filter(c => c.tier === tier);
+    if (tierComponents.length === 0) continue;
+    
+    componentsHtml += `<h2>${tier}s</h2>`;
     for (const c of tierComponents) {
       componentsHtml += `<h3>${c.name}</h3><p>${c.description}</p>`;
       componentsHtml += `
@@ -212,17 +289,19 @@ async function generateApiDocs() {
   }
   await fs.writeFile(path.join(API_DIR, 'components.html'), HTML_TEMPLATE('Components', componentsHtml, 1));
 
-  const tools = [
-    { name: 'getSalesMetrics', description: 'Returns revenue, orders, and conversion data.' },
-    { name: 'listUsers', description: 'Retrieves a list of users with optional filtering.' },
-    { name: 'getUserProfile', description: 'Returns detailed information for a specific user.' },
-    { name: 'updateTicket', description: 'Updates the status or priority of a support ticket.' }
-  ];
+  // 4. Dynamic Tool API Documentation
+  console.log('🔍 Scanning for tools...');
+  const tools = await scanTools();
+  console.log(`✅ Found ${tools.length} tools.`);
 
   let toolsHtml = '<h1>Tool API Reference</h1><p>Documentation for all registered backend tools.</p>';
-  for (const t of tools) {
-    toolsHtml += `<h3>${t.name}</h3><p>${t.description}</p>`;
-    toolsHtml += `<strong>Parameters:</strong><pre><code>{ "type": "object", "properties": { ... } }</code></pre>`;
+  if (tools.length === 0) {
+    toolsHtml += '<p>No tools found in the registry.</p>';
+  } else {
+    for (const t of tools) {
+      toolsHtml += `<h3>${t.name}</h3><p>${t.description}</p>`;
+      toolsHtml += `<strong>Parameters:</strong><pre><code>{ "type": "object", "properties": { ... } }</code></pre>`;
+    }
   }
   await fs.writeFile(path.join(API_DIR, 'tools.html'), HTML_TEMPLATE('Tools', toolsHtml, 1));
 

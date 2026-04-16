@@ -38,7 +38,7 @@ export const DataTable: React.FC<{ prompt?: string }> = ({ prompt = '' }) => {
       </div>
       
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-[11px] font-mono">
+        <table className="w-full text-start text-[11px] font-mono">
           <thead className="text-[9px] uppercase text-amber-600/70 border-b border-neutral-800">
             <tr>
               <th className="px-3 py-2 font-normal">ID</th>

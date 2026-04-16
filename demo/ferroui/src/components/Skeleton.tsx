@@ -28,7 +28,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({ delay = 0, className = '', l
     >
       {/* Copper Laser Sweep */}
       <motion.div
-        className="absolute inset-y-0 left-0 w-[20%] bg-gradient-to-r from-transparent via-amber-500/40 to-transparent blur-md"
+        className="absolute inset-y-0 inset-inline-start- w-[20%] bg-gradient-to-r from-transparent via-amber-500/40 to-transparent blur-md"
         animate={{
           left: ['-50%', '150%']
         }}

@@ -120,7 +120,7 @@ export function createSessionStore(): SessionStore {
     console.warn('[Session] REDIS_URL set but no Redis client injected — falling back to InMemorySessionStore');
   }
   return new InMemorySessionStore({
-    ttlSeconds: parseInt(process.env.SESSION_TTL_SECONDS ?? '3600', 10),
+    ttlSeconds: parseInt(process.env.SESSION_TTL_SECONDS ?? '86400', 10),
   });
 }
 

@@ -1,16 +1,17 @@
 import { Command } from 'commander';
 import chalk from 'chalk';
-import { devCommand } from './commands/dev';
-import { generateCommand } from './commands/generate';
-import { evalCommand } from './commands/eval';
-import { doctorCommand } from './commands/doctor';
-import { createCommand } from './commands/create';
-import { buildCommand } from './commands/build';
-import { deployCommand } from './commands/deploy';
-import { registryCommand } from './commands/registry';
-import { updateCommand } from './commands/update';
-import { logsCommand } from './commands/logs';
-import { tokensCommand } from './commands/tokens';
+import { devCommand } from './commands/dev.js';
+import { generateCommand } from './commands/generate.js';
+import { evalCommand } from './commands/eval.js';
+import { doctorCommand } from './commands/doctor.js';
+import { createCommand } from './commands/create.js';
+import { buildCommand } from './commands/build.js';
+import { deployCommand } from './commands/deploy.js';
+import { registryCommand } from './commands/registry.js';
+import { updateCommand } from './commands/update.js';
+import { logsCommand } from './commands/logs.js';
+import { tokensCommand } from './commands/tokens.js';
+import { migrateCommand } from './commands/migrate.js';
 
 const program = new Command();
 
@@ -31,6 +32,7 @@ program.addCommand(doctorCommand);
 program.addCommand(updateCommand);
 program.addCommand(logsCommand);
 program.addCommand(tokensCommand);
+program.addCommand(migrateCommand);
 
 program.on('command:*', () => {
   console.error(chalk.red('Invalid command: %s\nSee --help for a list of available commands.'), program.args.join(' '));

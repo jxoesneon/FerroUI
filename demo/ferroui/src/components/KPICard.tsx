@@ -41,8 +41,8 @@ export const KPICard: React.FC<KPICardProps> = ({ data, index }) => {
       <div className="absolute top-0 inset-x-0 h-[1px] bg-white/10" />
       
       {/* Circuit lines */}
-      <div className="absolute top-0 right-0 w-12 h-12 border-t border-r border-amber-600/30 opacity-50 group-hover:opacity-100 transition-opacity duration-300" />
-      <div className="absolute bottom-0 right-0 w-8 h-8 border-b border-r border-amber-600/30 opacity-50 group-hover:opacity-100 transition-opacity duration-300" />
+      <div className="absolute top-0 inset-inline-end- w-12 h-12 border-t border-r border-amber-600/30 opacity-50 group-hover:opacity-100 transition-opacity duration-300" />
+      <div className="absolute bottom-0 inset-inline-end- w-8 h-8 border-b border-r border-amber-600/30 opacity-50 group-hover:opacity-100 transition-opacity duration-300" />
 
       <div className="flex items-start justify-between relative z-10">
         <h3 className="text-[10px] font-mono tracking-widest text-neutral-400 uppercase">

@@ -68,7 +68,67 @@ cd my-ferroui-app
 
 ---
 
-## 3. Configuration
+## 3. Framework Development Setup
+
+If you are contributing to the FerroUI core framework instead of just using it, follow these steps:
+
+### 3.1 Monorepo Management
+
+FerroUI uses **pnpm workspaces** for monorepo management. Ensure you have pnpm installed:
+
+```bash
+npm install -g pnpm
+```
+
+### 3.2 Installation
+
+Install all dependencies for all packages:
+
+```bash
+pnpm install
+```
+
+### 3.3 Build Order
+
+The framework has internal dependencies that must be built in order. Use the turbo-powered build command:
+
+```bash
+pnpm build
+```
+
+This will automatically handle the build order:
+1. `@ferroui/schema` & `@ferroui/tokens` (Foundational)
+2. `@ferroui/i18n` & `@ferroui/telemetry`
+3. `@ferroui/registry` & `@ferroui/tools`
+4. `@ferroui/engine` & `@ferroui/renderer`
+5. `@ferroui/cli` (Dependent on all)
+
+### 3.4 Running Tests
+
+We maintain high coverage across multiple test suites:
+
+```bash
+# Run all tests in the monorepo
+pnpm test
+
+# Run tests for a specific package
+pnpm --filter @ferroui/engine test
+
+# Run tests in watch mode
+pnpm test:watch
+```
+
+### 3.5 Local Documentation Development
+
+To see documentation changes locally:
+
+```bash
+pnpm run docs:generate
+```
+
+---
+
+## 4. Configuration
 
 ### 3.1 Set Up Environment Variables
 
