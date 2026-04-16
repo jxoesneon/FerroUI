@@ -8,7 +8,7 @@
 
 ## 1. Overview
 
-This guide covers deploying FerroUI UI to Cloudflare Workers for edge computing.
+This guide covers deploying FerroUI to Cloudflare Workers for edge computing.
 Edge deployment provides:
 
 - Global low latency (<50ms cold start)

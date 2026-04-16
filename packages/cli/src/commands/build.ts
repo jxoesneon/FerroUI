@@ -27,7 +27,7 @@ export const buildCommand = new Command('build')
   .option('--skip-typecheck', 'Skip TypeScript type checking')
   .option('--skip-tests', 'Skip running tests')
   .action(async (options) => {
-    console.log(chalk.bold.cyan('\n✦ FerroUI UI Production Build\n'));
+    console.log(chalk.bold.cyan('\n✦ FerroUI Production Build\n'));
 
     const cwd = process.cwd();
     const outputDir = path.resolve(cwd, options.output);

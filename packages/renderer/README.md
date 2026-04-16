@@ -1,6 +1,6 @@
 # @ferroui/renderer
 
-FerroUI UI layout renderer — maps FerroUILayout JSON to React components via the component registry.
+FerroUI layout renderer — maps FerroUILayout JSON to React components via the component registry.
 
 ## Installation
 

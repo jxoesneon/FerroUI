@@ -1,5 +1,5 @@
 /**
- * Shared utilities for FerroUI UI monorepo.
+ * Shared utilities for FerroUI monorepo.
  */
 
 /**

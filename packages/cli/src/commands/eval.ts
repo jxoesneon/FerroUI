@@ -268,7 +268,7 @@ export const evalCommand = new Command('eval')
   .option('--no-report', 'Skip HTML report generation')
   .option('--ci', 'Exit with code 1 if pass rate < 95% (for CI pipelines)')
   .action(async (options) => {
-    console.log(chalk.bold.blue('\n📊 FerroUI UI Evaluation Suite\n'));
+    console.log(chalk.bold.blue('\n📊 FerroUI Evaluation Suite\n'));
 
     const evalsDir = path.resolve(process.cwd(), 'ferroui/evals');
     const evalCases = await loadEvalCases(evalsDir, options.prompt);

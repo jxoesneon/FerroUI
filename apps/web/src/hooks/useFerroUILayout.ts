@@ -16,7 +16,7 @@ interface UseFerroUILayoutResult {
 }
 
 /**
- * Hook for consuming FerroUI UI layouts via Server-Sent Events (SSE).
+ * Hook for consuming FerroUI layouts via Server-Sent Events (SSE).
  * Implements Section 8.5 of the System Architecture Document (Streaming Architecture).
  */
 export function useFerroUILayout({ url, initialRequestId }: UseFerroUILayoutOptions): UseFerroUILayoutResult {

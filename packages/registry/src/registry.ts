@@ -2,7 +2,7 @@ import { ComponentTier, FerroUIComponent } from '@ferroui/schema';
 import { RegistryEntry, RegistrationOptions, ComponentIdentifier } from './types';
 
 /**
- * The core Component Registry runtime for FerroUI UI.
+ * The core Component Registry runtime for FerroUI.
  * Responsible for component registration, versioning, and hierarchy validation.
  */
 export class ComponentRegistry {

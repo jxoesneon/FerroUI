@@ -1,6 +1,6 @@
 # @ferroui/engine
 
-The core server-side engine for FerroUI UI, orchestrating LLM interactions and layout generation.
+The core server-side engine for FerroUI, orchestrating LLM interactions and layout generation.
 
 ## Installation
 

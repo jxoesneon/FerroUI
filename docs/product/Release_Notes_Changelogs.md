@@ -1,4 +1,4 @@
-# FerroUI UI Release Notes & Changelogs
+# FerroUI Release Notes & Changelogs
 
 ---
 
@@ -6,7 +6,7 @@
 
 ### 🎉 General Availability Release
 
-We're thrilled to announce the general availability of FerroUI UI — the AI-powered server-driven UI meta-framework that lets you build dynamic interfaces from natural language.
+We're thrilled to announce the general availability of FerroUI — the AI-powered server-driven UI meta-framework that lets you build dynamic interfaces from natural language.
 
 ### ✨ New Features
 
@@ -194,7 +194,7 @@ Thank you to all contributors who made this release possible:
 
 ## Changelog Format
 
-All notable changes to FerroUI UI are documented in this file.
+All notable changes to FerroUI are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).

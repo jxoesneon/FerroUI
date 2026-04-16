@@ -2,7 +2,7 @@
   "name": "@ferroui/registry",
   "version": "0.1.0",
   "private": true,
-  "description": "Component registry for FerroUI UI, managing the mapping of FerroUILayout JSON to React components.",
+  "description": "Component registry for FerroUI, managing the mapping of FerroUILayout JSON to React components.",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",

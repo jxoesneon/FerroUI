@@ -10,7 +10,7 @@
 
 ## 1. Overview
 
-The `ferroui` CLI is the primary interface for FerroUI UI development. This PRD defines the CLI commands, developer workflows, and experience goals that make FerroUI UI the most developer-friendly AI framework.
+The `ferroui` CLI is the primary interface for FerroUI development. This PRD defines the CLI commands, developer workflows, and experience goals that make FerroUI the most developer-friendly AI framework.
 
 ---
 
@@ -30,7 +30,7 @@ The `ferroui` CLI is the primary interface for FerroUI UI development. This PRD 
 
 #### `ferroui create <project-name>`
 
-Create a new FerroUI UI project with all dependencies.
+Create a new FerroUI project with all dependencies.
 
 ```bash
 $ ferroui create my-dashboard
@@ -247,7 +247,7 @@ Diagnose common issues.
 
 ```bash
 $ ferroui doctor
-Checking FerroUI UI installation...
+Checking FerroUI installation...
 
 ✔ Node.js version (20.11.0)
 ✔ pnpm version (8.15.0)
@@ -262,7 +262,7 @@ Fix: Create .env.local file with FERROUI_API_KEY=your_key
 
 #### `ferroui update`
 
-Update FerroUI UI to latest version.
+Update FerroUI to latest version.
 
 ```bash
 $ ferroui update

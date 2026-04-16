@@ -1,6 +1,6 @@
 # @ferroui/registry
 
-Component registry for FerroUI UI, managing the mapping of FerroUILayout JSON to React components.
+Component registry for FerroUI, managing the mapping of FerroUILayout JSON to React components.
 
 ## Installation
 

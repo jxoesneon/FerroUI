@@ -10,7 +10,7 @@ expect.extend(matchers);
 describe('Components Registration', () => {
   it('renders Dashboard correctly', () => {
     render(<Dashboard><div>Child Content</div></Dashboard>);
-    expect(screen.getByText('FerroUI UI Dashboard')).toBeInTheDocument();
+    expect(screen.getByText('FerroUI Dashboard')).toBeInTheDocument();
     expect(screen.getByText('Child Content')).toBeInTheDocument();
   });
 

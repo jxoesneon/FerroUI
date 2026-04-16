@@ -1,4 +1,4 @@
-# FerroUI UI - Phase 2: UI Generation
+# FerroUI - Phase 2: UI Generation
 
 ## 1. ROLE DEFINITION
 

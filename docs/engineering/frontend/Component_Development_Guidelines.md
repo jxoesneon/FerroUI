@@ -9,7 +9,7 @@
 ## 1. Overview
 
 This document provides comprehensive guidelines for developing components in the
-FerroUI UI framework. Components are the building blocks of AI-generated layouts
+FerroUI framework. Components are the building blocks of AI-generated layouts
 and must adhere to strict standards for type safety, accessibility, and
 performance.
 
@@ -17,7 +17,7 @@ performance.
 
 ## 2. Atomic Design Hierarchy
 
-FerroUI UI follows the three-tier Atomic Design hierarchy. Every component must be
+FerroUI follows the three-tier Atomic Design hierarchy. Every component must be
 classified into one of these tiers.
 
 ### 2.1 Tier 1 — Atoms

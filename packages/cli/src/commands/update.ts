@@ -11,7 +11,7 @@ import { createRequire } from 'module';
  * Implements PRD-002 §3.5 — Utility Commands.
  */
 export const updateCommand = new Command('update')
-  .description('Update FerroUI UI CLI to the latest version.')
+  .description('Update FerroUI CLI to the latest version.')
   .option('--yes', 'Skip confirmation prompt')
   .option('--pkg-manager <manager>', 'Package manager to use: pnpm | npm | yarn', 'pnpm')
   .action(async (options) => {

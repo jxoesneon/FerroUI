@@ -9,7 +9,7 @@
 ## 1. Overview
 
 This document outlines disaster recovery (DR) and business continuity (BC)
-procedures for FerroUI UI.
+procedures for FerroUI.
 
 ---
 

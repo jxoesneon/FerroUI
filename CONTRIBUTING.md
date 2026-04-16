@@ -1,6 +1,6 @@
-# Contributing to FerroUI UI
+# Contributing to FerroUI
 
-Thank you for your interest in contributing to FerroUI UI! This document provides guidelines for contributing to the project.
+Thank you for your interest in contributing to FerroUI! This document provides guidelines for contributing to the project.
 
 ---
 

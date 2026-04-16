@@ -1,6 +1,6 @@
 # FerroUI Edge
 
-Edge computing worker for FerroUI UI, designed for Cloudflare Workers.
+Edge computing worker for FerroUI, designed for Cloudflare Workers.
 
 ## Installation
 

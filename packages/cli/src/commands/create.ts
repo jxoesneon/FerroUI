@@ -13,14 +13,14 @@ const TEMPLATES: Record<string, { label: string; description: string }> = {
 };
 
 export const createCommand = new Command('create')
-  .description('Create a new FerroUI UI project.')
+  .description('Create a new FerroUI project.')
   .argument('<name>', 'Name of the project')
   .option('-t, --template <template>', 'Template: default | minimal | full')
   .option('-p, --pkg-manager <manager>', 'Package manager: pnpm | npm | yarn')
   .option('--no-git', 'Skip git initialization')
   .option('--no-install', 'Skip dependency installation')
   .action(async (name: string, options: Record<string, any>) => {
-    console.log(chalk.bold.cyan('\n✦ FerroUI UI Project Creator\n'));
+    console.log(chalk.bold.cyan('\n✦ FerroUI Project Creator\n'));
 
     const targetDir = path.resolve(process.cwd(), name);
 
@@ -171,7 +171,7 @@ export default config;
       // ─── .env.local ────────────────────────────────────────────────────────
       await fs.writeFile(
         path.join(targetDir, '.env.local'),
-        `# FerroUI UI Environment Variables
+        `# FerroUI Environment Variables
 # Copy to .env and fill in your values
 OPENAI_API_KEY=
 ANTHROPIC_API_KEY=
@@ -259,7 +259,7 @@ registerTool({
         path.join(targetDir, 'README.md'),
         `# ${name}
 
-> Built with [FerroUI UI](https://ferroui.dev) — AI-powered, server-driven UI.
+> Built with [FerroUI](https://ferroui.dev) — AI-powered, server-driven UI.
 
 ## Quick Start
 
@@ -282,7 +282,7 @@ open http://localhost:3000
 
 \`\`\`
 src/
-  components/       # FerroUI UI components (register with @ferroui/registry)
+  components/       # FerroUI components (register with @ferroui/registry)
   tools/            # Data tools (register with @ferroui/tools)
 ferroui.config.ts     # Framework configuration
 \`\`\`

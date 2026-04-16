@@ -10,7 +10,7 @@ interface FerroUIRendererProps {
 }
 
 /**
- * Recursive FerroUI UI Renderer.
+ * Recursive FerroUI Renderer.
  * Implements Section 8.3: Atomic Component Hierarchy & Section 8.4: Framer Motion Animations.
  */
 export const FerroUIRenderer: React.FC<FerroUIRendererProps> = ({ component }) => {

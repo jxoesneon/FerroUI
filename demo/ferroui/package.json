@@ -1,7 +1,7 @@
 {
   "name": "ferroui-demo",
   "private": true,
-  "description": "Web application for FerroUI UI, a modern React-based meta-framework frontend.",
+  "description": "Web application for FerroUI, a modern React-based meta-framework frontend.",
   "version": "1.0.0",
   "type": "module",
   "engines": {

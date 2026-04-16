@@ -2,7 +2,7 @@
   "name": "@ferroui/telemetry",
   "version": "0.1.0",
   "private": true,
-  "description": "Telemetry and observability utilities for FerroUI UI, integrating OpenTelemetry for tracing and metrics.",
+  "description": "Telemetry and observability utilities for FerroUI, integrating OpenTelemetry for tracing and metrics.",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",

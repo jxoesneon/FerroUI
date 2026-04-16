@@ -9,7 +9,7 @@
 
 ## 1. Overview
 
-The system prompt is the most critical artifact in the FerroUI UI system. It defines the AI's entire operating contract. This SOP establishes procedures for creating, reviewing, deploying, and maintaining system prompts.
+The system prompt is the most critical artifact in the FerroUI system. It defines the AI's entire operating contract. This SOP establishes procedures for creating, reviewing, deploying, and maintaining system prompts.
 
 ---
 
@@ -54,7 +54,7 @@ All changes to system prompts require:
 
 ## 3. System Prompt Anatomy
 
-Every FerroUI UI system prompt contains the following sections in order:
+Every FerroUI system prompt contains the following sections in order:
 
 ### 3.1 Section Overview
 
@@ -73,7 +73,7 @@ Every FerroUI UI system prompt contains the following sections in order:
 ### 3.2 Complete Example: Phase 2 UI Generation
 
 ```markdown
-# FerroUI UI - Phase 2: UI Generation
+# FerroUI - Phase 2: UI Generation
 
 ## 1. ROLE DEFINITION
 

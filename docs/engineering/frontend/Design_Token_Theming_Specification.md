@@ -8,12 +8,12 @@
 
 ## 1. Overview
 
-Design tokens are the visual design atoms of the FerroUI UI design system. They
+Design tokens are the visual design atoms of the FerroUI design system. They
 are platform-agnostic variables that represent the visual properties of our
 components — colors, typography, spacing, borders, shadows, and more.
 
 This specification defines the token structure, naming conventions, and theming
-capabilities for FerroUI UI.
+capabilities for FerroUI.
 
 ---
 

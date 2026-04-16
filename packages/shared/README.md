@@ -1,6 +1,6 @@
 # @ferroui/shared
 
-Shared utilities, types, and constants for FerroUI UI.
+Shared utilities, types, and constants for FerroUI.
 
 ## Installation
 

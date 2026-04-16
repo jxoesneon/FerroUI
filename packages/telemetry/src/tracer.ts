@@ -9,14 +9,14 @@ const INSTRUMENTATION_NAME = '@ferroui/telemetry';
 const INSTRUMENTATION_VERSION = '0.1.0';
 
 /**
- * Returns the FerroUI UI tracer
+ * Returns the FerroUI tracer
  */
 export function getTracer(): Tracer {
   return trace.getTracer(INSTRUMENTATION_NAME, INSTRUMENTATION_VERSION);
 }
 
 /**
- * Default FerroUI UI tracer
+ * Default FerroUI tracer
  */
 export const tracer = getTracer();
 
@@ -51,7 +51,7 @@ export function initializeTelemetry(serviceName: string = 'ferroui-ui') {
 }
 
 /**
- * Creates a span with FerroUI UI standard attributes
+ * Creates a span with FerroUI standard attributes
  */
 export function startSpan(
   name: string,

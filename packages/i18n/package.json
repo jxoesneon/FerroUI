@@ -2,7 +2,7 @@
   "name": "@ferroui/i18n",
   "version": "0.1.0",
   "private": true,
-  "description": "Internationalization and localization utilities for FerroUI UI.",
+  "description": "Internationalization and localization utilities for FerroUI.",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",

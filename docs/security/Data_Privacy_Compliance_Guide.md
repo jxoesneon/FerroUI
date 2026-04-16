@@ -8,7 +8,7 @@
 
 ## 1. Overview
 
-This guide outlines FerroUI UI's approach to data privacy compliance, including GDPR, CCPA, and other privacy regulations. It provides implementation guidance for developers and administrators.
+This guide outlines FerroUI's approach to data privacy compliance, including GDPR, CCPA, and other privacy regulations. It provides implementation guidance for developers and administrators.
 
 ---
 

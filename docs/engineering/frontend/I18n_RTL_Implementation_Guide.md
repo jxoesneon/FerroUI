@@ -8,10 +8,10 @@
 
 ## 1. Overview
 
-FerroUI UI layouts must be locale-aware. Because the AI generates layouts at
+FerroUI layouts must be locale-aware. Because the AI generates layouts at
 runtime, internationalization cannot rely on static string extraction workflows.
 This guide covers the implementation of internationalization (i18n) and
-right-to-left (RTL) language support in FerroUI UI.
+right-to-left (RTL) language support in FerroUI.
 
 ---
 

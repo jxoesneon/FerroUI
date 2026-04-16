@@ -1,7 +1,7 @@
 {
   "name": "desktop",
   "private": true,
-  "description": "Desktop application for FerroUI UI, powered by Tauri and React.",
+  "description": "Desktop application for FerroUI, powered by Tauri and React.",
   "version": "1.0.0",
   "type": "module",
   "engines": {

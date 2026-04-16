@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "FerroUI UI: AI-powered, server-driven UI meta-framework",
+  "description": "FerroUI: AI-powered, server-driven UI meta-framework",
   "engines": {
     "node": ">=25"
   },

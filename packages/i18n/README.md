@@ -1,6 +1,6 @@
 # @ferroui/i18n
 
-Internationalization and localization utilities for FerroUI UI.
+Internationalization and localization utilities for FerroUI.
 
 ## Installation
 

@@ -240,7 +240,7 @@ COMMITMENT
 EVALUATION
 ├── Security team flags "Shadow AI" usage
 ├── Researches governed AI frameworks
-├── Finds FerroUI UI security documentation
+├── Finds FerroUI security documentation
 ├── Reviews threat model and compliance guide
 └── Decision: "Worth evaluating for enterprise use"
 
@@ -263,7 +263,7 @@ TEAM ROLLOUT
 ├── Collects feedback and issues
 ├── Iterates on configuration
 ├── Expands to additional teams
-└── Result: 5 teams using FerroUI UI
+└── Result: 5 teams using FerroUI
 
 SCALING
 ├── Monitors usage and costs

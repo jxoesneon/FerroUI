@@ -1,6 +1,6 @@
 # @ferroui/telemetry
 
-Telemetry and observability utilities for FerroUI UI, integrating OpenTelemetry for tracing and metrics.
+Telemetry and observability utilities for FerroUI, integrating OpenTelemetry for tracing and metrics.
 
 ## Installation
 

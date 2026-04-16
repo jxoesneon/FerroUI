@@ -100,7 +100,7 @@ ferroui doctor
 Expected output:
 
 ```
-Checking FerroUI UI installation...
+Checking FerroUI installation...
 
 ✔ Node.js version (20.11.0)
 ✔ pnpm version (8.15.0)
@@ -410,7 +410,7 @@ ferroui dev --help
 ## 10. Congratulations!
 
 You've successfully:
-- ✅ Installed FerroUI UI
+- ✅ Installed FerroUI
 - ✅ Generated your first AI-powered layout
 - ✅ Created a custom component
 - ✅ Built a custom tool

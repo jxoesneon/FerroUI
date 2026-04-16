@@ -5,7 +5,7 @@ import { themeManager } from './manager';
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
 /**
- * Root context provider for FerroUI UI theming.
+ * Root context provider for FerroUI theming.
  * Wraps the application to provide theme state and token access.
  */
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ 

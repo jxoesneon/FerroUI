@@ -1,6 +1,6 @@
 # FerroUI Desktop
 
-Desktop application for FerroUI UI, powered by Tauri and React.
+Desktop application for FerroUI, powered by Tauri and React.
 
 ## Installation
 

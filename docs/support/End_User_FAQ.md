@@ -8,15 +8,15 @@
 
 ## 1. General Questions
 
-### Q: What is FerroUI UI?
+### Q: What is FerroUI?
 
-**A:** FerroUI UI is an AI-powered, server-driven UI framework. Instead of writing static screens, you register components and data tools in TypeScript, and the AI assembles, validates, and streams layouts on demand based on natural language prompts.
+**A:** FerroUI is an AI-powered, server-driven UI framework. Instead of writing static screens, you register components and data tools in TypeScript, and the AI assembles, validates, and streams layouts on demand based on natural language prompts.
 
 ---
 
-### Q: What can I build with FerroUI UI?
+### Q: What can I build with FerroUI?
 
-**A:** FerroUI UI is ideal for:
+**A:** FerroUI is ideal for:
 - Internal dashboards
 - Admin panels
 - Data visualization tools
@@ -25,15 +25,15 @@
 
 ---
 
-### Q: Do I need to know AI/ML to use FerroUI UI?
+### Q: Do I need to know AI/ML to use FerroUI?
 
-**A:** No! FerroUI UI handles all the AI complexity. You write TypeScript components and tools like you normally would. The framework manages prompt engineering, model selection, and response parsing.
+**A:** No! FerroUI handles all the AI complexity. You write TypeScript components and tools like you normally would. The framework manages prompt engineering, model selection, and response parsing.
 
 ---
 
 ## 2. Getting Started
 
-### Q: How do I install FerroUI UI?
+### Q: How do I install FerroUI?
 
 **A:**
 ```bash
@@ -55,9 +55,9 @@ See [Quickstart Guide](../dev-experience/Quickstart_Developer_Onboarding.md) for
 
 ---
 
-### Q: Can I use FerroUI UI for free?
+### Q: Can I use FerroUI for free?
 
-**A:** FerroUI UI is open source and free to use. However, you'll need:
+**A:** FerroUI is open source and free to use. However, you'll need:
 - An LLM provider account (OpenAI, Anthropic, etc.)
 - Infrastructure for deployment (optional)
 
@@ -67,7 +67,7 @@ See [Quickstart Guide](../dev-experience/Quickstart_Developer_Onboarding.md) for
 
 ### Q: What is the Atomic Design hierarchy?
 
-**A:** FerroUI UI uses three tiers:
+**A:** FerroUI uses three tiers:
 - **Atoms** — Irreducible UI primitives (Text, Icon, Badge)
 - **Molecules** — Compositions of atoms (StatBadge, FormField)
 - **Organisms** — Functional blocks (DataTable, KPIBoard)
@@ -195,7 +195,7 @@ module.exports = {
 brew install ollama
 ollama pull llama2
 
-# Configure FerroUI UI
+# Configure FerroUI
 export FERROUI_DEFAULT_PROVIDER=ollama
 export OLLAMA_BASE_URL=http://localhost:11434
 ```
@@ -204,7 +204,7 @@ export OLLAMA_BASE_URL=http://localhost:11434
 
 ## 6. Deployment
 
-### Q: Where can I deploy FerroUI UI?
+### Q: Where can I deploy FerroUI?
 
 **A:** Three deployment options:
 1. **Web SaaS** — Docker/Kubernetes on AWS, GCP, Azure

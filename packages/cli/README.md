@@ -1,6 +1,6 @@
 # @ferroui/cli
 
-The primary interface for FerroUI UI development, providing CLI commands for project management.
+The primary interface for FerroUI development, providing CLI commands for project management.
 
 ## Installation
 

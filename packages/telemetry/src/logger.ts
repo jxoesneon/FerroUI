@@ -6,7 +6,7 @@ const INSTRUMENTATION_NAME = '@ferroui/telemetry';
 const INSTRUMENTATION_VERSION = '0.1.0';
 
 /**
- * Returns the FerroUI UI logger
+ * Returns the FerroUI logger
  */
 export function getLogger(): Logger {
   return logs.getLogger(INSTRUMENTATION_NAME, INSTRUMENTATION_VERSION);

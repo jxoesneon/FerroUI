@@ -18,7 +18,7 @@ export class FerroUIEngine {
   }
 
   /**
-   * Main entry point for the FerroUI UI engine.
+   * Main entry point for the FerroUI engine.
    * Processes a user prompt through the Dual-Phase Pipeline.
    */
   public async *process(

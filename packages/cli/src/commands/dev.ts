@@ -41,7 +41,7 @@ export const devCommand = new Command('dev')
   .option('--engine-only', 'Start only the orchestration engine (backend)')
   .option('--renderer-only', 'Start only the layout playground/renderer (frontend)')
   .action(async (options) => {
-    console.log(chalk.bold.cyan('\n✦ FerroUI UI Development Environment\n'));
+    console.log(chalk.bold.cyan('\n✦ FerroUI Development Environment\n'));
 
     const cwd = process.cwd();
     const pkgManager = detectPkgManager(cwd);

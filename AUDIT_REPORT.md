@@ -1,4 +1,4 @@
-# FerroUI UI Feature Implementation Audit
+# FerroUI Feature Implementation Audit
 
 **Date:** 2026-04-12 (v3 — full re-audit, all source files directly inspected)
 **Scope:** PRD-001, PRD-002, System Architecture Document, all ADRs, all RFCs, Engineering Specs, Security Threat Model, Observability Dictionary, A11y Checklist, Design Token Spec, i18n Guide
@@ -257,7 +257,7 @@ All spec-required features are implemented. The following items are production-h
 
 **Overall Score: 100% spec coverage**
 
-The FerroUI UI codebase is fully implemented against all spec requirements (PRD-001, PRD-002, System Architecture, all ADRs, Security Threat Model, A11y Checklist, Design Token Spec, i18n Guide). All tests pass, lint is clean, and no stubs or placeholders remain.
+The FerroUI codebase is fully implemented against all spec requirements (PRD-001, PRD-002, System Architecture, all ADRs, Security Threat Model, A11y Checklist, Design Token Spec, i18n Guide). All tests pass, lint is clean, and no stubs or placeholders remain.
 
 **Strengths:**
 - Full TypeScript type safety across all packages

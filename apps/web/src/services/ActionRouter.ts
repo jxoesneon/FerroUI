@@ -7,7 +7,7 @@ export interface ActionRouterContext {
 }
 
 /**
- * Global Action Router for FerroUI UI.
+ * Global Action Router for FerroUI.
  * Handles Section 2.3 Actions: NAVIGATE, SHOW_TOAST, REFRESH, TOOL_CALL.
  */
 export class ActionRouter {

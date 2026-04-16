@@ -9,7 +9,7 @@
 
 ## Context
 
-Early prototypes of FerroUI UI used a single LLM call that mixed data gathering with UI generation. This approach led to:
+Early prototypes of FerroUI used a single LLM call that mixed data gathering with UI generation. This approach led to:
 - Layouts rendered with fabricated data when tools failed
 - Inconsistent UI states due to stale data
 - Difficult debugging of data vs. presentation issues

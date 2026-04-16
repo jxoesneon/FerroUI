@@ -97,7 +97,7 @@ export async function* runDualPhasePipeline(
   });
 
   const phase1SystemPrompt = `
-# FerroUI UI - Phase 1: Data Gathering
+# FerroUI - Phase 1: Data Gathering
 
 You are a data retrieval agent. Your goal is to identify and call the necessary tools 
 to fulfill the user's request.
@@ -250,7 +250,7 @@ ${toolManifest}
   const componentManifest = JSON.stringify(registeredComponents, null, 2);
 
   const phase2SystemPrompt = `
-# FerroUI UI - Phase 2: UI Generation
+# FerroUI - Phase 2: UI Generation
 
 You are a UI layout engine. Use the following data to generate a valid FerroUILayout.
 

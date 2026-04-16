@@ -101,7 +101,7 @@ const HTML_TEMPLATE = (title: string, content: string, depth = 0) => {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${title} — FerroUI UI Docs</title>
+    <title>${title} — FerroUI Docs</title>
     <link rel="stylesheet" href="${relPath}/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -228,7 +228,7 @@ async function generateApiDocs() {
 
   const apiIndexHtml = `
     <h1>API Reference</h1>
-    <p>Select a registry to explore the FerroUI UI ecosystem capabilities.</p>
+    <p>Select a registry to explore the FerroUI ecosystem capabilities.</p>
     <div class="docs-grid" style="margin-top: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
         <div class="glass-card doc-category" style="padding: 2rem; border-radius: 24px; border: 1px solid rgba(255,255,255,0.05);">
             <h3>Components</h3>

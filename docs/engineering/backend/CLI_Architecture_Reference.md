@@ -8,7 +8,7 @@
 
 ## 1. Overview
 
-The FerroUI CLI is the primary developer interface for scaffolding, developing, and evaluating FerroUI UI projects. It provides a suite of commands to streamline the component-driven development lifecycle and ensure prompt parity with the engine.
+The FerroUI CLI is the primary developer interface for scaffolding, developing, and evaluating FerroUI projects. It provides a suite of commands to streamline the component-driven development lifecycle and ensure prompt parity with the engine.
 
 ---
 

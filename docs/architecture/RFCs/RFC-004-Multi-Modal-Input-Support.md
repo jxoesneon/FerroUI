@@ -9,7 +9,7 @@
 
 ## Summary
 
-This RFC proposes extending the FerroUI UI request model to support **multi-modal inputs** — voice, images, and documents — in addition to natural language text. This addresses the open question in the whitepaper regarding multi-modal handling.
+This RFC proposes extending the FerroUI request model to support **multi-modal inputs** — voice, images, and documents — in addition to natural language text. This addresses the open question in the whitepaper regarding multi-modal handling.
 
 ## Motivation
 

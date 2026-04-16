@@ -1,4 +1,4 @@
-# FerroUI UI System Architecture Document
+# FerroUI System Architecture Document
 
 **Version:** 1.0  
 **Last Updated:** 2025-04-10  
@@ -9,7 +9,7 @@
 
 ## 1. Executive Summary
 
-FerroUI UI is a production-grade, open meta-framework for building AI-driven applications where the user interface is synthesized at runtime in response to natural language intent. This document formalizes the complete architecture covering the dual-phase orchestration pipeline, atomic component model, LLM strategy layer, schema governance, security, observability, accessibility, internationalization, and developer ergonomics.
+FerroUI is a production-grade, open meta-framework for building AI-driven applications where the user interface is synthesized at runtime in response to natural language intent. This document formalizes the complete architecture covering the dual-phase orchestration pipeline, atomic component model, LLM strategy layer, schema governance, security, observability, accessibility, internationalization, and developer ergonomics.
 
 ---
 
@@ -27,18 +27,18 @@ FerroUI UI is a production-grade, open meta-framework for building AI-driven app
 | Accessibility by Default | Every component ships with correct ARIA roles and keyboard navigation |
 | Observable by Default | Every pipeline stage emits structured traces compatible with OpenTelemetry |
 
-### 2.2 What FerroUI UI Is NOT
+### 2.2 What FerroUI Is NOT
 
 - **Not a low-code visual editor** — There is no drag-and-drop canvas
 - **Not a chatbot framework** — The LLM produces structured JSON, not prose
-- **Not a design system** — FerroUI UI consumes a design system through its component registry
+- **Not a design system** — FerroUI consumes a design system through its component registry
 - **Not a no-code platform** — Developers write typed components and tool functions in real code
 
 ---
 
 ## 3. Four-Layer Runtime Architecture
 
-FerroUI UI is organized into four distinct runtime layers. Each layer has a single responsibility and communicates with adjacent layers through versioned, typed contracts.
+FerroUI is organized into four distinct runtime layers. Each layer has a single responsibility and communicates with adjacent layers through versioned, typed contracts.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -97,7 +97,7 @@ The router handles four canonical action types:
 
 ## 5. Layer 2 — Orchestration Engine
 
-The orchestration engine is the heart of FerroUI UI. It can be deployed as:
+The orchestration engine is the heart of FerroUI. It can be deployed as:
 - TypeScript (Node.js / Bun) service
 - Embedded in a Tauri Rust binary
 - Edge deployment on Cloudflare Workers with Durable Objects
@@ -213,7 +213,7 @@ This prevents prompt-injection attacks attempting data exfiltration.
 
 ## 8. The FerroUI Component Model
 
-FerroUI UI enforces a three-tier Atomic hierarchy that is machine-validated.
+FerroUI enforces a three-tier Atomic hierarchy that is machine-validated.
 
 ### 8.1 Tier Definitions
 

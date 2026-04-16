@@ -35,14 +35,14 @@ function semverMeetsMin(version: string, min: number[]): boolean {
 
 /**
  * `ferroui doctor` — PRD-002 §3.5
- * Diagnose common issues with the FerroUI UI development environment.
+ * Diagnose common issues with the FerroUI development environment.
  */
 export const doctorCommand = new Command('doctor')
-  .description('Diagnose common issues with the FerroUI UI environment.')
+  .description('Diagnose common issues with the FerroUI environment.')
   .option('--json', 'Output results as JSON')
   .action(async (options) => {
     if (!options.json) {
-      console.log(chalk.bold.cyan('\n✦ FerroUI UI Doctor\n'));
+      console.log(chalk.bold.cyan('\n✦ FerroUI Doctor\n'));
       console.log(chalk.dim('Checking your development environment...\n'));
     }
 

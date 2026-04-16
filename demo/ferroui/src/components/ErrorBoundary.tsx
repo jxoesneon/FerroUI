@@ -12,7 +12,7 @@ interface State {
 }
 
 /**
- * Strict Error Boundary for FerroUI UI components.
+ * Strict Error Boundary for FerroUI components.
  * Ensures Section 8.4: Component Isolation and Fault Tolerance.
  */
 export class FerroUIErrorBoundary extends Component<Props, State> {

@@ -1,6 +1,6 @@
 # @ferroui/schema
 
-Zod-based schemas and TypeScript types for the FerroUI UI layout system.
+Zod-based schemas and TypeScript types for the FerroUI layout system.
 
 ## Installation
 

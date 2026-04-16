@@ -35,7 +35,7 @@ ferroui --version
 
 #### `ferroui create <project-name>`
 
-Create a new FerroUI UI project.
+Create a new FerroUI project.
 
 ```bash
 ferroui create my-app
@@ -289,7 +289,7 @@ ferroui doctor
 
 #### `ferroui update`
 
-Update FerroUI UI to latest version.
+Update FerroUI to latest version.
 
 ```bash
 ferroui update
@@ -442,7 +442,7 @@ Add to your `package.json`:
 
 **VS Code:**
 
-Install the FerroUI UI extension for:
+Install the FerroUI extension for:
 - Syntax highlighting
 - Auto-completion
 - Inline documentation

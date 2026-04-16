@@ -39,7 +39,7 @@ const promCacheHitRate = new PromGauge({
 });
 
 /**
- * Returns the FerroUI UI meter
+ * Returns the FerroUI meter
  */
 export function getMeter(): Meter {
   return metrics.getMeter(INSTRUMENTATION_NAME, INSTRUMENTATION_VERSION);

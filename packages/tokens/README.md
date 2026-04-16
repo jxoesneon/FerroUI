@@ -1,6 +1,6 @@
 # @ferroui/tokens
 
-Design tokens for the FerroUI UI system.
+Design tokens for the FerroUI system.
 
 ## Installation
 

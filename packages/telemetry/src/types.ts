@@ -1,5 +1,5 @@
 /**
- * Attribute keys for FerroUI UI telemetry as defined in docs/ops/Observability_Telemetry_Dictionary.md
+ * Attribute keys for FerroUI telemetry as defined in docs/ops/Observability_Telemetry_Dictionary.md
  */
 export enum FerroUIAttributes {
   REQUEST_ID = 'request.id',
@@ -22,7 +22,7 @@ export enum FerroUIAttributes {
 }
 
 /**
- * Metric names for FerroUI UI
+ * Metric names for FerroUI
  */
 export enum FerroUIMetrics {
   // System Metrics

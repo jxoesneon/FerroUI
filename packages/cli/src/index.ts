@@ -16,7 +16,7 @@ const program = new Command();
 
 program
   .name('ferroui')
-  .description('FerroUI UI CLI — The primary interface for FerroUI UI development.')
+  .description('FerroUI CLI — The primary interface for FerroUI development.')
   .version('1.0.0');
 
 // Register commands

@@ -75,7 +75,7 @@ export async function repairLayout(
   const errorReport = errors.map((e: ValidationIssue) => `- ${e.path}: ${e.message}`).join('\n');
   
   const repairSystemPrompt = `
-# FerroUI UI - Repair Mode
+# FerroUI - Repair Mode
 
 The following layout JSON failed validation. Your task is to fix it.
 

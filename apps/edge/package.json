@@ -2,7 +2,7 @@
   "name": "@ferroui/edge",
   "version": "0.1.0",
   "private": true,
-  "description": "Edge computing worker for FerroUI UI, designed for Cloudflare Workers.",
+  "description": "Edge computing worker for FerroUI, designed for Cloudflare Workers.",
   "type": "module",
   "main": "src/index.ts",
   "engines": {

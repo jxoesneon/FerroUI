@@ -8,7 +8,7 @@
 
 ## 1. Overview
 
-This guide covers containerizing and deploying FerroUI UI as a web SaaS application using Docker and Kubernetes.
+This guide covers containerizing and deploying FerroUI as a web SaaS application using Docker and Kubernetes.
 
 ---
 

@@ -9,7 +9,7 @@
 
 ## 1. Overview
 
-This document summarizes third-party security audits conducted on FerroUI UI. Full reports are available upon request to authorized personnel.
+This document summarizes third-party security audits conducted on FerroUI. Full reports are available upon request to authorized personnel.
 
 ---
 

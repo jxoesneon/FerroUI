@@ -1,7 +1,7 @@
 [package]
 name = "ferroui-desktop"
 version = "1.0.0"
-description = "FerroUI UI Desktop"
+description = "FerroUI Desktop"
 authors = ["FerroUI Project Team"]
 license = "MIT"
 repository = "https://github.com/ferroui/ferroui"

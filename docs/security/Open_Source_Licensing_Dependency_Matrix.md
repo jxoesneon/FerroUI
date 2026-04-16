@@ -8,7 +8,7 @@
 
 ## 1. Overview
 
-This document tracks all open-source dependencies used in FerroUI UI, their licenses, and compliance status.
+This document tracks all open-source dependencies used in FerroUI, their licenses, and compliance status.
 
 ---
 
@@ -118,7 +118,7 @@ Required in source files:
 
 ```typescript
 /**
- * Copyright (c) 2026 FerroUI UI Contributors
+ * Copyright (c) 2026 FerroUI Contributors
  * SPDX-License-Identifier: MIT
  * 
  * This file may contain portions of third-party code.

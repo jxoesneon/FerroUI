@@ -1,6 +1,6 @@
-# FerroUI UI Documentation
+# FerroUI Documentation
 
-Welcome to the machine-readable documentation index for FerroUI UI. This file is designed for LLMs and AI coding assistants to understand the ecosystem structure.
+Welcome to the machine-readable documentation index for FerroUI. This file is designed for LLMs and AI coding assistants to understand the ecosystem structure.
 
 ## Core Framework
 - [System Architecture](https://github.com/jxoesneon/FerroUI/blob/main/docs/architecture/System_Architecture_Document.md): The foundational design of FerroUI's dual-phase pipeline.

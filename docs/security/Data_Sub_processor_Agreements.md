@@ -9,7 +9,7 @@
 
 ## 1. Overview
 
-This document lists all data sub-processors used by FerroUI UI and the agreements in place with each.
+This document lists all data sub-processors used by FerroUI and the agreements in place with each.
 
 ---
 

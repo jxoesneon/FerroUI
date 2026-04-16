@@ -1,6 +1,6 @@
 # @ferroui/tools
 
-Development and utility tools for the FerroUI UI ecosystem.
+Development and utility tools for the FerroUI ecosystem.
 
 ## Installation
 

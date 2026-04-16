@@ -1,6 +1,6 @@
 # @ferroui/config
 
-Shared configuration (ESLint, TypeScript, Prettier) for FerroUI UI.
+Shared configuration (ESLint, TypeScript, Prettier) for FerroUI.
 
 ## Installation
 

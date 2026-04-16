@@ -1,4 +1,4 @@
-# PRD-001: FerroUI UI Core Framework
+# PRD-001: FerroUI Core Framework
 
 **Version:** 1.0  
 **Status:** Approved  
@@ -10,7 +10,7 @@
 
 ## 1. Executive Summary
 
-FerroUI UI is an AI-powered, server-driven UI meta-framework that enables developers to build dynamic, natural language-driven interfaces without writing static screens. This PRD defines the core framework capabilities, user experience goals, and success metrics for the initial release.
+FerroUI is an AI-powered, server-driven UI meta-framework that enables developers to build dynamic, natural language-driven interfaces without writing static screens. This PRD defines the core framework capabilities, user experience goals, and success metrics for the initial release.
 
 ### 1.1 Problem Statement
 
@@ -24,7 +24,7 @@ Current approaches resolve this badly:
 
 ### 1.2 Solution
 
-FerroUI UI treats the LLM as a **runtime UI orchestrator** rather than a content generator. Developers register typed components and data tools; the AI assembles, validates, streams, and self-heals layouts on demand.
+FerroUI treats the LLM as a **runtime UI orchestrator** rather than a content generator. Developers register typed components and data tools; the AI assembles, validates, streams, and self-heals layouts on demand.
 
 ---
 
@@ -154,7 +154,7 @@ Tech Stack: React, Framer Motion, Tailwind CSS
 ### 5.1 First-Time Developer Journey
 
 ```
-1. Discover FerroUI UI (GitHub, blog post, conference)
+1. Discover FerroUI (GitHub, blog post, conference)
    ↓
 2. Read Quickstart Guide (5 minutes)
    ↓

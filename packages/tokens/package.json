@@ -2,7 +2,7 @@
   "name": "@ferroui/tokens",
   "version": "1.0.0",
   "private": true,
-  "description": "Design tokens for the FerroUI UI system, providing unified color, spacing, and typography scales.",
+  "description": "Design tokens for the FerroUI system, providing unified color, spacing, and typography scales.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",

@@ -8,7 +8,7 @@
 
 ## 1. Overview
 
-This guide covers packaging FerroUI UI as a desktop application using Tauri. Tauri
+This guide covers packaging FerroUI as a desktop application using Tauri. Tauri
 provides:
 
 - Native performance with WebKit rendering
@@ -100,7 +100,7 @@ apps/desktop/
     "bundle": {
       "active": true,
       "category": "DeveloperTool",
-      "copyright": "© 2026 FerroUI UI",
+      "copyright": "© 2026 FerroUI",
       "deb": {
         "depends": []
       },
@@ -122,7 +122,7 @@ apps/desktop/
         "signingIdentity": null
       },
       "resources": [],
-      "shortDescription": "FerroUI UI Desktop",
+      "shortDescription": "FerroUI Desktop",
       "targets": ["dmg", "msi", "deb", "appimage"],
       "windows": {
         "certificateThumbprint": null,
@@ -146,7 +146,7 @@ apps/desktop/
         "fullscreen": false,
         "height": 900,
         "resizable": true,
-        "title": "FerroUI UI",
+        "title": "FerroUI",
         "width": 1440
       }
     ]

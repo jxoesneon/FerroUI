@@ -2,7 +2,7 @@
   "name": "@ferroui/tools",
   "version": "0.1.0",
   "private": true,
-  "description": "Development and utility tools for the FerroUI UI ecosystem.",
+  "description": "Development and utility tools for the FerroUI ecosystem.",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",

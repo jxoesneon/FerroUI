@@ -1,7 +1,7 @@
 {
   "name": "@ferroui/cli",
   "version": "1.0.0",
-  "description": "The primary interface for FerroUI UI development, providing CLI commands for project management.",
+  "description": "The primary interface for FerroUI development, providing CLI commands for project management.",
   "main": "dist/index.js",
   "bin": {
     "ferroui": "bin/ferroui.js"

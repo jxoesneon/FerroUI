@@ -9,7 +9,7 @@
 
 ## 1. Overview
 
-This document defines the monorepo structure, package governance policies, and dependency management strategies for the FerroUI UI project. FerroUI UI uses a Turborepo + pnpm monorepo architecture to manage multiple applications and shared packages.
+This document defines the monorepo structure, package governance policies, and dependency management strategies for the FerroUI project. FerroUI uses a Turborepo + pnpm monorepo architecture to manage multiple applications and shared packages.
 
 ---
 
@@ -133,7 +133,7 @@ All production-critical dependencies (e.g., `react`, `zod`, `framer-motion`) mus
 
 ### 5.1 Versioning Strategy
 
-FerroUI UI follows **Semantic Versioning** (SemVer) for all packages:
+FerroUI follows **Semantic Versioning** (SemVer) for all packages:
 
 ```
 MAJOR.MINOR.PATCH

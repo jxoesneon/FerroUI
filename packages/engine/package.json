@@ -2,7 +2,7 @@
   "name": "@ferroui/engine",
   "version": "0.1.0",
   "private": true,
-  "description": "The core server-side engine for FerroUI UI, orchestrating LLM interactions and layout generation.",
+  "description": "The core server-side engine for FerroUI, orchestrating LLM interactions and layout generation.",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",

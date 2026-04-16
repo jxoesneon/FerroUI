@@ -8,7 +8,7 @@
 
 ## 1. Overview
 
-This document defines the observability and telemetry standards for FerroUI UI.
+This document defines the observability and telemetry standards for FerroUI.
 All components must emit structured telemetry compatible with OpenTelemetry
 (OTel).
 
