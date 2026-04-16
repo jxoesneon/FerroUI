@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "mempalace-rs": {
+      "command": "cargo run --release --manifest-path C:\\Users\\Eduardo\\mempalace-rs\\Cargo.toml",
+      "args": [
+        "--yolo"
+      ]
+    }
+  }
+}
