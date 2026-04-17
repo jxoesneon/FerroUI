@@ -31,6 +31,14 @@ export class ToolRegistry {
     if (this.tools.has(tool.name)) {
       throw new Error(`Tool with name "${tool.name}" is already registered.`);
     }
+
+    // Governance: programmatically enforce that sensitive tools have permission requirements
+    if (tool.sensitive && (!tool.requiredPermissions || tool.requiredPermissions.length === 0)) {
+      throw new Error(
+        `Governance Violation: Tool "${tool.name}" is marked as sensitive but has no requiredPermissions defined.`
+      );
+    }
+
     this.tools.set(tool.name, tool);
     return tool;
   }

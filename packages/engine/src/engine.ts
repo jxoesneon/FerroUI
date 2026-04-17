@@ -35,7 +35,7 @@ export class FerroUIEngine {
       description: 'Changes the active LLM provider for the engine. Privileged tool.',
       parameters: z.object({
         providerId: z.enum(['openai', 'anthropic', 'google', 'ollama', 'llama-cpp']),
-        options: z.record(z.any()).optional(),
+        options: z.record(z.string(), z.any()).optional(),
       }),
       returns: z.object({
         success: z.boolean(),
@@ -81,23 +81,28 @@ export class FerroUIEngine {
     prompt: string,
     context: RequestContext
   ): AsyncGenerator<EngineChunk, void, undefined> {
+    const promptHash = CryptoJS.SHA256(prompt.trim().toLowerCase()).toString();
     const span = tracer.startSpan('FerroUIEngine.process', {
       attributes: {
-        'ferroui.prompt': prompt,
-        'ferroui.userId': context.userId,
+        'ferroui.prompt_hash': promptHash,
+        'ferroui.userId_hash': CryptoJS.SHA256(context.userId).toString(),
         'ferroui.requestId': context.requestId,
       },
     });
 
     try {
       yield* runDualPhasePipeline(this.provider, prompt, context, this.config);
-    } catch (error) {
-      span.recordException(error as Error);
+    } catch (error: any) {
+      // Record exception with PII scrubbing (simulated here, but recording typed error)
+      span.recordException(error instanceof Error ? error : new Error(String(error)));
       
-      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred.';
+      const errorMessage = error?.message || 'An unexpected error occurred.';
+      const errorCode = error?.code || 'ENGINE_FAILURE';
       
       // Determine if this is an unrecoverable failure (e.g. max repair attempts exceeded)
-      const isUnrecoverable = errorMessage.includes('repair') || errorMessage.includes('max attempts');
+      const isUnrecoverable = errorMessage.includes('repair') || 
+                            errorMessage.includes('max attempts') ||
+                            errorCode === 'REPAIR_FAILED';
 
       if (isUnrecoverable) {
         // Yield Safe Mode Layout instead of raw error chunk

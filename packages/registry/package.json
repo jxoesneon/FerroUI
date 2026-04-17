@@ -14,7 +14,8 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "start:inspector": "node dist/inspector.js",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:a11y": "vitest run"
   },
   "keywords": [
     "ferroui",

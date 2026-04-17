@@ -82,8 +82,14 @@ export interface TierValidationError {
  */
 export function validateTiers(
   component: FerroUIComponent,
-  path = 'layout'
+  path = 'layout',
+  visited = new Set<FerroUIComponent>()
 ): TierValidationError[] {
+  if (visited.has(component)) {
+    return [{ path, message: `Circular dependency detected in component hierarchy.`, rule: 'CYCLE' }];
+  }
+  visited.add(component);
+  
   const errors: TierValidationError[] = [];
   const tier = COMPONENT_TIER_REGISTRY[component.type];
 
@@ -135,9 +141,10 @@ export function validateTiers(
   // Recurse into children
   if (component.children) {
     component.children.forEach((child: FerroUIComponent, index: number) => {
-      errors.push(...validateTiers(child, `${path}.children[${index}]`));
+      errors.push(...validateTiers(child, `${path}.children[${index}]`, visited));
     });
   }
 
+  visited.delete(component);
   return errors;
 }

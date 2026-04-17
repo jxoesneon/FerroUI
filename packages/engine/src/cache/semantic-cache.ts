@@ -205,7 +205,7 @@ export class SemanticCache {
 
     // 2. Permissions Normalization & Hashing - Spec §3.2
     const sortedPermissions = [...permissions].sort();
-    const permissionsHash = CryptoJS.SHA256(sortedPermissions.join(',')).toString().slice(0, 16);
+    const permissionsHash = CryptoJS.SHA256(sortedPermissions.join(',')).toString().slice(0, 32);
 
     const userScope = classification === 'PUBLIC' ? 'shared' : userId;
 
@@ -215,8 +215,8 @@ export class SemanticCache {
       .sort(([a], [b]) => a.localeCompare(b))
       .map(([name, output]) => {
         const canonical = JSON.stringify(output);
-        const hash = CryptoJS.SHA256(canonical).toString().slice(0, 16);
-        return `${name}:${hash}`;
+        const hash = CryptoJS.SHA256(canonical).toString().slice(0, 32);
+        return `${name.replace(/\|/g, '_')}:${hash}`;
       })
       .join('|');
 

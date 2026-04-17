@@ -10,8 +10,11 @@ export interface TokenGroup {
   [key: string]: TokenValue | TokenGroup;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface PrimitiveTokens extends TokenGroup {}
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface SemanticTokens extends TokenGroup {}
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ComponentTokens extends TokenGroup {}
 
 export interface Theme {

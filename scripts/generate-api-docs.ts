@@ -233,7 +233,7 @@ async function scanTools(): Promise<ToolInfo[]> {
           results.push({ name: match[1], description: match[2] });
         }
       }
-    } catch (e) {
+    } catch (_e) {
       // Ignore if directory doesn't exist
     }
   };

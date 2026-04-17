@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, ChevronRight } from 'lucide-react';
 import type { Phase } from '../types';
-import { MOCK_COMMAND } from '../data/mockData';
 import { useOrbPosition } from '../hooks/useOrbPosition';
 
 interface AgentWidgetProps {

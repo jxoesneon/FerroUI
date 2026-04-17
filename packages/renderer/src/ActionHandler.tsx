@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import { ActionSchema } from '@ferroui/schema';
-import type { Action } from '@ferroui/schema';
 
 export interface ActionHandlerProps {
   children: React.ReactNode;

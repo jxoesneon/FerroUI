@@ -11,8 +11,14 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "types": ["node"]
+    "types": ["node"],
+    "composite": true,
+    "declarationMap": true
   },
+  "references": [
+    { "path": "../schema" },
+    { "path": "../registry" }
+  ],
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "src/templates"]
 }

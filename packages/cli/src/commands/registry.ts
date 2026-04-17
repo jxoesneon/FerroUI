@@ -75,7 +75,7 @@ registryCommand
       // For this restoration, we'll trigger the npm script if available
       execSync('npm run docs:generate', { stdio: 'ignore' });
       spinner.succeed(chalk.green(`Documentation exported to ${options.output}`));
-    } catch (error: any) {
+    } catch (_error: any) {
       spinner.fail(chalk.red('Failed to export documentation.'));
       process.exit(1);
     }

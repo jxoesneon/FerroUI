@@ -150,7 +150,7 @@ export type LayoutMetadata = z.infer<typeof LayoutMetadataSchema>;
  * Defined in Section 2.1 of the specification
  */
 export const FerroUILayoutSchema = z.object({
-  schemaVersion: z.string().regex(/^\d+\.\d+$/, "Version must be in 'x.y' format").default('1.1.0'),
+  schemaVersion: z.string().regex(/^\d+\.\d+(\.\d+)?$/, "Version must be in 'x.y' or 'x.y.z' format").default('1.1.0'),
   requestId: z.string().uuid("Request ID must be a valid UUID"),
   locale: z.string().regex(/^[a-z]{2}(-[A-Z][a-z]{3})?(-[A-Z]{2})?$/, "Locale must be a valid BCP 47 tag"),
   layout: FerroUIComponentSchema,

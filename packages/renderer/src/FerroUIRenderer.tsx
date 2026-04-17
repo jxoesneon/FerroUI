@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback, useEffect } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import type { FerroUIComponent } from '@ferroui/schema';
 import { registry } from '@ferroui/registry';
 

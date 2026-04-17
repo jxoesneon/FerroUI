@@ -4,6 +4,7 @@ import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { resourceFromAttributes } from '@opentelemetry/resources';
 import { ATTR_SERVICE_NAME } from '@opentelemetry/semantic-conventions';
 import { FerroUIAttributes } from './types';
+import CryptoJS from 'crypto-js';
 
 const INSTRUMENTATION_NAME = '@ferroui/telemetry';
 const INSTRUMENTATION_VERSION = '0.1.0';
@@ -102,8 +103,15 @@ export function setCommonAttributes(
   }
 ) {
   if (attributes.requestId) span.setAttribute(FerroUIAttributes.REQUEST_ID, attributes.requestId);
-  if (attributes.userId) span.setAttribute(FerroUIAttributes.USER_ID, attributes.userId);
-  if (attributes.promptHash) span.setAttribute(FerroUIAttributes.PROMPT_HASH, attributes.promptHash);
+  
+  // Security: Never send raw userId or prompt to telemetry
+  if (attributes.userId) {
+    span.setAttribute(FerroUIAttributes.USER_ID, `hash:${CryptoJS.SHA256(attributes.userId).toString().slice(0, 16)}`);
+  }
+  if (attributes.promptHash) {
+    span.setAttribute(FerroUIAttributes.PROMPT_HASH, attributes.promptHash);
+  }
+  
   if (attributes.schemaVersion) span.setAttribute(FerroUIAttributes.SCHEMA_VERSION, attributes.schemaVersion);
   if (attributes.securityInjectionDetected !== undefined) {
     span.setAttribute(FerroUIAttributes.SECURITY_INJECTION_DETECTED, attributes.securityInjectionDetected);

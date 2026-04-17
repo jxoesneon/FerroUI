@@ -285,8 +285,14 @@ export function createServer(options: { provider?: LlmProvider; port?: number } 
       return;
     }
 
-    const { context } = req.body as { prompt: string; context: RequestContext };
-    let { prompt } = req.body as { prompt: string; context: RequestContext };
+    const { prompt, context: bodyContext } = req.body as { prompt: string; context: RequestContext };
+    
+    // Security: Override context with verified JWT payload
+    const context: RequestContext = {
+      ...bodyContext,
+      userId: (req as any).user?.sub || (req as any).user?.userId || bodyContext?.userId,
+      permissions: (req as any).user?.permissions || [],
+    };
 
     if (!prompt) {
       return res.status(400).json({ error: 'Missing prompt' });
@@ -300,7 +306,7 @@ export function createServer(options: { provider?: LlmProvider; port?: number } 
     // 1. Trim whitespace
     // 2. Remove potential script tags
     // 3. Prevent prompt injection by neutralizing known delimiters
-    prompt = prompt
+    const sanitizedPrompt = prompt
       .trim()
       .replace(/<script\b[^>]*>([\s\S]*?)<\/script>/gmi, "");
 
@@ -314,9 +320,9 @@ export function createServer(options: { provider?: LlmProvider; port?: number } 
     let pipelineSucceeded = false;
 
     try {
-      console.log(`[Engine] Starting process for prompt: "${prompt}" (RequestID: ${context.requestId})`);
+      console.log(`[Engine] Starting process for prompt: "${sanitizedPrompt}" (RequestID: ${context.requestId})`);
       
-      for await (const chunk of engine.process(prompt, context)) {
+      for await (const chunk of engine.process(sanitizedPrompt, context)) {
         res.write(`data: ${JSON.stringify(chunk)}\n\n`);
         if ((chunk as EngineChunk).type === 'complete') {
           pipelineSucceeded = true;

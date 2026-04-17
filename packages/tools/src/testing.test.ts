@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
 import { z } from 'zod';
-import { registerTool } from './registry';
 import { executeTool, createMockContext } from './testing';
 import { ToolDefinition } from './types';
 

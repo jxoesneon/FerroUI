@@ -92,11 +92,12 @@ export async function* runDualPhasePipeline(
   const pipelineStart = Date.now();
   yield { type: 'phase', phase: 1, content: 'Starting Phase 1: Data Gathering' };
 
-  // Security: Check for prompt injection
+  // Security: Check for prompt injection and block immediately
   const isSuspicious = detectPromptInjection(prompt);
   if (isSuspicious) {
-    console.warn(`[Security] Potential prompt injection detected in request ${context.requestId}`);
-    // We don't block yet, but we will bypass cache and use extra caution
+    console.warn(`[Security] Prompt injection detected and blocked in request ${context.requestId}`);
+    yield { type: 'error', error: { code: 'PROMPT_INJECTION', message: 'Potential prompt injection detected. Request blocked.', retryable: false } };
+    return;
   }
 
   auditLogger.log({
@@ -301,6 +302,8 @@ You may ONLY use components listed above. If a component is not listed, do NOT u
 - Root component must be "Dashboard".
 - Root component props: { "heading": "..." }
 - Use the data provided above.
+- If a tool output contains an "error" key, do NOT invent data; instead, render a StatusBanner with the error message in that section of the layout.
+- If data is marked as [TRUNCATED], use the available portion or show a "Large Dataset" indicator.
 - Do not invent data that was not returned by tool outputs.
 - Ensure all components have "aria" props for accessibility.
 - schemaVersion must be "1.1.0".

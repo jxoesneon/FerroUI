@@ -8,7 +8,7 @@ import { KPIBoard } from './components/KPIBoard';
 import { DataTable } from './components/DataTable';
 import { ChartPanel } from './components/ChartPanel';
 import { Skeleton } from './components/Skeleton';
-import type { LayoutRow, ComponentType } from './types';
+import type { ComponentType } from './types';
 
 // App.css intentionally excluded — theme is defined inline in FerroUI
 
@@ -116,7 +116,7 @@ function App() {
           {/* Fluid Grid container replaces rigid rows */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 w-full">
             <AnimatePresence>
-              {(phase !== 'idle' && phase !== 'expand') && renderedComponents.map((widget, i) => {
+              {(phase !== 'idle' && phase !== 'expand') && renderedComponents.map((widget, _i) => {
                 const isWidgetLoading = widget.status === 'loading';
 
                 return (

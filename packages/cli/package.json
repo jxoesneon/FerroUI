@@ -26,10 +26,13 @@
     "commander": "^14.0.3",
     "execa": "^9.6.1",
     "fs-extra": "^11.3.4",
+    "globby": "^16.2.0",
     "handlebars": "^4.7.9",
     "ora": "^9.3.0",
     "prompts": "^2.4.2",
-    "zod": "^4.3.6"
+    "zod": "^4.3.6",
+    "@ferroui/schema": "workspace:*",
+    "@ferroui/registry": "workspace:*"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",

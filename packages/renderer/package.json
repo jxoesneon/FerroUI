@@ -10,7 +10,9 @@
   },
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch"
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "test:a11y": "vitest run"
   },
   "keywords": [
     "ferroui",

@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef } from 'react';
+import { validateLayout } from '@ferroui/schema';
 import type { FerroUIComponent } from '@ferroui/schema';
 
 export interface FerroUIStreamState {
@@ -133,9 +134,15 @@ export function useFerroUIStream(options: UseFerroUIStreamOptions = {}) {
                   break;
 
                 case 'layout_chunk':
-                  // Partial layout updates during streaming
+                  // Strict client-side validation
                   if (chunk.layout) {
-                    setState(prev => ({ ...prev, layout: chunk.layout }));
+                    const validationResult = validateLayout(chunk.layout);
+                    if (validationResult.valid) {
+                      setState(prev => ({ ...prev, layout: validationResult.data as unknown as FerroUIComponent }));
+                    } else {
+                      console.error('[FerroUI] Client validation failed:', validationResult.errors);
+                      setState(prev => ({ ...prev, error: 'Received invalid layout structure from engine' }));
+                    }
                   }
                   break;
 

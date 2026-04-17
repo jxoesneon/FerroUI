@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { SemanticCache } from './semantic-cache.js';
 import { SQLiteCacheBackend, RedisCacheBackend, InMemoryCacheBackend } from './cache-backend.js';
-import Database from 'better-sqlite3';
 import { Redis } from 'ioredis';
 import { FerroUILayout } from '@ferroui/schema';
 
