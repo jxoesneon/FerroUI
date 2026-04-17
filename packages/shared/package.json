@@ -25,7 +25,7 @@
   ],
   "devDependencies": {
     "@ferroui/config": "workspace:*",
-    "tsup": "latest",
+    "tsup": "^8.5.1",
     "typescript": "latest"
   }
 }
