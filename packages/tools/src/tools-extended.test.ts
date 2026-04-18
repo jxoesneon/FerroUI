@@ -219,7 +219,7 @@ describe('executeTool', () => {
       timeout: 20,
       parameters: z.object({}),
       returns: z.object({}),
-      execute: () => new Promise(r => setTimeout(r, 500)),
+      execute: () => new Promise<Record<string, never>>(resolve => setTimeout(() => resolve({}), 500)),
     });
     await expect(executeTool('slow_tool', {}, makeContext())).rejects.toMatchObject({ code: 'TIMEOUT' });
   });
