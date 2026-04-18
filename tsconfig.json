@@ -10,7 +10,6 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "ignoreDeprecations": "6.0",
     "jsx": "react-jsx",
     "paths": {
       "@ferroui/engine": ["./packages/engine/dist"],
@@ -30,7 +29,8 @@
     { "path": "packages/tools" },
     { "path": "packages/i18n" },
     { "path": "packages/renderer" },
-    { "path": "packages/engine" }
+    { "path": "packages/engine" },
+    { "path": "packages/mcp-server" }
   ],
   "exclude": ["node_modules", "dist"]
 }

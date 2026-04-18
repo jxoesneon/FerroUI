@@ -1,4 +1,4 @@
-# Component Development Guidelines
+﻿# Component Development Guidelines
 
 **Version:** 1.0  
 **Last Updated:** 2025-04-10  
@@ -259,7 +259,7 @@ Components are registered in the Component Registry using the
 
 ```typescript
 // packages/registry/src/index.ts
-import { registerComponent } from '@ferroui/core';
+import { registerComponent } from '@ferroui/registry';
 import { Text, TextSchema } from './atoms/Text';
 import { StatBadge, StatBadgeSchema } from './molecules/StatBadge';
 import { KPIBoard, KPIBoardSchema } from './organisms/KPIBoard';
@@ -559,3 +559,4 @@ export const Body: Story = {
 | Version | Date       | Author        | Changes         |
 | ------- | ---------- | ------------- | --------------- |
 | 1.0     | 2025-04-10 | Frontend Team | Initial release |
+

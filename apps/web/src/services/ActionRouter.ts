@@ -58,8 +58,18 @@ export class ActionRouter {
         await this.handleToolCall(payload.tool, payload.args);
         break;
 
-      default:
-        console.warn(`ActionRouter: Unhandled action type: ${(action as any).type}`);
+      case 'STATE_UPDATE':
+        // State updates are server-driven; the renderer re-fetches after any action.
+        this.context.refresh();
+        break;
+
+      default: {
+        // Exhaustiveness guard: TypeScript will error here if a new Action variant is
+        // added to the schema but not handled above.
+        const _exhaustive: never = action;
+        console.warn(`ActionRouter: Unhandled action type`, _exhaustive);
+        break;
+      }
     }
   }
 
@@ -67,8 +77,6 @@ export class ActionRouter {
    * Handles TOOL_CALL actions by executing the specified tool.
    */
   private async handleToolCall(tool: string, args: Record<string, unknown>): Promise<void> {
-    console.log(`Executing tool: ${tool}`, args);
-    
     try {
       const response = await fetch('/api/tools/call', {
         method: 'POST',
@@ -82,10 +90,8 @@ export class ActionRouter {
         throw new Error(`Tool call failed: ${response.statusText}`);
       }
 
-      const result = await response.json();
-      console.log(`Tool call result:`, result);
-      
-      // Usually, tool calls trigger a refresh to reflect state changes
+      await response.json();
+      // Tool calls trigger a refresh to reflect state changes
       this.context?.refresh();
     } catch (error) {
       console.error('Error executing tool call:', error);

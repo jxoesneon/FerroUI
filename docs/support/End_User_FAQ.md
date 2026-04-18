@@ -1,4 +1,4 @@
-# End User FAQ
+﻿# End User FAQ
 
 **Version:** 1.0  
 **Last Updated:** 2025-04-10  
@@ -92,7 +92,7 @@ This creates all the boilerplate files with TypeScript types, Zod schema, and te
 **A:** Yes! Wrap your existing components with a Zod schema and register them:
 
 ```typescript
-import { registerComponent } from '@ferroui/core';
+import { registerComponent } from '@ferroui/registry';
 import { MyExistingComponent } from './MyExistingComponent';
 import { MyComponentSchema } from './schema';
 
@@ -302,3 +302,4 @@ See [Security Threat Model](../security/Security_Threat_Model.md).
 | Version | Date | Author | Changes |
 |---------|------|--------|---------|
 | 1.0 | 2025-04-10 | Customer Success | Initial release |
+

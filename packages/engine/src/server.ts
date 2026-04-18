@@ -2,16 +2,71 @@ import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { rateLimit } from 'express-rate-limit';
+import { RedisStore } from 'rate-limit-redis';
+import type { RedisReply } from 'rate-limit-redis';
+import Redis from 'ioredis';
 import { FerroUIEngine } from './engine';
 import { RequestContext, EngineChunk } from './types';
 import { AnthropicProvider } from './providers/anthropic';
 import { OpenAIProvider } from './providers/openai';
 import { LlmProvider } from './providers/base';
 import { auditLogger, AuditEventType } from './audit/audit-logger';
-import { getPrometheusMetrics, recordRequestCompletion } from '@ferroui/telemetry';
-import { sessionStore } from './session/session-store';
+import { getPrometheusMetrics, recordRequestCompletion, initializeTelemetry } from '@ferroui/telemetry';
+import { sessionStore, setRedisClient } from './session/session-store';
 import { createAuthMiddleware } from './auth/jwt';
+import type { JwtPayload } from './auth/jwt';
 import { semanticCache } from './cache/semantic-cache';
+import { RedisCacheBackend } from './cache/cache-backend';
+import { ProviderRouter } from './providers/router';
+import { tenantQuotaMiddleware } from './middleware/tenant-quota';
+
+/** Express Request augmented with the verified JWT payload (set by createAuthMiddleware). */
+type AuthenticatedRequest = express.Request & { auth?: JwtPayload };
+
+/** Module-level Redis client reference, set by bootstrapRedis() */
+let _activeRedisClient: Redis | undefined;
+
+/**
+ * Bootstrap Redis-backed stores if REDIS_URL is configured.
+ * Must be called before `createServer` to ensure the module-level
+ * `sessionStore` singleton is Redis-backed in multi-instance deployments.
+ */
+async function bootstrapRedis(): Promise<Redis | undefined> {
+  const redisUrl = process.env.REDIS_URL;
+  if (!redisUrl) return undefined;
+
+  const client = new Redis(redisUrl, {
+    maxRetriesPerRequest: 3,
+    enableOfflineQueue: false,
+    lazyConnect: true,
+  });
+
+  try {
+    await client.connect();
+    await client.ping();
+    console.log('[FerroUI] Redis connected — using Redis-backed session store, semantic cache, and rate limiter');
+
+    // Wire session store — bridge ioredis API to RedisSessionClientLike interface
+    setRedisClient({
+      get: (key) => client.get(key),
+      set: (key, value, options) =>
+        options?.PX
+          ? client.set(key, value, 'PX', options.PX)
+          : client.set(key, value),
+      del: (key) => client.del(key as string),
+    });
+
+    // Wire semantic cache backend
+    semanticCache.setBackend(new RedisCacheBackend(client));
+
+    _activeRedisClient = client;
+    return client;
+  } catch (err) {
+    console.warn('[FerroUI] Redis connection failed, falling back to in-memory stores:', err instanceof Error ? err.message : err);
+    client.disconnect();
+    return undefined;
+  }
+}
 
 /**
  * FerroUI Engine Server
@@ -67,7 +122,36 @@ function securityHeaders(_req: Request, res: Response, next: NextFunction): void
   next();
 }
 
+/**
+ * Production-mode invariants (F-026 hardening).
+ * Throws early if any unsafe configuration would ship to prod.
+ * Exported for test coverage of the guard logic itself.
+ */
+export function assertProductionInvariants(env: NodeJS.ProcessEnv = process.env): void {
+  if (env.NODE_ENV !== 'production') return;
+
+  const violations: string[] = [];
+
+  // Dev-only auth bypass must never ship. Used by tests/integration.test.ts
+  // but should be impossible to leak into a production container.
+  if (env.SKIP_AUTH === 'true' || env.SKIP_AUTH === '1') {
+    violations.push('SKIP_AUTH is enabled — refusing to start in production.');
+  }
+
+  if (!env.JWT_SECRET || env.JWT_SECRET.length < 32) {
+    violations.push('JWT_SECRET must be set and ≥32 characters in production.');
+  }
+
+  if (violations.length > 0) {
+    throw new Error(
+      `[FerroUI] Production startup aborted:\n  - ${violations.join('\n  - ')}`
+    );
+  }
+}
+
 export function createServer(options: { provider?: LlmProvider; port?: number } = {}): { app: express.Express; server: ReturnType<express.Express['listen']> } {
+  assertProductionInvariants();
+
   const app = express();
   const port = options.port || process.env.PORT || 4000;
   const provider = options.provider || new AnthropicProvider(); // Default to Anthropic
@@ -91,15 +175,28 @@ export function createServer(options: { provider?: LlmProvider; port?: number } 
     next();
   });
 
-  // Apply rate limiting to all requests
+  // Apply rate limiting to all requests.
+  // When Redis is available (multi-instance), use RedisStore so the counter is
+  // shared across all engine pods; otherwise fall back to in-memory.
+  const rateLimiterStore = _activeRedisClient
+    ? new RedisStore({
+        sendCommand: (...args: string[]) => (_activeRedisClient as Redis).call(args[0], ...args.slice(1)) as Promise<RedisReply>,
+        prefix: 'ferroui:rl:',
+      })
+    : undefined;
+
   const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    limit: 100, // Limit each IP to 100 requests per `window`
+    windowMs: 15 * 60 * 1000,
+    limit: 100,
     standardHeaders: 'draft-7',
     legacyHeaders: false,
-    message: { error: 'Too many requests from this IP, please try again after 15 minutes' }
+    store: rateLimiterStore,
+    message: { error: 'Too many requests from this IP, please try again after 15 minutes' },
   });
   app.use(limiter);
+
+  // Per-tenant quota enforcement on /api/* routes
+  app.use(tenantQuotaMiddleware);
 
   // JWT auth — skip health/admin probes, enforce on API routes
   app.use(createAuthMiddleware({
@@ -154,6 +251,43 @@ export function createServer(options: { provider?: LlmProvider; port?: number } 
     res.status(200).json({ status: 'reset', timestamp: new Date().toISOString() });
   });
 
+  /**
+   * GDPR: User data deletion endpoint — D2
+   *
+   * Deletes all session data for the specified userId.
+   * Requires: authenticated caller. In production, restrict to matching
+   * userId or admin role via JWT middleware.
+   */
+  app.delete('/api/users/:userId/data', async (req: Request, res: Response) => {
+    const { userId } = req.params;
+    if (!userId || typeof userId !== 'string' || userId.trim() === '') {
+      res.status(400).json({ error: 'Invalid userId' });
+      return;
+    }
+
+    try {
+      await sessionStore.delete(userId);
+      await semanticCache.invalidatePattern(`user:${userId}:*`);
+
+      auditLogger.log({
+        type: AuditEventType.REQUEST_COMPLETE,
+        requestId: `gdpr-deletion-${userId}`,
+        userId,
+        success: true,
+        durationMs: 0,
+      });
+
+      res.status(200).json({
+        deleted: true,
+        userId,
+        message: 'User data deleted from session store and semantic cache.',
+      });
+    } catch (err) {
+      console.error('[GDPR] Deletion failed for userId', userId, err);
+      res.status(500).json({ error: 'Data deletion failed', detail: err instanceof Error ? err.message : String(err) });
+    }
+  });
+
   app.get('/admin/logs', (req: Request, res: Response) => {
     const lines = parseInt((req.query.lines as string) ?? '50', 10);
     const events = auditLogger.getEvents(lines);
@@ -205,6 +339,18 @@ export function createServer(options: { provider?: LlmProvider; port?: number } 
       threshold: CIRCUIT_BREAKER_THRESHOLD,
       lastFailure,
     });
+  });
+
+  /**
+   * Provider health endpoint — shows circuit breaker state per LLM provider
+   * when a ProviderRouter is in use.
+   */
+  app.get('/health/providers', (_req, res) => {
+    if (provider instanceof ProviderRouter) {
+      res.status(200).json({ providers: provider.getHealthSnapshot() });
+    } else {
+      res.status(200).json({ providers: { [provider.id]: { failures: 0, circuitOpen: false, providerId: provider.id } } });
+    }
   });
 
   /**
@@ -286,12 +432,13 @@ export function createServer(options: { provider?: LlmProvider; port?: number } 
     }
 
     const { prompt, context: bodyContext } = req.body as { prompt: string; context: RequestContext };
-    
-    // Security: Override context with verified JWT payload
+
+    // Security: Override context with verified JWT payload set by createAuthMiddleware
+    const auth = (req as AuthenticatedRequest).auth;
     const context: RequestContext = {
       ...bodyContext,
-      userId: (req as any).user?.sub || (req as any).user?.userId || bodyContext?.userId,
-      permissions: (req as any).user?.permissions || [],
+      userId: auth?.sub ?? auth?.userId ?? bodyContext?.userId,
+      permissions: auth?.permissions ?? [],
     };
 
     if (!prompt) {
@@ -381,5 +528,8 @@ if (isDirectlyExecuted) {
     provider = new AnthropicProvider();
   }
 
-  createServer({ provider });
+  initializeTelemetry(process.env.OTEL_SERVICE_NAME ?? 'ferroui-engine');
+  bootstrapRedis().then(() => {
+    createServer({ provider });
+  });
 }

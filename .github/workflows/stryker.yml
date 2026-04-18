@@ -1,0 +1,107 @@
+name: Mutation Testing (Stryker)
+
+on:
+  schedule:
+    # Weekly on Sundays at 3 AM UTC (off-peak)
+    - cron: '0 3 * * 0'
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Package to mutate (engine|schema)'
+        required: true
+        default: 'engine'
+        type: choice
+        options:
+          - engine
+          - schema
+
+concurrency:
+  group: stryker-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  mutation-test:
+    name: Stryker Mutation Testing
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # For dashboard upload
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: '10.33.0'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '25'
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build packages
+        run: pnpm -r --if-present run build
+
+      - name: Run Stryker mutation testing
+        run: |
+          cd packages/${{ github.event.inputs.target || 'engine' }}
+          pnpm exec stryker run ../../stryker.conf.mjs
+        env:
+          STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
+
+      - name: Upload mutation report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stryker-report
+          path: |
+            packages/*/reports/mutation/*.html
+            packages/*/reports/mutation/*.json
+          retention-days: 30
+
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const reportPath = `packages/${process.env.TARGET || 'engine'}/reports/mutation/mutation.json`;
+            
+            let summary = '## 🧬 Stryker Mutation Testing Results\n\n';
+            
+            try {
+              const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+              const score = report.metrics.mutationScore;
+              const killed = report.metrics.killed;
+              const survived = report.metrics.survived;
+              const total = killed + survived + report.metrics.timeout + report.metrics.noCoverage + report.metrics.ignored;
+              
+              summary += `**Package:** ${process.env.TARGET || 'engine'}\n`;
+              summary += `**Mutation Score:** ${score.toFixed(2)}%\n\n`;
+              summary += `| Metric | Count |\n|--------|-------|\n`;
+              summary += `| Killed | ${killed} |\n`;
+              summary += `| Survived | ${survived} |\n`;
+              summary += `| Total | ${total} |\n\n`;
+              
+              if (score >= 85) {
+                summary += '✅ **Excellent!** Score meets schema target (85%)\n';
+              } else if (score >= 70) {
+                summary += '⚠️ **Good** Score meets engine minimum (70%)\n';
+              } else {
+                summary += '❌ **Below threshold** Consider adding more tests\n';
+              }
+            } catch (e) {
+              summary += '❌ Could not parse mutation report\n';
+            }
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: summary
+            });
+        env:
+          TARGET: ${{ github.event.inputs.target || 'engine' }}

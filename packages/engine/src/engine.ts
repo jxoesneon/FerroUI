@@ -4,6 +4,7 @@ import { runDualPhasePipeline } from './pipeline/dual-phase';
 import { tracer } from '@ferroui/telemetry';
 import { registerTool } from '@ferroui/tools';
 import { z } from 'zod';
+import CryptoJS from 'crypto-js';
 import { OpenAIProvider } from './providers/openai';
 import { AnthropicProvider } from './providers/anthropic';
 import { GoogleProvider } from './providers/google';

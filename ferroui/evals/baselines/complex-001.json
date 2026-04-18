@@ -1,0 +1,24 @@
+{
+  "id": "complex-001",
+  "category": "complex",
+  "name": "Multi-section Sales Dashboard",
+  "prompt": "Create a sales dashboard with KPIs at the top, a chart in the middle, and a data table at the bottom",
+  "capturedAt": "2025-01-01T00:00:00.000Z",
+  "modelVersion": "claude-3-5-sonnet-20241022",
+  "metrics": {
+    "schemaValid": true,
+    "repairAttempts": 0,
+    "toolsInvoked": ["getRevenue", "getOrders", "getSalesData"],
+    "componentCount": 5,
+    "latencyMs": 2400
+  },
+  "assertions": {
+    "minimumComponentCount": 4,
+    "requiredComponents": ["organism", "molecule"],
+    "mustContainSections": ["kpi", "chart", "table"],
+    "mustHaveAria": true,
+    "mustNotInventData": true,
+    "schemaVersion": "1.1.0",
+    "maxLatencyMs": 5000
+  }
+}

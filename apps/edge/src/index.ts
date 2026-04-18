@@ -4,6 +4,8 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 
 export type Env = {
   GEMINI_API_KEY: string;
+  FERROUI_ENGINE_URL?: string;
+  FERROUI_DEBUG?: string;
 };
 
 const app = new Hono<{ Bindings: Env }>();
@@ -11,17 +13,24 @@ const app = new Hono<{ Bindings: Env }>();
 const DEBUG_FLAGS = {
   API_KEY: true,
   MODEL_INIT: true,
-  REQUEST_PROCESSING: true
-};
+  REQUEST_PROCESSING: true,
+} as const;
 
-const logger = (flag: keyof typeof DEBUG_FLAGS, message: string, data?: any) => {
-  if (DEBUG_FLAGS[flag]) {
-    console.log(`[DEBUG:${flag}] ${message}`, data || '');
-  }
-};
+type DebugFlag = keyof typeof DEBUG_FLAGS;
 
-async function synthesizeLayout(prompt: string, apiKey: string) {
-  logger('API_KEY', 'Validating API Key length', apiKey ? apiKey.length : 0);
+const makeLogger = (debugEnabled: boolean) =>
+  (flag: DebugFlag, message: string, data?: unknown) => {
+    if (debugEnabled) {
+      console.log(`[DEBUG:${flag}] ${message}`, data ?? '');
+    }
+  };
+
+async function synthesizeLayout(
+  prompt: string,
+  apiKey: string,
+  logger: ReturnType<typeof makeLogger>,
+) {
+  logger('API_KEY', 'Validating API Key presence', apiKey ? 'set' : 'missing');
   
   const genAI = new GoogleGenerativeAI(apiKey);
   logger('MODEL_INIT', 'Initializing model');
@@ -49,6 +58,7 @@ Dynamically select components and generate relevant data based on the user promp
 app.post('/api/layout', async (c) => {
   const { requestId, prompt } = await c.req.json();
   const apiKey = c.env.GEMINI_API_KEY;
+  const logger = makeLogger(c.env.FERROUI_DEBUG === 'true');
 
   if (!apiKey) {
     logger('API_KEY', 'Error: API Key missing');
@@ -56,7 +66,7 @@ app.post('/api/layout', async (c) => {
   }
 
   try {
-    const fullLayout = await synthesizeLayout(prompt || 'Show standard diagnostic dashboard', apiKey);
+    const fullLayout = await synthesizeLayout(prompt || 'Show standard diagnostic dashboard', apiKey, logger);
     fullLayout.requestId = requestId || crypto.randomUUID();
     const jsonString = JSON.stringify(fullLayout);
     
@@ -72,13 +82,12 @@ app.post('/api/layout', async (c) => {
       await stream.writeSSE({ data: chunk3 });
       await stream.writeSSE({ data: '[DONE]' });
     });
-  } catch (err: any) {
-    logger('REQUEST_PROCESSING', 'Unhandled route exception', err.message);
-    return c.json({ error: 'Synthesis failed', details: err.message }, 500);
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    logger('REQUEST_PROCESSING', 'Unhandled route exception', message);
+    return c.json({ error: 'Synthesis failed', details: message }, 500);
   }
 });
-
-
 
 app.get('/api/stream', (c) => {
   return streamSSE(c, async (stream) => {
@@ -96,16 +105,25 @@ app.get('/api/stream', (c) => {
 
 app.post('/api/tools/call', async (c) => {
   try {
-    const body = await c.req.json();
+    const body = await c.req.json() as { tool: string; args: Record<string, unknown> };
     const { tool, args } = body;
-    
-    return c.json({
-      success: true,
-      message: `Executed ${tool} successfully`,
-      result: { processedArgs: args }
+    const engineUrl = c.env.FERROUI_ENGINE_URL ?? 'http://localhost:4000';
+
+    const response = await fetch(`${engineUrl}/api/tools/call`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tool, args }),
     });
-  } catch (err: any) {
-    return c.json({ success: false, error: err.message }, 400);
+
+    if (!response.ok) {
+      return c.json({ success: false, error: `Engine responded ${response.status}` }, 502);
+    }
+
+    const result = await response.json();
+    return c.json(result);
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    return c.json({ success: false, error: message }, 400);
   }
 });
 

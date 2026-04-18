@@ -1,0 +1,97 @@
+name: Load Tests (k6)
+
+on:
+  schedule:
+    # Weekly on Sundays at 2 AM UTC
+    - cron: '0 2 * * 0'
+  workflow_dispatch:
+    inputs:
+      test_type:
+        description: 'Test type to run'
+        required: true
+        default: 'smoke'
+        type: choice
+        options:
+          - smoke
+          - soak
+
+concurrency:
+  group: load-test
+  cancel-in-progress: false
+
+jobs:
+  load-test:
+    name: k6 Load Test
+    runs-on: ubuntu-latest
+    env:
+      JWT_SECRET: test-secret-min32chars-padding-here!!
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: '10.33.0'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '25'
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build engine
+        run: pnpm -F @ferroui/engine run build
+
+      - name: Start engine server
+        run: |
+          pnpm -F @ferroui/engine start &
+          sleep 5
+          # Wait for server to be ready
+          until curl -s http://localhost:4000/healthz > /dev/null; do
+            echo "Waiting for server..."
+            sleep 2
+          done
+          echo "Server is ready"
+
+      - name: Setup k6
+        uses: grafana/setup-k6-action@v1
+
+      - name: Generate JWT token for load tests
+        run: |
+          npm install -g jsonwebtoken
+          echo "JWT_TOKEN=$(node -e "console.log(require('jsonwebtoken').sign({sub:'load-test',userId:'load-test',permissions:['read']},'$JWT_SECRET',{expiresIn:'1h'}))")" >> $GITHUB_ENV
+
+      - name: Run smoke test
+        if: github.event.inputs.test_type == 'smoke' || github.event.inputs.test_type == null
+        run: |
+          k6 run --out json=smoke-results.json tests/load/smoke.js
+        env:
+          BASE_URL: http://localhost:4000
+          JWT_TOKEN: ${{ env.JWT_TOKEN }}
+
+      - name: Run soak test
+        if: github.event.inputs.test_type == 'soak'
+        run: |
+          k6 run --out json=soak-results.json tests/load/soak.js
+        env:
+          BASE_URL: http://localhost:4000
+          JWT_TOKEN: ${{ env.JWT_TOKEN }}
+
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: load-test-results
+          path: |
+            smoke-results.json
+            soak-results.json
+            load-results.json
+          retention-days: 30
+
+      - name: Compare with baseline
+        run: |
+          echo "## Load Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f load-results.json ]; then
+            cat load-results.json | jq -r 'to_entries | map("| \(.key) | \(.value) |") | .[]' >> $GITHUB_STEP_SUMMARY
+          fi

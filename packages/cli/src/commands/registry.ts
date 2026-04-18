@@ -55,7 +55,7 @@ registryCommand
       }
 
       // Start the inspector (long-running)
-      const { execaNode } = await import('execa' as any);
+      const { execaNode } = await import('execa');
       await execaNode(inspectorEntry, ['--port', String(port)], { stdio: 'inherit' });
     } catch (error: any) {
       spinner.fail(chalk.red('Failed to start registry inspector.'));

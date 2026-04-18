@@ -1,0 +1,96 @@
+version: "3.9"
+
+services:
+  # ─── FerroUI Engine ──────────────────────────────────────────────────────────
+  engine:
+    build:
+      context: .
+      dockerfile: packages/engine/Dockerfile
+    ports:
+      - "4000:4000"
+    environment:
+      NODE_ENV: development
+      PORT: 4000
+      REDIS_URL: redis://redis:6379
+      SESSION_TTL_SECONDS: "86400"
+      # LLM provider (set one of the API keys below)
+      LLM_PROVIDER: "${LLM_PROVIDER:-anthropic}"
+      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:-}"
+      OPENAI_API_KEY: "${OPENAI_API_KEY:-}"
+      GOOGLE_API_KEY: "${GOOGLE_API_KEY:-}"
+      # JWT
+      JWT_SECRET: "${JWT_SECRET:-dev-secret-change-in-production}"
+      # Cache HMAC
+      CACHE_SIGNING_SECRET: "${CACHE_SIGNING_SECRET:-ferroui-cache-hmac-secret-CHANGE-IN-PRODUCTION}"
+      # Telemetry
+      OTEL_SERVICE_NAME: ferroui-engine
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4318"
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:4000/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    restart: unless-stopped
+
+  # ─── Web App ─────────────────────────────────────────────────────────────────
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      VITE_ENGINE_URL: "http://localhost:4000"
+    depends_on:
+      engine:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # ─── Redis ───────────────────────────────────────────────────────────────────
+  redis:
+    image: redis:7.4-alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  # ─── Redis Commander (dev UI) ─────────────────────────────────────────────
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    ports:
+      - "8081:8081"
+    environment:
+      REDIS_HOSTS: local:redis:6379
+    depends_on:
+      - redis
+    profiles:
+      - debug
+    restart: unless-stopped
+
+  # ─── OpenTelemetry Collector ──────────────────────────────────────────────
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.116.0
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./infra/otel-collector-config.yaml:/etc/otel-collector-config.yaml:ro
+    ports:
+      - "4317:4317"   # OTLP gRPC
+      - "4318:4318"   # OTLP HTTP
+      - "8889:8889"   # Prometheus metrics scrape
+    profiles:
+      - observability
+    restart: unless-stopped
+
+volumes:
+  redis-data:

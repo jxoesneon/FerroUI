@@ -290,8 +290,26 @@ Key panels:
 
 ---
 
-## 10. Document History
+## 10. Audit Log Configuration
+
+Environment variables for the durable audit logger (SOC 2 CC7.2 compliant):
+
+| Variable | Values | Default | Description |
+|----------|--------|---------|-------------|
+| `AUDIT_LOG_OUTPUT` | `console`, `memory`, `file`, `sqlite` | `console` (dev), `file` (prod) | Backend for audit events |
+| `AUDIT_LOG_FILE` | Path string | `/var/log/ferroui/audit.log` (prod) | File path when output=file |
+| `AUDIT_SQLITE_PATH` | Path string | — | SQLite DB path when output=sqlite |
+| `AUDIT_HMAC_SECRET` | Secret string | Auto-generated (ephemeral) | HMAC key for chain signing |
+
+**HMAC Chain Verification:** When using SQLite backend, call `auditLogger.verifyChain()` to detect tampering. Returns `{ valid: boolean, tamperedAt?: number, reason?: string }`.
+
+**File Rotation:** File backend auto-rotates after 10,000 entries. Rotated files are timestamped.
+
+---
+
+## 11. Document History
 
 | Version | Date       | Author        | Changes         |
 | ------- | ---------- | ------------- | --------------- |
 | 1.0     | 2025-04-10 | Platform Team | Initial release |
+| 1.1     | 2026-04-17 | Security Team | Added audit log env vars (A.6) |

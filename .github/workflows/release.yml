@@ -1,0 +1,84 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+env:
+  PNPM_VERSION: "10.33.0"
+  NODE_VERSION: "25"
+
+jobs:
+  release:
+    name: Changesets Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      id-token: write   # Required for npm provenance
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build all packages
+        run: pnpm -r --if-present run build
+
+      # Generate SBOM for supply chain transparency (A.9)
+      - name: Generate SBOM
+        run: |
+          npm install -g @cyclonedx/cyclonedx-npm
+          cyclonedx-npm --output-file=sbom.json --output-format=json
+
+      - name: Create Release PR or Publish
+        uses: changesets/action@v1
+        with:
+          publish: pnpm changeset publish --provenance
+          title: "chore: release packages"
+          commit: "chore: release packages"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: "true"
+
+      - name: Create GitHub Release tags
+        if: steps.changesets.outputs.published == 'true'
+        run: |
+          echo "Published packages: ${{ steps.changesets.outputs.publishedPackages }}"
+
+      # Attest SBOM for supply chain verification (A.9)
+      - name: Attest SBOM
+        if: steps.changesets.outputs.published == 'true'
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: sbom.json
+          subject-name: ferroui-sbom
+          show-summary: true
+
+      # Attach SBOM to GitHub Release (A.9)
+      - name: Upload SBOM to Release
+        if: steps.changesets.outputs.published == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: sbom.json
+          tag_name: ${{ github.ref_name }}
+          token: ${{ secrets.GITHUB_TOKEN }}

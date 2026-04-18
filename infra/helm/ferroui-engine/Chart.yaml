@@ -1,0 +1,26 @@
+apiVersion: v2
+name: ferroui-engine
+description: A Helm chart for FerroUI Engine - AI-powered server-driven UI meta-framework
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+keywords:
+  - ferroui
+  - ai
+  - sdui
+  - llm
+home: https://ferroui.dev
+sources:
+  - https://github.com/ferroui/ferroui
+maintainers:
+  - name: FerroUI Team
+    email: team@ferroui.dev
+dependencies:
+  - name: redis
+    version: 18.x.x
+    repository: https://charts.bitnami.com/bitnami
+    condition: redis.enabled
+  - name: grafana
+    version: 7.x.x
+    repository: https://grafana.github.io/helm-charts
+    condition: grafana.enabled

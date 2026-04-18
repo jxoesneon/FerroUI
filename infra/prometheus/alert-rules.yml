@@ -1,0 +1,166 @@
+# Prometheus Alert Rules for FerroUI (C.4)
+# 
+# Apply with: kubectl apply -f infra/prometheus/alert-rules.yml
+# Or via PrometheusRule CRD for Prometheus Operator
+
+groups:
+  - name: ferroui-alerts
+    interval: 30s
+    rules:
+      # High Error Rate
+      - alert: FerroUIHighErrorRate
+        expr: |
+          (
+            sum(rate(ferroui_requests_errors_total[5m]))
+            /
+            sum(rate(ferroui_requests_total[5m]))
+          ) > 0.05
+        for: 5m
+        labels:
+          severity: critical
+          team: platform
+        annotations:
+          summary: "High error rate detected in FerroUI"
+          description: "Error rate is {{ $value | humanizePercentage }} over the last 5 minutes"
+          runbook_url: "https://docs.ferroui.dev/runbooks/high-error-rate"
+
+      # High Latency (P95)
+      - alert: FerroUIHighLatency
+        expr: |
+          histogram_quantile(0.95,
+            sum(rate(ferroui_request_duration_seconds_bucket[5m])) by (le)
+          ) > 5
+        for: 5m
+        labels:
+          severity: warning
+          team: platform
+        annotations:
+          summary: "High latency detected (p95 > 5s)"
+          description: "95th percentile latency is {{ $value }}s"
+          runbook_url: "https://docs.ferroui.dev/runbooks/high-latency"
+
+      # LLM Provider Down
+      - alert: FerroUILLMProviderDown
+        expr: |
+          sum(rate(ferroui_llm_calls_total[2m])) == 0
+        for: 2m
+        labels:
+          severity: critical
+          team: ai
+        annotations:
+          summary: "LLM provider appears down"
+          description: "No LLM calls recorded in the last 2 minutes"
+
+      # High Hallucination Rate
+      - alert: FerroUIHighHallucinationRate
+        expr: |
+          (
+            sum(rate(ferroui_validation_hallucinations_total[5m]))
+            /
+            sum(rate(ferroui_requests_total[5m]))
+          ) > 0.02
+        for: 10m
+        labels:
+          severity: warning
+          team: ai
+        annotations:
+          summary: "High hallucination rate detected"
+          description: "Hallucination rate is {{ $value | humanizePercentage }}"
+
+      # Circuit Breaker Open
+      - alert: FerroUICircuitBreakerOpen
+        expr: ferroui_circuit_state == 1
+        for: 1m
+        labels:
+          severity: warning
+          team: platform
+        annotations:
+          summary: "Circuit breaker is open"
+          description: "Service circuit breaker has opened for {{ $labels.service }}"
+
+      # Cache Hit Rate Low
+      - alert: FerroUILowCacheHitRate
+        expr: |
+          (
+            sum(rate(ferroui_cache_hits_total[5m]))
+            /
+            (
+              sum(rate(ferroui_cache_hits_total[5m]))
+              +
+              sum(rate(ferroui_cache_misses_total[5m]))
+            )
+          ) < 0.5
+        for: 10m
+        labels:
+          severity: info
+          team: platform
+        annotations:
+          summary: "Cache hit rate below 50%"
+          description: "Current cache hit rate: {{ $value | humanizePercentage }}"
+
+      # Rate Limiting Triggered
+      - alert: FerroUIRateLimiting
+        expr: |
+          sum(rate(ferroui_requests_rate_limited_total[5m])) > 0
+        for: 1m
+        labels:
+          severity: info
+          team: platform
+        annotations:
+          summary: "Rate limiting in effect"
+          description: "Requests are being rate limited"
+
+      # Pod Crash Looping
+      - alert: FerroUIPodCrashLooping
+        expr: |
+          rate(kube_pod_container_status_restarts_total{pod=~"ferroui-engine-.*"}[10m]) > 0
+        for: 5m
+        labels:
+          severity: critical
+          team: platform
+        annotations:
+          summary: "FerroUI pod is crash looping"
+          description: "Pod {{ $labels.pod }} has restarted {{ $value }} times in 10m"
+
+      # High Memory Usage
+      - alert: FerroUIHighMemoryUsage
+        expr: |
+          (
+            container_memory_working_set_bytes{pod=~"ferroui-engine-.*"}
+            /
+            container_spec_memory_limit_bytes{pod=~"ferroui-engine-.*"}
+          ) > 0.85
+        for: 5m
+        labels:
+          severity: warning
+          team: platform
+        annotations:
+          summary: "High memory usage"
+          description: "Pod {{ $labels.pod }} using {{ $value | humanizePercentage }} of memory limit"
+
+      # High CPU Usage
+      - alert: FerroUIHighCPUUsage
+        expr: |
+          (
+            rate(container_cpu_usage_seconds_total{pod=~"ferroui-engine-.*"}[5m])
+            /
+            container_spec_cpu_quota{pod=~"ferroui-engine-.*"}
+          ) > 0.8
+        for: 5m
+        labels:
+          severity: warning
+          team: platform
+        annotations:
+          summary: "High CPU usage"
+          description: "Pod {{ $labels.pod }} using {{ $value | humanizePercentage }} of CPU limit"
+
+      # Audit Log Chain Broken
+      - alert: FerroUIAuditChainBroken
+        expr: ferroui_audit_chain_valid == 0
+        for: 1m
+        labels:
+          severity: critical
+          team: security
+        annotations:
+          summary: "Audit log chain integrity compromised"
+          description: "Audit log chain validation failed - possible tampering detected"

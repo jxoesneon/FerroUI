@@ -1,0 +1,53 @@
+# CODEOWNERS
+# Each line is a file pattern followed by one or more owners.
+# Order matters — the last matching pattern takes precedence.
+# Docs: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Global fallback — architecture team reviews everything by default
+*                                   @ferroui/architecture
+
+# Core engine & pipeline
+packages/engine/**                  @ferroui/engine-core
+packages/schema/**                  @ferroui/engine-core
+
+# LLM provider integrations — require LLM team review
+packages/engine/src/providers/**    @ferroui/llm-team
+
+# Security-sensitive files — require security team sign-off
+packages/engine/src/auth/**         @ferroui/security
+packages/engine/src/audit/**        @ferroui/security
+packages/engine/src/pipeline/dual-phase.ts  @ferroui/security @ferroui/engine-core
+SECURITY.md                         @ferroui/security
+docs/security/**                    @ferroui/security
+
+# Component registry & renderer — frontend team
+packages/registry/**                @ferroui/frontend
+packages/renderer/**                @ferroui/frontend
+apps/web/**                         @ferroui/frontend
+
+# Infrastructure & CI/CD — platform team
+infra/**                            @ferroui/platform
+.github/**                          @ferroui/platform
+**/Dockerfile                       @ferroui/platform
+
+# Design tokens — design systems team
+packages/tokens/**                  @ferroui/design-systems
+
+# i18n — i18n team
+packages/i18n/**                    @ferroui/i18n
+
+# Telemetry — platform team
+packages/telemetry/**               @ferroui/platform
+
+# CLI tools — DX team
+packages/cli/**                     @ferroui/dx
+
+# Documentation — tech writing team
+docs/**                             @ferroui/tech-writing
+README.md                           @ferroui/tech-writing
+CONTRIBUTING.md                     @ferroui/tech-writing
+
+# Dependency management — platform team must approve all lockfile changes
+pnpm-lock.yaml                      @ferroui/platform
+package.json                        @ferroui/platform
+pnpm-workspace.yaml                 @ferroui/platform

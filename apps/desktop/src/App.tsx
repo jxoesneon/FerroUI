@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useFerroUILayout } from '../../web/src/hooks/useFerroUILayout';
 import { FerroUIRenderer } from '../../web/src/components/FerroUIRenderer';
 import { actionRouter, type ActionRouterContext } from '../../web/src/services/ActionRouter';
@@ -22,15 +22,15 @@ function App() {
   useEffect(() => {
     const context: ActionRouterContext = {
       refresh,
-      showToast: (message: string, variant: any) => {
+      showToast: (message: string, variant: 'info' | 'success' | 'warning' | 'error') => {
         const id = Math.random().toString(36).substring(2, 9);
         setToasts((prev) => [...prev, { id, message, variant }]);
         setTimeout(() => {
           setToasts((prev) => prev.filter((t) => t.id !== id));
         }, 3000);
       },
-      navigate: (path: string, params?: any) => {
-        console.log('Navigating to:', path, params);
+      navigate: (path: string, params?: Record<string, unknown>) => {
+        window.history.pushState(params ?? null, '', path);
       },
     };
 
@@ -57,7 +57,7 @@ function App() {
   return (
     <div className="ferroui-app min-h-screen relative">
       {/* Main Layout Rendering */}
-      {layout?.layout && <FerroUIRenderer component={layout.layout as any} />}
+      {layout?.layout != null && <FerroUIRenderer component={layout.layout} />}
 
       {/* Loading Indicator */}
       {loading && (

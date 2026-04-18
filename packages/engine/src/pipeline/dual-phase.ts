@@ -7,6 +7,7 @@ import { repairLayout } from '../validation/repair';
 import { semanticCache } from '../cache/semantic-cache';
 import { tracer, PipelinePhase, setCommonAttributes, withLlmCall, withToolCall, recordCacheHit, recordCacheMiss } from '@ferroui/telemetry';
 import { auditLogger, AuditEventType } from '../audit/audit-logger';
+import { checkPromptFirewall } from '../security/prompt-firewall';
 import CryptoJS from 'crypto-js';
 
 const MAX_TOOL_CALLS_PER_REQUEST = 8;
@@ -28,24 +29,6 @@ const toolLogger: ToolLogger = {
   warn: (msg, ctx) => console.warn(msg, ctx ?? ''),
   error: (msg, ctx) => console.error(msg, ctx ?? ''),
 };
-
-/**
- * Detects potential prompt injection attempts in user input
- */
-function detectPromptInjection(prompt: string): boolean {
-  const patterns = [
-    /ignore previous instructions/i,
-    /system prompt/i,
-    /you are now a/i,
-    /instead of your usual/i,
-    /new rules/i,
-    /bypass/i,
-    /jailbreak/i,
-    /DAN mode/i,
-    /output ONLY/i, // Suspicious if trying to force specific output formats to bypass checks
-  ];
-  return patterns.some(pattern => pattern.test(prompt));
-}
 
 // Link semantic cache to tool registry for invalidation
 registerCacheHandler({
@@ -92,10 +75,11 @@ export async function* runDualPhasePipeline(
   const pipelineStart = Date.now();
   yield { type: 'phase', phase: 1, content: 'Starting Phase 1: Data Gathering' };
 
-  // Security: Check for prompt injection and block immediately
-  const isSuspicious = detectPromptInjection(prompt);
+  // Security: Run prompt firewall (built-in + optional Lakera/NeMo) and block immediately
+  const firewallResult = await checkPromptFirewall(prompt);
+  const isSuspicious = firewallResult.blocked;
   if (isSuspicious) {
-    console.warn(`[Security] Prompt injection detected and blocked in request ${context.requestId}`);
+    console.warn(`[Security] Prompt blocked by ${firewallResult.provider} firewall in request ${context.requestId}: ${firewallResult.reason}`);
     yield { type: 'error', error: { code: 'PROMPT_INJECTION', message: 'Potential prompt injection detected. Request blocked.', retryable: false } };
     return;
   }
@@ -107,6 +91,7 @@ export async function* runDualPhasePipeline(
     promptHash: CryptoJS.SHA256(prompt.trim().toLowerCase()).toString(),
     permissions: context.permissions,
     locale: context.locale,
+    tenantId: context.tenantId ?? 'default',
     isSuspicious,
   });
 
@@ -142,6 +127,8 @@ ${toolManifest}
     systemPrompt: phase1SystemPrompt,
     userPrompt: prompt,
     temperature: 0,
+    jsonMode: true,
+    enablePromptCache: true,
   };
 
   const phase1Response = await withLlmCall(
@@ -251,7 +238,9 @@ ${toolManifest}
     }
     recordCacheMiss();
   } else if (config.cacheEnabled && shouldBypassCache) {
-    console.log(`[Cache] Bypassing cache for request ${context.requestId} (Sensitive: ${hasSensitiveData}, Suspicious: ${isSuspicious})`);
+    if (process.env.FERROUI_DEBUG === 'true') {
+      console.log(`[Cache] Bypassing cache for request ${context.requestId} (Sensitive: ${hasSensitiveData}, Suspicious: ${isSuspicious})`);
+    }
   }
 
   phase1Span.end();
@@ -315,6 +304,8 @@ You may ONLY use components listed above. If a component is not listed, do NOT u
     systemPrompt: phase2SystemPrompt,
     userPrompt: prompt,
     temperature: 0.2,
+    jsonMode: true,
+    enablePromptCache: true,
   };
 
   const streamingLayout = providerRef.current.processPrompt(phase2Request);

@@ -1,0 +1,70 @@
+# Chaos Testing Infrastructure (B.6)
+# Uses Toxiproxy to simulate network failures and test resilience
+# 
+# Usage:
+#   docker-compose -f tests/chaos/docker-compose.yml up -d
+#   npm run test:chaos
+#   docker-compose -f tests/chaos/docker-compose.yml down
+
+version: '3.8'
+
+services:
+  # Toxiproxy - network fault injection proxy
+  toxiproxy:
+    image: shopify/toxiproxy:latest
+    ports:
+      - "8474:8474"  # Toxiproxy API
+      - "14000:14000" # FerroUI engine (proxied)
+      - "16379:16379" # Redis (proxied)
+    volumes:
+      - ./toxiproxy.json:/config/toxiproxy.json:ro
+    command: -config /config/toxiproxy.json -host 0.0.0.0
+    networks:
+      - chaos-net
+
+  # FerroUI Engine (behind Toxiproxy)
+  ferroui-engine:
+    build:
+      context: ../..
+      dockerfile: packages/engine/Dockerfile
+    environment:
+      - NODE_ENV=production
+      - PORT=4000
+      - REDIS_URL=redis://toxiproxy:16379
+      - JWT_SECRET=chaos-test-secret-min32chars-padding-here!!
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-test-key}
+      - SKIP_LLM_CALLS=true  # Use stub LLM for chaos tests
+    depends_on:
+      - redis
+    networks:
+      - chaos-net
+    expose:
+      - "4000"
+
+  # Redis (behind Toxiproxy)
+  redis:
+    image: redis:7-alpine
+    networks:
+      - chaos-net
+    expose:
+      - "6379"
+
+  # Chaos test runner
+  chaos-tester:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    depends_on:
+      - toxiproxy
+      - ferroui-engine
+    environment:
+      - ENGINE_URL=http://toxiproxy:14000
+      - TOXIPROXY_API=http://toxiproxy:8474
+    networks:
+      - chaos-net
+    volumes:
+      - ./results:/results
+
+networks:
+  chaos-net:
+    driver: bridge

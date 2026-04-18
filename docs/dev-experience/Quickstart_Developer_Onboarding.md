@@ -1,4 +1,4 @@
-# Quickstart & Developer Onboarding
+﻿# Quickstart & Developer Onboarding
 
 **Version:** 1.0  
 **Last Updated:** 2025-04-10  
@@ -325,7 +325,7 @@ MyMetric.displayName = 'MyMetric';
 Edit `src/components/index.ts`:
 
 ```typescript
-import { registerComponent } from '@ferroui/core';
+import { registerComponent } from '@ferroui/registry';
 import { MyMetric } from './MyMetric';
 import { MyMetricSchema } from './MyMetric/schema';
 
@@ -480,3 +480,4 @@ You've successfully:
 ---
 
 *Ready to build something amazing? Check out the [CLI Usage Guide](./CLI_Usage_Guide.md) for more advanced features.*
+

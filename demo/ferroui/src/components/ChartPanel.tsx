@@ -1,21 +1,21 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { TIME_SERIES_DATA } from '../data/mockData';
 import { Activity } from 'lucide-react';
 
-export const ChartPanel: React.FC = () => {
-  
-  // Calculate SVG Path from data
-  // Data range varies, we'll auto-scale to a 400x100 ViewBox
-  const max = Math.max(...TIME_SERIES_DATA);
-  const min = Math.min(...TIME_SERIES_DATA);
-  const range = max - min;
-  
+interface ChartPanelProps {
+  timeSeries: number[];
+}
+
+export const ChartPanel: React.FC<ChartPanelProps> = ({ timeSeries }) => {
+  const max = Math.max(...timeSeries);
+  const min = Math.min(...timeSeries);
+  const range = max - min || 1;
+
   const width = 400;
   const height = 100;
-  
-  const pathData = TIME_SERIES_DATA.map((value, index) => {
-    const x = (index / (TIME_SERIES_DATA.length - 1)) * width;
+
+  const pathData = timeSeries.map((value, index) => {
+    const x = (index / (timeSeries.length - 1)) * width;
     const y = height - ((value - min) / range) * height;
     return `${index === 0 ? 'M' : 'L'} ${x} ${y}`;
   }).join(' ');

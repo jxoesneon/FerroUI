@@ -23,12 +23,12 @@
     "llm"
   ],
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.88.0",
     "@ferroui/i18n": "workspace:*",
     "@ferroui/registry": "workspace:*",
     "@ferroui/schema": "workspace:*",
     "@ferroui/telemetry": "workspace:*",
     "@ferroui/tools": "workspace:*",
-    "@anthropic-ai/sdk": "^0.88.0",
     "@google/generative-ai": "^0.24.1",
     "better-sqlite3": "^12.9.0",
     "cookie-parser": "^1.4.7",
@@ -39,6 +39,7 @@
     "ioredis": "^5.10.1",
     "jsonwebtoken": "^9.0.3",
     "openai": "^6.34.0",
+    "rate-limit-redis": "^4.3.1",
     "uuid": "^13.0.0",
     "zod": "^4.3.6",
     "zod-to-json-schema": "^3.25.2"

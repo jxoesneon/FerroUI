@@ -1,0 +1,46 @@
+{
+  "id": "edge-001",
+  "category": "edge",
+  "name": "Empty Data Graceful Degradation",
+  "prompt": "Show me recent orders (when no orders exist)",
+  "capturedAt": "2025-01-01T00:00:00.000Z",
+  "modelVersion": "claude-3-5-sonnet-20241022",
+  "metrics": {
+    "schemaValid": true,
+    "repairAttempts": 0,
+    "toolsInvoked": ["getOrders"],
+    "componentCount": 2,
+    "latencyMs": 1200
+  },
+  "goldenLayout": {
+    "schemaVersion": "1.1.0",
+    "requestId": "eval-edge-001",
+    "locale": "en",
+    "page": {
+      "type": "organism",
+      "id": "dashboard-root",
+      "layout": "stack",
+      "aria": { "role": "main", "label": "Orders Dashboard" },
+      "props": { "heading": "Recent Orders" },
+      "children": [
+        {
+          "type": "molecule",
+          "id": "status-banner-empty",
+          "layout": "block",
+          "aria": { "role": "status", "label": "No orders found" },
+          "props": {
+            "variant": "info",
+            "message": "No orders found."
+          },
+          "children": []
+        }
+      ]
+    }
+  },
+  "assertions": {
+    "mustContainComponent": "StatusBanner",
+    "mustNotInventData": true,
+    "mustHaveAria": true,
+    "schemaVersion": "1.1.0"
+  }
+}

@@ -1,5 +1,47 @@
 import { describe, it, expect } from 'vitest';
-import { validateTiers } from './tiers';
+import {
+  validateTiers,
+  syncTiersFromRegistry,
+  resolveComponentTier,
+  COMPONENT_TIER_REGISTRY,
+} from './tiers';
+import { ComponentTier } from './types';
+import type { FerroUIComponent } from './types';
+
+// validateTiers tolerates untyped component shapes at runtime; cast helper
+// keeps tests readable while satisfying TypeScript's stricter expectations.
+const asComponent = <T>(c: T): FerroUIComponent => c as unknown as FerroUIComponent;
+
+describe('syncTiersFromRegistry', () => {
+  it('writes entries into the registry', () => {
+    const original = COMPONENT_TIER_REGISTRY['CustomWidget'];
+    syncTiersFromRegistry([{ name: 'CustomWidget', tier: ComponentTier.MOLECULE }]);
+    expect(COMPONENT_TIER_REGISTRY['CustomWidget']).toBe(ComponentTier.MOLECULE);
+    // Cleanup
+    if (original === undefined) delete COMPONENT_TIER_REGISTRY['CustomWidget'];
+    else COMPONENT_TIER_REGISTRY['CustomWidget'] = original;
+  });
+
+  it('overrides existing entries', () => {
+    const original = COMPONENT_TIER_REGISTRY['Text'];
+    syncTiersFromRegistry([{ name: 'Text', tier: ComponentTier.ORGANISM }]);
+    expect(COMPONENT_TIER_REGISTRY['Text']).toBe(ComponentTier.ORGANISM);
+    // Restore
+    COMPONENT_TIER_REGISTRY['Text'] = original;
+  });
+});
+
+describe('resolveComponentTier', () => {
+  it('returns the tier for a known component', () => {
+    expect(resolveComponentTier('Dashboard')).toBe(ComponentTier.ORGANISM);
+    expect(resolveComponentTier('Text')).toBe(ComponentTier.ATOM);
+    expect(resolveComponentTier('StatBadge')).toBe(ComponentTier.MOLECULE);
+  });
+
+  it('returns undefined for an unknown component', () => {
+    expect(resolveComponentTier('NotReal-xyz')).toBeUndefined();
+  });
+});
 
 describe('validateTiers', () => {
   it('allows valid hierarchy (Organism -> Molecule -> Atom)', () => {
@@ -12,7 +54,7 @@ describe('validateTiers', () => {
         },
       ],
     };
-    const errors = validateTiers(component);
+    const errors = validateTiers(asComponent(component));
     expect(errors).toHaveLength(0);
   });
 
@@ -21,7 +63,7 @@ describe('validateTiers', () => {
       type: 'Text',
       children: [{ type: 'Icon' }],
     };
-    const errors = validateTiers(component);
+    const errors = validateTiers(asComponent(component));
     expect(errors).toContainEqual(expect.objectContaining({ rule: 'R008' }));
   });
 
@@ -30,7 +72,7 @@ describe('validateTiers', () => {
       type: 'StatBadge',
       children: [{ type: 'Dashboard' }],
     };
-    const errors = validateTiers(component);
+    const errors = validateTiers(asComponent(component));
     expect(errors).toContainEqual(expect.objectContaining({ rule: 'R009' }));
   });
 
@@ -39,7 +81,7 @@ describe('validateTiers', () => {
       type: 'Text',
       children: [{ type: 'Divider' }],
     };
-    const errors = validateTiers(component);
+    const errors = validateTiers(asComponent(component));
     expect(errors).toContainEqual(expect.objectContaining({ rule: 'R010' }));
   });
 
@@ -48,7 +90,27 @@ describe('validateTiers', () => {
       type: 'Dashboard',
       children: [{ type: 'Text' }],
     };
-    const errors = validateTiers(component);
+    const errors = validateTiers(asComponent(component));
     expect(errors).toHaveLength(0);
+  });
+
+  it('rejects Dashboard nested below root (R011)', () => {
+    const component = {
+      type: 'Dashboard',
+      children: [
+        { type: 'FormGroup', children: [{ type: 'Dashboard' }] },
+      ],
+    };
+    const errors = validateTiers(asComponent(component));
+    expect(errors).toContainEqual(expect.objectContaining({ rule: 'R011' }));
+  });
+
+  it('detects circular references without infinite recursion', () => {
+    const leaf = { type: 'Text' } as unknown as FerroUIComponent & { children?: FerroUIComponent[] };
+    const parent = { type: 'StatBadge', children: [leaf] } as unknown as FerroUIComponent & { children: FerroUIComponent[] };
+    // Create a cycle: leaf's only child is the parent.
+    leaf.children = [parent];
+    const errors = validateTiers(parent);
+    expect(errors.some((e) => e.rule === 'CYCLE')).toBe(true);
   });
 });

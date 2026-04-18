@@ -1,6 +1,6 @@
 import { Command } from 'commander';
 import chalk from 'chalk';
-import { execa } from 'execa';
+import { execa, type ResultPromise } from 'execa';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs-extra';
@@ -61,7 +61,7 @@ export const devCommand = new Command('dev')
 
     const spinner = ora('Starting development services...').start();
      
-    const processes: any[] = [];
+    const processes: ResultPromise[] = [];
 
     const sharedEnv = { ...process.env, PATH: process.env.PATH };
 
@@ -78,7 +78,7 @@ export const devCommand = new Command('dev')
             env: { ...sharedEnv, PORT: String(playgroundPort) },
             reject: false,
           });
-          processes.push(playground as any);
+          processes.push(playground);
         } else {
           spinner.warn(chalk.yellow('apps/web not found — playground not started'));
         }
@@ -107,7 +107,7 @@ export const devCommand = new Command('dev')
             env: { ...sharedEnv, PORT: String(enginePort) },
             reject: false,
           });
-          processes.push(engine as any);
+          processes.push(engine);
         } else {
           spinner.warn(chalk.yellow('Engine entry not found — engine not started'));
         }
@@ -134,7 +134,7 @@ export const devCommand = new Command('dev')
             env: { ...sharedEnv, PORT: String(inspectorPort) },
             reject: false,
           });
-          processes.push(inspector as any);
+          processes.push(inspector);
         } else {
           spinner.warn(chalk.yellow('Registry inspector entry not found — inspector not started'));
         }

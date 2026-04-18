@@ -347,10 +347,10 @@ export const Modal = memo(forwardRef<HTMLDivElement, ModalProps>(
       onClick: (e) => e.target === e.currentTarget && onClose?.(),
     },
       React.createElement('div', {
-        ref: (el) => {
-          (modalRef as any).current = el;
-          if (typeof ref === 'function') ref(el as HTMLDivElement);
-          else if (ref) (ref as any).current = el;
+        ref: (el: HTMLDivElement | null) => {
+          (modalRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
+          if (typeof ref === 'function') ref(el);
+          else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = el;
         },
         className: 'ferroui-modal',
         role: 'dialog',

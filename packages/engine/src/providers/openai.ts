@@ -27,6 +27,7 @@ export class OpenAIProvider implements LlmProvider {
       model: this.model,
       temperature: req.temperature ?? 0.2,
       max_tokens: req.maxTokens,
+      ...(req.jsonMode ? { response_format: { type: 'json_object' as const } } : {}),
       messages: [
         { role: 'system', content: req.systemPrompt },
         ...(req.conversationContext?.map(c => ({ role: 'user' as const, content: c })) ?? []),
@@ -60,6 +61,7 @@ export class OpenAIProvider implements LlmProvider {
       temperature: req.temperature ?? 0,
       max_tokens: req.maxTokens,
       stream: false,
+      ...(req.jsonMode ? { response_format: { type: 'json_object' as const } } : {}),
       messages: [
         { role: 'system', content: req.systemPrompt },
         ...(req.conversationContext?.map(c => ({ role: 'user' as const, content: c })) ?? []),

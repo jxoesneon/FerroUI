@@ -1,4 +1,4 @@
-# FerroUI Release Notes & Changelogs
+﻿# FerroUI Release Notes & Changelogs
 
 ---
 
@@ -48,7 +48,7 @@ We're thrilled to announce the general availability of FerroUI — the AI-powere
 ### 📦 Packages
 
 ```
-@ferroui/core@1.0.0         # Core orchestration engine
+@ferroui/engine@1.0.0         # Core orchestration engine
 @ferroui/react@1.0.0        # React renderer and hooks
 @ferroui/cli@1.0.0          # Command-line interface
 @ferroui/schema@1.0.0       # Zod schemas and validators
@@ -244,7 +244,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ```bash
 # Update packages
-npm install @ferroui/core@latest @ferroui/react@latest
+npm install @ferroui/engine@latest @ferroui/react@latest
 
 # Run migration tool
 npx @ferroui/migrate@latest
@@ -272,3 +272,4 @@ npx @ferroui/migrate@latest
 ---
 
 *Last updated: 2025-04-10*
+

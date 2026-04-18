@@ -1,12 +1,17 @@
 // @vitest-environment jsdom
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { ActionRouter } from './ActionRouter';
 
 describe('ActionRouter', () => {
   let router: ActionRouter;
 
   beforeEach(() => {
-    router = (ActionRouter as any).instance = new (ActionRouter as any)();
+    router = (ActionRouter as unknown as { instance: ActionRouter }).instance =
+      new (ActionRouter as unknown as new () => ActionRouter)();
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
   });
 
   it('should be a singleton', () => {
@@ -17,7 +22,7 @@ describe('ActionRouter', () => {
 
   it('should warn if context is not set', async () => {
     const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    await router.dispatch({ type: 'REFRESH' } as any);
+    await router.dispatch({ type: 'REFRESH', payload: undefined });
     expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Context not set'), expect.any(Object));
     consoleSpy.mockRestore();
   });
@@ -25,21 +30,21 @@ describe('ActionRouter', () => {
   it('should dispatch NAVIGATE', async () => {
     const context = { navigate: vi.fn(), refresh: vi.fn(), showToast: vi.fn() };
     router.setContext(context);
-    await router.dispatch({ type: 'NAVIGATE', payload: { path: '/home', params: { id: 1 } } } as any);
+    await router.dispatch({ type: 'NAVIGATE', payload: { path: '/home', params: { id: 1 } } });
     expect(context.navigate).toHaveBeenCalledWith('/home', { id: 1 });
   });
 
   it('should dispatch SHOW_TOAST', async () => {
     const context = { navigate: vi.fn(), refresh: vi.fn(), showToast: vi.fn() };
     router.setContext(context);
-    await router.dispatch({ type: 'SHOW_TOAST', payload: { message: 'Hello', variant: 'success' } } as any);
+    await router.dispatch({ type: 'SHOW_TOAST', payload: { message: 'Hello', variant: 'success' } });
     expect(context.showToast).toHaveBeenCalledWith('Hello', 'success');
   });
 
   it('should dispatch REFRESH', async () => {
     const context = { navigate: vi.fn(), refresh: vi.fn(), showToast: vi.fn() };
     router.setContext(context);
-    await router.dispatch({ type: 'REFRESH' } as any);
+    await router.dispatch({ type: 'REFRESH', payload: undefined });
     expect(context.refresh).toHaveBeenCalled();
   });
 
@@ -47,8 +52,8 @@ describe('ActionRouter', () => {
     const context = { navigate: vi.fn(), refresh: vi.fn(), showToast: vi.fn() };
     router.setContext(context);
     const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    await router.dispatch({ type: 'UNKNOWN_ACTION' } as any);
-    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Unhandled action type'));
+    await router.dispatch({ type: 'UNKNOWN_ACTION' } as never);
+    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Unhandled action type'), expect.anything());
     consoleSpy.mockRestore();
   });
 
@@ -56,14 +61,15 @@ describe('ActionRouter', () => {
     const context = { navigate: vi.fn(), refresh: vi.fn(), showToast: vi.fn() };
     router.setContext(context);
     
-    global.fetch = vi.fn().mockResolvedValue({
+    const fetchMock = vi.fn().mockResolvedValue({
       ok: true,
-      json: () => Promise.resolve({ success: true })
+      json: () => Promise.resolve({ success: true }),
     });
-    
-    await router.dispatch({ type: 'TOOL_CALL', payload: { tool: 'myTool', args: { a: 1 } } } as any);
-    
-    expect(global.fetch).toHaveBeenCalledWith('/api/tools/call', {
+    vi.stubGlobal('fetch', fetchMock);
+
+    await router.dispatch({ type: 'TOOL_CALL', payload: { tool: 'myTool', args: { a: 1 } } });
+
+    expect(fetchMock).toHaveBeenCalledWith('/api/tools/call', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ tool: 'myTool', args: { a: 1 } })
@@ -75,14 +81,14 @@ describe('ActionRouter', () => {
     const context = { navigate: vi.fn(), refresh: vi.fn(), showToast: vi.fn() };
     router.setContext(context);
     
-    global.fetch = vi.fn().mockResolvedValue({
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
       ok: false,
-      statusText: 'Server Error'
-    });
-    
+      statusText: 'Server Error',
+    }));
+
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    
-    await router.dispatch({ type: 'TOOL_CALL', payload: { tool: 'myTool', args: {} } } as any);
+
+    await router.dispatch({ type: 'TOOL_CALL', payload: { tool: 'myTool', args: {} } });
     
     expect(context.showToast).toHaveBeenCalledWith('Tool call failed: myTool', 'error');
     consoleSpy.mockRestore();

@@ -1,23 +1,27 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { PROXY_CONNECTIONS } from '../data/mockData';
 import { Database } from 'lucide-react';
+import type { ProxyConnection } from '../types';
 
-export const DataTable: React.FC<{ prompt?: string }> = ({ prompt = '' }) => {
+interface DataTableProps {
+  connections: ProxyConnection[];
+  prompt?: string;
+}
+
+export const DataTable: React.FC<DataTableProps> = ({ connections, prompt = '' }) => {
   const data = React.useMemo(() => {
     const p = prompt.toLowerCase();
-    if (p.includes('us 1') || p.includes('us-1') || p.includes('us-east-1') || p.includes('us-west-1')) {
-      return PROXY_CONNECTIONS.filter(r => r.origin.includes('us-1') || r.origin.includes('us-east-1') || r.origin.includes('us-west-1') || 
-                                           r.destination.includes('us-1') || r.destination.includes('us-east-1') || r.destination.includes('us-west-1'));
+    if (p.includes('us-east-1') || p.includes('us-west-1') || p.includes('us-1')) {
+      return connections.filter(
+        (r) =>
+          r.origin.includes('us-east-1') || r.origin.includes('us-west-1') ||
+          r.destination.includes('us-east-1') || r.destination.includes('us-west-1'),
+      );
     }
-    if (p.includes('offline')) {
-      return PROXY_CONNECTIONS.filter(r => r.status === 'Offline');
-    }
-    if (p.includes('online')) {
-      return PROXY_CONNECTIONS.filter(r => r.status === 'Online');
-    }
-    return PROXY_CONNECTIONS;
-  }, [prompt]);
+    if (p.includes('offline')) return connections.filter((r) => r.status === 'Offline');
+    if (p.includes('online'))  return connections.filter((r) => r.status === 'Online');
+    return connections;
+  }, [connections, prompt]);
 
   return (
     <motion.div
