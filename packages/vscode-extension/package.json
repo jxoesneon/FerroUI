@@ -1,5 +1,6 @@
 {
-  "name": "ferroui",
+  "name": "@ferroui/extension",
+  "private": true,
   "displayName": "FerroUI",
   "description": "AI-powered UI development assistant",
   "version": "0.1.0",
