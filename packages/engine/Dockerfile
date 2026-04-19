@@ -9,7 +9,7 @@ WORKDIR /app
 # Enable pnpm
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
+RUN npm install -g pnpm@10.33.0
 
 # Copy root configurations
 COPY pnpm-lock.yaml pnpm-workspace.yaml package.json .npmrc* ./
