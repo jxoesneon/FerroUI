@@ -29,17 +29,17 @@ export default defineConfig({
                   {
                     id: 'title',
                     type: 'Text',
-                    props: { text: 'Welcome to FerroUI' }
+                    props: { value: 'Welcome to FerroUI' }
                   },
                   {
                     id: 'desc',
                     type: 'Text',
-                    props: { text: 'AI-generated UI components are ready.' }
+                    props: { value: 'AI-generated UI components are ready.' }
                   },
                   {
                     id: 'action',
-                    type: 'ActionButton',
-                    props: { label: 'Explore Docs', variant: 'primary' }
+                    type: 'Button',
+                    props: { label: 'Explore Docs' }
                   }
                 ]
               }
@@ -67,8 +67,8 @@ export default defineConfig({
                 type: 'Dashboard',
                 props: { className: 'p-8' },
                 children: [
-                  { id: 'title', type: 'Text', props: { text: 'Welcome to FerroUI' } },
-                  { id: 'desc', type: 'Text', props: { text: 'Prompt ready.' } }
+                  { id: 'title', type: 'Text', props: { value: 'Welcome to FerroUI' } },
+                  { id: 'desc', type: 'Text', props: { value: 'Prompt ready.' } }
                 ]
               }
             };
