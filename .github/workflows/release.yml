@@ -68,11 +68,11 @@ jobs:
       - name: Manual Publish
         if: steps.changesets.outputs.published != 'true' && github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
-          pnpm config set //registry.npmjs.org/:_authToken "${NPM_TOKEN}"
-          pnpm config set registry https://registry.npmjs.org/
+          pnpm changeset version
           pnpm changeset publish --provenance
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: "true"
 
       - name: Create GitHub Release tags
