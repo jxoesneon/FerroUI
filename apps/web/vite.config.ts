@@ -14,7 +14,7 @@ export default defineConfig({
       name: 'ferroui-api-mock',
       configureServer(server) {
         server.middlewares.use((req, res, next) => {
-          if (req.url === '/api/layout') {
+          if (req.url?.startsWith('/api/layout')) {
             res.setHeader('Content-Type', 'text/event-stream');
             res.setHeader('Cache-Control', 'no-cache');
             res.setHeader('Connection', 'keep-alive');
@@ -26,27 +26,15 @@ export default defineConfig({
                 type: 'Dashboard',
                 props: { className: 'p-8' },
                 children: [
-                  {
-                    id: 'title',
-                    type: 'Text',
-                    props: { value: 'Welcome to FerroUI' }
-                  },
-                  {
-                    id: 'desc',
-                    type: 'Text',
-                    props: { value: 'AI-generated UI components are ready.' }
-                  },
-                  {
-                    id: 'action',
-                    type: 'Button',
-                    props: { label: 'Explore Docs' }
-                  }
+                  { id: 'title', type: 'Text', props: { value: 'Welcome to FerroUI' } },
+                  { id: 'desc', type: 'Text', props: { value: 'AI-generated UI components are ready.' } },
+                  { id: 'action', type: 'Button', props: { label: 'Explore Docs' } }
                 ]
               }
             };
             
             res.write(`data: ${JSON.stringify(welcomeChunk)}\n\n`);
-            res.write(`data: ${JSON.stringify({ type: 'complete' })}\n\n`);
+            res.write(`data: [DONE]\n\n`);
             res.end();
             return;
           }
@@ -55,7 +43,7 @@ export default defineConfig({
       },
       configurePreviewServer(server) {
         server.middlewares.use((req, res, next) => {
-          if (req.url === '/api/layout') {
+          if (req.url?.startsWith('/api/layout')) {
             res.setHeader('Content-Type', 'text/event-stream');
             res.setHeader('Cache-Control', 'no-cache');
             res.setHeader('Connection', 'keep-alive');
@@ -68,7 +56,8 @@ export default defineConfig({
                 props: { className: 'p-8' },
                 children: [
                   { id: 'title', type: 'Text', props: { value: 'Welcome to FerroUI' } },
-                  { id: 'desc', type: 'Text', props: { value: 'Prompt ready.' } }
+                  { id: 'desc', type: 'Text', props: { value: 'Prompt ready.' } },
+                  { id: 'action', type: 'Button', props: { label: 'Explore Docs' } }
                 ]
               }
             };

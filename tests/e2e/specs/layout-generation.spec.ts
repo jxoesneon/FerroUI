@@ -10,8 +10,8 @@ test.describe('Layout Generation E2E', () => {
     // Navigate to the app
     await page.goto('/');
 
-    // Wait for the app to load (look for the prompt input or loading state)
-    await expect(page.locator('body')).toContainText(/ferroui|loading|prompt/i);
+    // Wait for the app to load (look for the mocked welcome content)
+    await expect(page.locator('body')).toContainText(/Welcome to FerroUI/i);
 
     // Verify the page has loaded without errors
     const errorBoundary = page.locator('[data-testid="error-boundary"]');
