@@ -68,7 +68,7 @@ jobs:
       - name: Manual Publish
         if: steps.changesets.outputs.published != 'true' && github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
-          pnpm config set //registry.npmjs.org/:_authToken "${NPM_TOKEN}"
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
           pnpm changeset publish --provenance
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
