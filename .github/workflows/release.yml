@@ -40,6 +40,12 @@ jobs:
       - name: Build all packages
         run: pnpm -r --if-present run build
 
+      - name: Create .npmrc for authentication
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > .npmrc
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       # Generate SBOM for supply chain transparency (A.9)
       - name: Generate SBOM
         uses: anchore/sbom-action@v0
