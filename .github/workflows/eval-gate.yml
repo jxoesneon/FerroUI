@@ -35,8 +35,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build engine
-        run: pnpm -F @ferroui/engine run build
+      - name: Build packages
+        run: pnpm -r --if-present run build
 
       - name: Run Eval Suite (Default Suite v6)
         run: |
