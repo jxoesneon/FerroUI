@@ -1,6 +1,7 @@
 {
   "name": "@ferroui/renderer",
   "version": "0.1.0",
+  "private": true,
   "description": "FerroUI layout renderer — maps FerroUILayout JSON to React components via the component registry.",
   "type": "module",
   "main": "dist/index.js",
