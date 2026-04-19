@@ -41,11 +41,6 @@ WORKDIR /app
 RUN apk add --no-cache libc6-compat
 ENV NODE_ENV=production
 
-# Enable pnpm in runner if needed or use node directly
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
-
 # Copy built files and production dependencies from builder
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/pnpm-lock.yaml ./
