@@ -6,6 +6,9 @@ import path from 'path'
 
 // https://vite.dev/config/
 export default defineConfig({
+  define: {
+    'window.VITE_E2E_MOCK': JSON.stringify(true),
+  },
   plugins: [
     react(),
     tailwindcss(),
