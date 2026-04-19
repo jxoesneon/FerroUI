@@ -16,6 +16,8 @@
     "typecheck": "tsc --build packages/engine/tsconfig.json",
     "tokens:build": "node --experimental-strip-types scripts/build-tokens.ts",
     "docs:generate": "node --experimental-strip-types scripts/generate-api-docs.ts",
+    "storybook": "storybook dev -p 6006",
+    "storybook:build": "storybook build",
     "test:a11y": "pnpm run -r test:a11y",
     "lighthouse": "lighthouse http://localhost:3000 --output=json --output-path=./ferroui/evals/lighthouse.json",
     "pa11y": "pa11y http://localhost:3000"

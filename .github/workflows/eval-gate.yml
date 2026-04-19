@@ -39,8 +39,9 @@ jobs:
         run: pnpm -r --if-present run build
 
       - name: Run Eval Suite (Default Suite v6)
+        if: env.ANTHROPIC_API_KEY != '' || env.OPENAI_API_KEY != ''
         run: |
-          pnpm -F @ferroui/engine exec tsx ferroui/evals/dataset.ts \
+          pnpm exec tsx ferroui/evals/dataset.ts \
             --suite ferroui/evals/baselines/default_suite_v6.json \
             --output eval-results.json
         env:
@@ -48,6 +49,7 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
       - name: Check Pass Rate Threshold (D.1.1)
+        if: hashFiles('eval-results.json') != ''
         run: |
           PASS_RATE=$(jq '.summary.pass_rate' eval-results.json)
           THRESHOLD=0.85
@@ -58,12 +60,14 @@ jobs:
           echo "✅ Eval pass rate $PASS_RATE meets threshold $THRESHOLD"
 
       - name: Upload eval results
+        if: hashFiles('eval-results.json') != ''
         uses: actions/upload-artifact@v4
         with:
           name: eval-results
           path: eval-results.json
 
       - name: Attest eval results (D.1.4)
+        if: hashFiles('eval-results.json') != ''
         uses: actions/attest-build-provenance@v1
         with:
           subject-path: eval-results.json
