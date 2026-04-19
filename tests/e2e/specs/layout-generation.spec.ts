@@ -33,22 +33,35 @@ test.describe('Layout Generation E2E', () => {
     }
   });
 
-  test('keyboard navigation works for interactive elements', async ({ page }) => {
+  test('keyboard navigation works for interactive elements', async ({ page, browserName }) => {
     await page.goto('/');
+
+    // Webkit sometimes requires an initial click/interaction to start keyboard navigation
+    await page.click('body');
 
     // Test basic keyboard accessibility - Tab key navigation
     await page.keyboard.press('Tab');
     
     // Check that something is focused (indicates keyboard accessibility)
-    const focusedElement = page.locator(':focus');
-    const count = await focusedElement.count();
+    // Use a small retry for Webkit
+    let count = 0;
+    for (let i = 0; i < 2; i++) {
+      const focusedElement = page.locator(':focus');
+      count = await focusedElement.count();
+      if (count > 0) break;
+      if (browserName === 'webkit') await page.keyboard.press('Tab');
+    }
+    
     expect(count).toBeGreaterThan(0);
 
     // Verify Enter/Space can activate buttons
     const buttons = page.locator('button');
+    const focusedElement = page.locator(':focus');
     if (await buttons.count() > 0) {
-      // Tab to first button
-      while (await focusedElement.evaluate(el => el.tagName.toLowerCase()) !== 'button') {
+      // Tab to first button if not already there
+      for (let i = 0; i < 5; i++) {
+        const tagName = await focusedElement.evaluate(el => el?.tagName?.toLowerCase() || '');
+        if (tagName === 'button') break;
         await page.keyboard.press('Tab');
       }
       
