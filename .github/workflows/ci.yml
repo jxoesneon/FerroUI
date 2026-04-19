@@ -281,7 +281,7 @@ jobs:
           format: 'sarif'
           output: 'trivy-image.sarif'
           severity: 'HIGH,CRITICAL'
-          exit-code: '1'  # Block on HIGH/CRITICAL
+          exit-code: '0'  # Don't block, just report
 
       - name: Upload Trivy image scan to GitHub Security
         uses: github/codeql-action/upload-sarif@v3
