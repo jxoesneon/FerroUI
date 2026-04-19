@@ -42,9 +42,10 @@ jobs:
 
       # Generate SBOM for supply chain transparency (A.9)
       - name: Generate SBOM
-        run: |
-          npm install -g @cyclonedx/cyclonedx-npm
-          cyclonedx-npm --output-file=sbom.json --output-format=json
+        uses: anchore/sbom-action@v0
+        with:
+          format: cyclonedx-json
+          output-file: sbom.json
 
       - name: Create Release PR or Publish
         uses: changesets/action@v1
