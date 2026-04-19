@@ -33,18 +33,13 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
           registry-url: https://registry.npmjs.org
+          always-auth: true
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Build all packages
         run: pnpm -r --if-present run build
-
-      - name: Create .npmrc for authentication
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > .npmrc
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       # Generate SBOM for supply chain transparency (A.9)
       - name: Generate SBOM
@@ -57,20 +52,13 @@ jobs:
         id: changesets
         uses: changesets/action@v1
         with:
-          # Only use the action for PR creation, handle publish manually
-          publish: echo "Manual publish step"
+          publish: pnpm changeset publish --provenance
           title: "chore: release packages"
           commit: "chore: release packages"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Manual Publish
-        if: steps.changesets.outputs.published != 'true' && github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: ./scripts/publish-packages.sh
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_CONFIG_PROVENANCE: "true"
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create GitHub Release tags
         if: steps.changesets.outputs.published == 'true'
