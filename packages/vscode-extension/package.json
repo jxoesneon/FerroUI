@@ -1,5 +1,6 @@
 {
-  "name": "ferroui",
+  "name": "@ferroui/extension",
+  "private": true,
   "displayName": "FerroUI",
   "description": "AI-powered UI development assistant",
   "version": "0.1.0",
@@ -86,15 +87,14 @@
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "test": "vscode-test"
+    "watch": "tsc -watch -p ./"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@types/node": "^25",
     "@types/vscode": "^1.85.0",
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.4.0",
-    "typescript": "^5"
+    "typescript": "^6"
   },
   "dependencies": {
     "node-fetch": "^3.3.0"

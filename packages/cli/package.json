@@ -1,6 +1,7 @@
 {
   "name": "@ferroui/cli",
   "version": "1.0.0",
+  "private": true,
   "description": "The primary interface for FerroUI development, providing CLI commands for project management.",
   "type": "module",
   "main": "dist/index.js",
@@ -39,7 +40,7 @@
     "@types/node": "^25.6.0",
     "@types/prompts": "^2.4.9",
     "ts-node": "^10.9.2",
-    "typescript": "^6.0.2",
+    "typescript": "^6.0.3",
     "vitest": "^4.1.4"
   }
 }

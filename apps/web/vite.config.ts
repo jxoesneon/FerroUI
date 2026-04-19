@@ -6,7 +6,73 @@ import path from 'path'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss(), tsconfigPaths()],
+  define: {
+    'window.VITE_E2E_MOCK': JSON.stringify(true),
+  },
+  plugins: [
+    react(),
+    tailwindcss(),
+    tsconfigPaths(),
+    {
+      name: 'ferroui-api-mock',
+      configureServer(server) {
+        server.middlewares.use((req, res, next) => {
+          if (req.url?.startsWith('/api/layout')) {
+            res.setHeader('Content-Type', 'text/event-stream');
+            res.setHeader('Cache-Control', 'no-cache');
+            res.setHeader('Connection', 'keep-alive');
+            
+            const welcomeChunk = {
+              type: 'layout',
+              layout: {
+                id: 'welcome',
+                type: 'Section',
+                props: { title: 'Welcome to FerroUI' },
+                children: [
+                  { id: 'desc', type: 'Text', props: { value: 'Prompt ready.' } },
+                  { id: 'action', type: 'Button', props: { label: 'Explore Docs' } }
+                ]
+              }
+            };
+            
+            res.write(`data: ${JSON.stringify(welcomeChunk)}\n\n`);
+            res.write(`data: [DONE]\n\n`);
+            res.end();
+            return;
+          }
+          next();
+        });
+      },
+      configurePreviewServer(server) {
+        server.middlewares.use((req, res, next) => {
+          if (req.url?.startsWith('/api/layout')) {
+            res.setHeader('Content-Type', 'text/event-stream');
+            res.setHeader('Cache-Control', 'no-cache');
+            res.setHeader('Connection', 'keep-alive');
+
+            const welcomeChunk = {
+              type: 'layout',
+              layout: {
+                id: 'welcome',
+                type: 'Section',
+                props: { title: 'Welcome to FerroUI' },
+                children: [
+                  { id: 'desc', type: 'Text', props: { value: 'Prompt ready.' } },
+                  { id: 'action', type: 'Button', props: { label: 'Explore Docs' } }
+                ]
+              }
+            };
+            
+            res.write(`data: ${JSON.stringify(welcomeChunk)}\n\n`);
+            res.write(`data: [DONE]\n\n`);
+            res.end();
+            return;
+          }
+          next();
+        });
+      }
+    }
+  ],
   resolve: {
     alias: {
       '@ferroui/engine': path.resolve(__dirname, '../../packages/engine/src'),

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useFerroUILayout } from './hooks/useFerroUILayout';
 import { FerroUIRenderer } from './components/FerroUIRenderer';
 import { actionRouter, type ActionRouterContext } from './services/ActionRouter';
+import { I18nProvider } from '@ferroui/i18n';
 import './components/components-registration';
 import './App.css';
 
@@ -55,35 +56,37 @@ function App() {
   }
 
   return (
-    <div className="ferroui-app min-h-screen relative">
-      {/* Main Layout Rendering */}
-      {layout?.layout != null && <FerroUIRenderer component={layout.layout} />}
+    <I18nProvider locale="en" bundle={{}}>
+      <div className="ferroui-app min-h-screen relative">
+        {/* Main Layout Rendering */}
+        {layout?.layout != null && <FerroUIRenderer component={layout.layout} />}
 
-      {/* Loading Indicator */}
-      {loading && (
-        <div className="fixed bottom-4 right-4 bg-white shadow-lg rounded-full px-4 py-2 flex items-center space-x-2 border border-blue-200">
-          <div className="animate-spin h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full"></div>
-          <span className="text-sm font-medium text-blue-800">Streaming Layout...</span>
-        </div>
-      )}
-
-      {/* Toast Notifications */}
-      <div className="fixed top-4 right-4 z-50 flex flex-col space-y-2">
-        {toasts.map((toast) => (
-          <div
-            key={toast.id}
-            className={`px-6 py-3 rounded-lg shadow-xl text-white font-medium animate-bounce-in ${
-              toast.variant === 'error' ? 'bg-red-600' :
-              toast.variant === 'success' ? 'bg-green-600' :
-              toast.variant === 'warning' ? 'bg-yellow-600' :
-              'bg-blue-600'
-            }`}
-          >
-            {toast.message}
+        {/* Loading Indicator */}
+        {loading && (
+          <div className="fixed bottom-4 right-4 bg-white shadow-lg rounded-full px-4 py-2 flex items-center space-x-2 border border-blue-200">
+            <div className="animate-spin h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full"></div>
+            <span className="text-sm font-medium text-blue-800">Streaming Layout...</span>
           </div>
-        ))}
+        )}
+
+        {/* Toast Notifications */}
+        <div className="fixed top-4 right-4 z-50 flex flex-col space-y-2">
+          {toasts.map((toast) => (
+            <div
+              key={toast.id}
+              className={`px-6 py-3 rounded-lg shadow-xl text-white font-medium animate-bounce-in ${
+                toast.variant === 'error' ? 'bg-red-600' :
+                toast.variant === 'success' ? 'bg-green-600' :
+                toast.variant === 'warning' ? 'bg-yellow-600' :
+                'bg-blue-600'
+              }`}
+            >
+              {toast.message}
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+    </I18nProvider>
   );
 }
 

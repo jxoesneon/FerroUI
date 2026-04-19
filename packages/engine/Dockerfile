@@ -9,7 +9,7 @@ WORKDIR /app
 # Enable pnpm
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
+RUN npm install -g pnpm@10.33.0
 
 # Copy root configurations
 COPY pnpm-lock.yaml pnpm-workspace.yaml package.json .npmrc* ./
@@ -30,7 +30,7 @@ RUN pnpm install --frozen-lockfile
 COPY . .
 
 # Build all packages
-RUN pnpm -r run build --filter=@ferroui/engine...
+RUN pnpm --filter=@ferroui/engine... run build
 
 # Runtime stage
 FROM node:25-alpine AS runner
@@ -40,11 +40,6 @@ WORKDIR /app
 # Install production dependencies only
 RUN apk add --no-cache libc6-compat
 ENV NODE_ENV=production
-
-# Enable pnpm in runner if needed or use node directly
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
 
 # Copy built files and production dependencies from builder
 COPY --from=builder /app/package.json ./

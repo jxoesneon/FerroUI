@@ -16,6 +16,8 @@
     "typecheck": "tsc --build packages/engine/tsconfig.json",
     "tokens:build": "node --experimental-strip-types scripts/build-tokens.ts",
     "docs:generate": "node --experimental-strip-types scripts/generate-api-docs.ts",
+    "storybook": "storybook dev -p 6006",
+    "storybook:build": "storybook build",
     "test:a11y": "pnpm run -r test:a11y",
     "lighthouse": "lighthouse http://localhost:3000 --output=json --output-path=./ferroui/evals/lighthouse.json",
     "pa11y": "pa11y http://localhost:3000"
@@ -36,6 +38,7 @@
     "@changesets/cli": "latest",
     "@chromatic-com/storybook": "^3",
     "@eslint/js": "^10.0.1",
+    "@pact-foundation/pact": "^14.0.0",
     "@playwright/test": "^1.59.1",
     "@storybook/addon-a11y": "^8.6.12",
     "@storybook/addon-coverage": "^1.0.5",
@@ -55,21 +58,22 @@
     "@vitest/coverage-v8": "^4.1.4",
     "axe-core": "^4.11.3",
     "chromatic": "^11.28.2",
-    "eslint": "^10.2.0",
+    "eslint": "^10.2.1",
     "eventsource-parser": "^3.0.6",
     "globals": "^17.5.0",
     "jsdom": "^29.0.2",
     "jsonwebtoken": "^9.0.3",
     "lint-staged": "^16.4.0",
     "partial-json-parser": "^1.2.2",
-    "prettier": "^3.8.2",
+    "prettier": "^3.8.3",
     "rimraf": "^6.1.3",
+    "storybook": "^8.6.18",
     "stryker": "^0.35.1",
     "tailwindcss-logical": "^4.2.0",
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0",
-    "typescript": "6.0.2",
-    "typescript-eslint": "^8.58.1",
+    "typescript": "6.0.3",
+    "typescript-eslint": "^8.58.2",
     "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^4.1.4",
     "zod": "^4.3.6"
@@ -91,7 +95,9 @@
       "flatted@<3.4.0": ">=3.4.0",
       "flatted@<=3.4.1": ">=3.4.2",
       "lodash@>=4.0.0 <=4.17.23": ">=4.18.0",
-      "lodash@<=4.17.23": ">=4.18.0"
+      "lodash@<=4.17.23": ">=4.18.0",
+      "serialize-javascript@<=7.0.2": ">=7.0.3",
+      "serialize-javascript@<7.0.5": ">=7.0.5"
     }
   }
 }

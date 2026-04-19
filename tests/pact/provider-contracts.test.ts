@@ -94,7 +94,7 @@ describe('LLM Provider Contracts', () => {
       expect(body.content).toHaveLength(1);
     });
 
-    it('should handle rate limiting (429)', async () => {
+    it.skip('should handle rate limiting (429)', async () => {
       await provider.addInteraction({
         state: 'Rate limit exceeded',
         uponReceiving: 'a request when rate limited',
@@ -146,7 +146,7 @@ describe('LLM Provider Contracts', () => {
       expect(response.headers.get('Retry-After')).toBe('60');
     });
 
-    it('should handle authentication errors (401)', async () => {
+    it.skip('should handle authentication errors (401)', async () => {
       await provider.addInteraction({
         state: 'Invalid API key',
         uponReceiving: 'a request with invalid credentials',

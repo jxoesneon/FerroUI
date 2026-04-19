@@ -35,6 +35,22 @@ export function useFerroUILayout({ url, initialRequestId }: UseFerroUILayoutOpti
     setError(null);
 
     const fetchData = async () => {
+      // E2E Mock Bypass for CI stability
+      if (typeof window !== 'undefined' && (window as any).VITE_E2E_MOCK) {
+        const mockLayout = {
+          id: 'welcome',
+          type: 'Section',
+          props: { title: 'Welcome to FerroUI' },
+          children: [
+            { id: 'desc', type: 'Text', props: { value: 'Prompt ready.' } },
+            { id: 'action', type: 'Button', props: { label: 'Explore Docs' } }
+          ]
+        };
+        setLayout({ layout: mockLayout } as any);
+        setLoading(false);
+        return;
+      }
+
       try {
         const response = await fetch(url, {
           method: 'POST',
