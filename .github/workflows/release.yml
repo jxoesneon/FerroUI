@@ -33,13 +33,18 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
           registry-url: https://registry.npmjs.org
-          always-auth: true
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Build all packages
         run: pnpm -r --if-present run build
+
+      - name: Configure NPM Authentication
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > .npmrc
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       # Generate SBOM for supply chain transparency (A.9)
       - name: Generate SBOM
