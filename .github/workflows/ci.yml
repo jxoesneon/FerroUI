@@ -1,0 +1,369 @@
+name: FerroUI CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION_DEFAULT: "25"
+
+jobs:
+  # 
+  # 1. Build & Test matrix
+  # 
+  build-test:
+    name: Build & Test (Node ${{ matrix.node-version }} / ${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ["22", "24", "25"]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        exclude:
+          # Reduce bill: only full matrix on ubuntu; other OS only on default Node
+          - os: windows-latest
+            node-version: "22"
+          - os: windows-latest
+            node-version: "24"
+          - os: macos-latest
+            node-version: "22"
+          - os: macos-latest
+            node-version: "24"
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v6
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm -r --if-present run build
+
+      - name: Test with coverage
+        run: pnpm -r --if-present run test -- --coverage --coverage.provider=v8
+
+      - name: Lint
+        run: pnpm -r --if-present run lint
+
+      - name: Type check
+        run: pnpm run typecheck
+
+      - name: Upload coverage
+        if: matrix.os == 'ubuntu-latest' && matrix.node-version == env.NODE_VERSION_DEFAULT
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: "**/coverage"
+          retention-days: 7
+
+  # 
+  # 2. Coverage gate  fails PR if any package drops below the monorepo floor.
+  #    Per-package thresholds are defined in each package's vitest.config.ts
+  #    (engine, schema, registry, etc. have stricter targets). This gate is the
+  #    workspace-wide safety net matching CONTRIBUTING.md's 80% minimum.
+  #    See docs/architecture/Monorepo_Architecture_Package_Governance.md §7.3
+  # 
+  coverage-gate:
+    name: Coverage Gate
+    needs: build-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION_DEFAULT }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm -r --if-present run build
+
+      - name: Run coverage with thresholds
+        run: |
+          pnpm -r --if-present run test -- \
+            --coverage \
+            --coverage.provider=v8 \
+            --coverage.thresholds.lines=80 \
+            --coverage.thresholds.functions=80 \
+            --coverage.thresholds.branches=70 \
+            --coverage.thresholds.statements=80
+
+  # 
+  # 3. CodeQL  SAST
+  # 
+  codeql:
+    name: CodeQL Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    strategy:
+      matrix:
+        language: [javascript-typescript]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          queries: security-extended,security-and-quality
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION_DEFAULT }}
+          cache: pnpm
+
+      - name: Install & Build
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm -r --if-present run build
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: /language:${{ matrix.language }}
+
+  # 
+  # 4. Dependency vulnerability scan (Snyk)
+  # 
+  snyk:
+    name: Snyk Vulnerability Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION_DEFAULT }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # NOTE: Snyk failures are currently non-blocking while token is being configured.
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/node@master
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high --all-projects
+
+  # 
+  # 5. Secret scanning (gitleaks)
+  # 
+  gitleaks:
+    name: Secret Scan (gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # 
+  # 6. SBOM generation
+  # 
+  sbom:
+    name: Generate SBOM
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION_DEFAULT }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate SBOM (CycloneDX)
+        uses: anchore/sbom-action@v0
+        with:
+          format: cyclonedx-json
+          output-file: ferroui-sbom.json
+
+      - name: Upload SBOM artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-cyclonedx
+          path: ferroui-sbom.json
+          retention-days: 90
+
+  # 
+  # 7. npm audit (lockfile integrity)
+  # 
+  npm-audit:
+    name: npm audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION_DEFAULT }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # High / critical CVEs block the merge. If a vulnerability has no fix
+      # yet, add a dated exemption to pnpm.overrides or document in SECURITY.md
+      # rather than ignoring.
+      - name: Run pnpm audit
+        run: pnpm audit --audit-level=high
+
+  # 
+  # 8. Container Security Scan (A.10)
+  # 
+  container-scan:
+    name: Trivy Container Scan
+    runs-on: ubuntu-latest
+    needs: build-test
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build engine Docker image
+        run: |
+          docker build -t ferroui-engine:test -f packages/engine/Dockerfile .
+
+      - name: Run Trivy vulnerability scanner (image)
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'ferroui-engine:test'
+          format: 'sarif'
+          output: 'trivy-image.sarif'
+          severity: 'HIGH,CRITICAL'
+          exit-code: '0'  # Don't block, just report
+
+      - name: Upload Trivy image scan to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-image.sarif'
+          category: 'trivy-image'
+
+      - name: Run Trivy vulnerability scanner (fs)
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-fs.sarif'
+          severity: 'HIGH,CRITICAL'
+          skip-dirs: 'node_modules,packages/*/node_modules,apps/*/node_modules'
+
+      - name: Upload Trivy fs scan to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-fs.sarif'
+          category: 'trivy-fs'
+
+  # 
+  # 9. E2E Tests (Playwright) — B.1
+  # 
+  e2e:
+    name: E2E Tests (Playwright)
+    runs-on: ubuntu-latest
+    needs: build-test
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION_DEFAULT }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps
+
+      - name: Build web app
+        run: pnpm -F web build
+
+      - name: Run Playwright tests
+        run: pnpm exec playwright test --config tests/e2e/playwright.config.ts
+        env:
+          E2E_BASE_URL: http://localhost:3000
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+  # 
+  # 10. Integration tests (real HTTP server, mocked LLMs)
+  # 
+  integration:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    needs: build-test
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION_DEFAULT }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build packages
+        run: pnpm -r --if-present run build
+
+      - name: Run integration tests
+        run: pnpm run test:integration
+        env:
+          JWT_SECRET: "test-secret-min32chars-padding-here!!"
+          NODE_ENV: test

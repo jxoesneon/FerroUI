@@ -1,0 +1,108 @@
+name: FerroUI Docs Deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - 'packages/**'
+      - 'scripts/generate-docs.ts'
+      - '.github/workflows/docs-deploy.yml'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'README.md'
+      - 'CONTRIBUTING.md'
+      - 'CODE_OF_CONDUCT.md'
+      - 'SECURITY.md'
+      - 'MONITORING.md'
+      - 'LICENSE'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build docs site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # needed for lastUpdated git timestamps
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 25
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build registry packages (required for doc generation)
+        run: |
+          pnpm --filter @ferroui/schema build
+          pnpm --filter @ferroui/telemetry build
+          pnpm --filter @ferroui/i18n build
+          pnpm --filter @ferroui/registry build
+          pnpm --filter @ferroui/tools build
+          pnpm --filter @ferroui/engine build
+
+      - name: Generate API reference pages
+        run: pnpm run docs:generate
+
+      - name: Build VitePress site
+        run: pnpm exec vitepress build docs
+
+      - name: Check for broken links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --no-progress
+            --verbose
+            --max-concurrency 4
+            --accept 200..=299,301,302,403,429
+            --exclude-path docs/.vitepress/dist/assets
+            --exclude "^https?://jxoesneon\\.github\\.io/FerroUI/"
+            --exclude "^https?://localhost"
+            docs/.vitepress/dist
+          fail: false
+          output: ./lychee/report.md
+
+      - name: Upload link-check report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lychee-report
+          path: lychee/report.md
+          if-no-files-found: ignore
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v6
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: docs/.vitepress/dist
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

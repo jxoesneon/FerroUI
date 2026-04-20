@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "src",
+    "types": ["node"],
+    "composite": true,
+    "declaration": true,
+    "ignoreDeprecations": "6.0"
+  },
+  "references": [
+    { "path": "../schema" },
+    { "path": "../telemetry" }
+  ],
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "src/**/*.test.ts", "src/**/*.test.tsx", "src/**/__tests__/**"]
+}

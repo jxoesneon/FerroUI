@@ -1,0 +1,35 @@
+{
+  "font": {
+    "family": {
+      "sans": {
+        "$value": ["Inter", "system-ui", "sans-serif"],
+        "$type": "fontFamily"
+      },
+      "mono": {
+        "$value": ["JetBrains Mono", "monospace"],
+        "$type": "fontFamily"
+      }
+    },
+    "size": {
+      "xs": { "$value": "0.75rem", "$type": "fontSize" },
+      "sm": { "$value": "0.875rem", "$type": "fontSize" },
+      "base": { "$value": "1rem", "$type": "fontSize" },
+      "lg": { "$value": "1.125rem", "$type": "fontSize" },
+      "xl": { "$value": "1.25rem", "$type": "fontSize" },
+      "2xl": { "$value": "1.5rem", "$type": "fontSize" },
+      "3xl": { "$value": "1.875rem", "$type": "fontSize" },
+      "4xl": { "$value": "2.25rem", "$type": "fontSize" }
+    },
+    "weight": {
+      "normal": { "$value": "400", "$type": "fontWeight" },
+      "medium": { "$value": "500", "$type": "fontWeight" },
+      "semibold": { "$value": "600", "$type": "fontWeight" },
+      "bold": { "$value": "700", "$type": "fontWeight" }
+    },
+    "lineHeight": {
+      "tight": { "$value": "1.25", "$type": "lineHeight" },
+      "normal": { "$value": "1.5", "$type": "lineHeight" },
+      "relaxed": { "$value": "1.75", "$type": "lineHeight" }
+    }
+  }
+}

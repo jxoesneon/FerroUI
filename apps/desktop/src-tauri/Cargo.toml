@@ -1,0 +1,28 @@
+[package]
+name = "ferroui-desktop"
+version = "1.0.0"
+description = "FerroUI Desktop"
+authors = ["FerroUI Project Team"]
+license = "MIT"
+repository = "https://github.com/ferroui/ferroui"
+edition = "2021"
+rust-version = "1.60"
+
+[build-dependencies]
+tauri-build = { version = "1.5" }
+
+[dependencies]
+tauri = { version = "1.6", features = ["shell-open", "api-all"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tokio = { version = "1.35", features = ["full"] }
+reqwest = { version = "0.11", features = ["json", "stream"] }
+futures-util = "0.3"
+uuid = { version = "1.6", features = ["v4"] }
+chrono = { version = "0.4", features = ["serde"] }
+async-trait = "0.1"
+
+[features]
+# this feature is used for production builds or when `devPath` is a directory
+# it is also allowed in dev mode for testing purposes
+custom-protocol = ["tauri/custom-protocol"]

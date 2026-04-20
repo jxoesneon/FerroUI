@@ -1,0 +1,59 @@
+{
+  "id": "basic-001",
+  "category": "basic",
+  "name": "Simple KPI Dashboard",
+  "prompt": "Show me a dashboard with revenue and order KPIs",
+  "capturedAt": "2025-01-01T00:00:00.000Z",
+  "modelVersion": "claude-3-5-sonnet-20241022",
+  "metrics": {
+    "schemaValid": true,
+    "repairAttempts": 0,
+    "toolsInvoked": ["getRevenue", "getOrders"],
+    "componentCount": 3,
+    "latencyMs": 1800
+  },
+  "goldenLayout": {
+    "schemaVersion": "1.1.0",
+    "requestId": "eval-basic-001",
+    "locale": "en",
+    "page": {
+      "type": "organism",
+      "id": "dashboard-root",
+      "layout": "stack",
+      "aria": { "role": "main", "label": "Revenue and Orders Dashboard" },
+      "props": { "heading": "Revenue & Orders Overview" },
+      "children": [
+        {
+          "type": "molecule",
+          "id": "kpi-revenue",
+          "layout": "inline",
+          "aria": { "role": "region", "label": "Revenue KPI" },
+          "props": {
+            "label": "Total Revenue",
+            "value": "$0",
+            "trend": "neutral"
+          },
+          "children": []
+        },
+        {
+          "type": "molecule",
+          "id": "kpi-orders",
+          "layout": "inline",
+          "aria": { "role": "region", "label": "Orders KPI" },
+          "props": {
+            "label": "Total Orders",
+            "value": "0",
+            "trend": "neutral"
+          },
+          "children": []
+        }
+      ]
+    }
+  },
+  "assertions": {
+    "requiredComponents": ["organism", "molecule"],
+    "mustHaveAria": true,
+    "mustNotHavePII": true,
+    "schemaVersion": "1.1.0"
+  }
+}

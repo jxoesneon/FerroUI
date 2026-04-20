@@ -1,0 +1,26 @@
+{
+  "description": "Load test baseline for drift detection (B.2.4)",
+  "lastUpdated": "2026-04-17",
+  "thresholds": {
+    "smoke_test": {
+      "vus": 50,
+      "duration": "30s",
+      "p95_response_ms": 5000,
+      "max_error_rate": 0.1
+    },
+    "soak_test": {
+      "vus": 200,
+      "duration": "10m",
+      "p95_response_ms": 5000,
+      "max_error_rate": 0.05
+    }
+  },
+  "historical": [
+    {
+      "date": "2026-04-17",
+      "smoke_p95_ms": 1200,
+      "soak_p95_ms": 2800,
+      "error_rate": 0.01
+    }
+  ]
+}

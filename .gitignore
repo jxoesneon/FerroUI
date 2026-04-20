@@ -1,0 +1,108 @@
+﻿# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+
+# Production
+build/
+
+# Misc
+.DS_Store
+*.pem
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDEs
+.vscode/
+.idea/workspace.xml
+*.swp
+*.swo
+*~
+.vscode/settings.json
+
+# FerroUI Specific
+.ferroui/
+ferroui-eval-reports/
+
+# Build artifacts
+*.tsbuildinfo
+*.js.map
+packages/*/dist
+apps/*/dist
+**/*.js
+**/*.d.ts
+!**/src/**/*.d.ts
+!**/vite.config.ts
+!**/vite.config.js
+!**/eslint.config.js
+!**/packages/cli/bin/ferroui.js
+!**/node_modules/**
+!**/.claude/**
+
+# MemPalace
+.fastembed_cache/*
+entities.json
+mempalace.yaml
+
+# Runtime and Local Artifacts
+.npm-cache/
+.pnpm-store/
+.project_root
+.logs.json
+logs.json
+checkpoint-*.json
+npm-debug.log*
+.vitest/
+
+# Lock files (only pnpm allowed)
+package-lock.json
+yarn.lock
+
+# OS specific
+.DS_Store
+
+# Log files (root-level dev session logs)
+*.log
+dev.log
+edge_dev.log
+edge_dev2.log
+edge_final.log
+edge_v3.log
+web_dev.log
+web_dev2.log
+web_final.log
+web_final_test.log
+web_v3.log
+
+# Agent rules
+.agent/
+superpowers/
+
+# Docs site build output
+docs/.vitepress/dist/
+docs/.vitepress/cache/
+
+# Audit reports (moved to docs/audit/)
+.dev.vars
+
+# Wrangler state
+.wrangler/
+
+# Token artifacts
+packages/tokens/tokens/
+packages/tokens/src-tokens/
+
+# Puppeteer temp
+.tmp_pup/
+
+# Validation scripts (development only)
+check_page.js
+run_puppeteer.mjs
+verify-ferro.js
+validate-demo.ts

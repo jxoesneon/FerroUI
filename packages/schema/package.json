@@ -1,0 +1,38 @@
+{
+  "name": "@ferroui/schema",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Zod-based schemas and TypeScript types for the FerroUI layout system.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "engines": {
+    "node": ">=25"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run"
+  },
+  "keywords": [
+    "ferroui",
+    "schema",
+    "zod",
+    "types"
+  ],
+  "dependencies": {
+    "@ferroui/shared": "workspace:*",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.4"
+  }
+}

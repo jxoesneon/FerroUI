@@ -1,0 +1,26 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - deployment.yaml
+  - service.yaml
+  - configmap.yaml
+  - secret.yaml
+  - redis.yaml
+  - otel-collector.yaml
+
+commonLabels:
+  app.kubernetes.io/name: ferroui-engine
+  app.kubernetes.io/managed-by: kustomize
+
+images:
+  - name: ferroui-engine
+    newName: ghcr.io/ferroui/engine
+    newTag: latest
+
+configMapGenerator:
+  - name: ferroui-config
+    literals:
+      - NODE_ENV=production
+      - PORT=4000
+      - AUDIT_LOG_OUTPUT=file

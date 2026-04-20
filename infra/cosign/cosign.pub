@@ -1,0 +1,16 @@
+# Placeholder for Cosign public key (C.5 - SLSA/Cosign signing)
+# Generate with: cosign generate-key-pair
+# Store private key in GitHub Secrets as COSIGN_PRIVATE_KEY
+# This public key should be committed to the repo for verification
+
+# IMPORTANT: The actual private key must NEVER be committed to the repo.
+# Use GitHub Actions with the key stored as a secret:
+#
+#   - uses: sigstore/cosign-installer@v3
+#   - name: Sign container image
+#     run: |
+#       cosign sign --key env://COSIGN_PRIVATE_KEY \
+#         ghcr.io/ferroui/engine:${{ github.sha }}
+#     env:
+#       COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
+#       COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}

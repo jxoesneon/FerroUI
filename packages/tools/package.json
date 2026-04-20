@@ -1,0 +1,43 @@
+{
+  "name": "@ferroui/tools",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Development and utility tools for the FerroUI ecosystem.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "engines": {
+    "node": ">=25"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./testing": {
+      "types": "./dist/testing.d.ts",
+      "import": "./dist/testing.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run"
+  },
+  "keywords": [
+    "ferroui",
+    "tools",
+    "utilities"
+  ],
+  "dependencies": {
+    "@ferroui/schema": "workspace:*",
+    "@ferroui/telemetry": "workspace:*",
+    "zod": "^4.3.6",
+    "zod-to-json-schema": "^3.25.2"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.4"
+  }
+}

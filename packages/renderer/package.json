@@ -1,0 +1,35 @@
+{
+  "name": "@ferroui/renderer",
+  "version": "0.1.0",
+  "private": true,
+  "description": "FerroUI layout renderer — maps FerroUILayout JSON to React components via the component registry.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "engines": {
+    "node": ">=25"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "test:a11y": "vitest run"
+  },
+  "keywords": [
+    "ferroui",
+    "renderer",
+    "react"
+  ],
+  "dependencies": {
+    "@ferroui/schema": "workspace:*",
+    "@ferroui/registry": "workspace:*",
+    "react": "^19.2.5"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14",
+    "typescript": "^6.0.3"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0 || >=19.0.0"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "paths": {
+      "@ferroui/engine": ["./packages/engine/dist"],
+      "@ferroui/registry": ["./packages/registry/dist"],
+      "@ferroui/schema": ["./packages/schema/dist"],
+      "@ferroui/tools": ["./packages/tools/dist"],
+      "@ferroui/telemetry": ["./packages/telemetry/dist"],
+      "@ferroui/i18n": ["./packages/i18n/dist"],
+      "@ferroui/renderer": ["./packages/renderer/dist"]
+    }
+  },
+  "files": [],
+  "references": [
+    { "path": "packages/schema" },
+    { "path": "packages/telemetry" },
+    { "path": "packages/registry" },
+    { "path": "packages/tools" },
+    { "path": "packages/i18n" },
+    { "path": "packages/renderer" },
+    { "path": "packages/engine" },
+    { "path": "packages/mcp-server" }
+  ],
+  "exclude": ["node_modules", "dist"]
+}

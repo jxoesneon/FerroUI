@@ -1,0 +1,8 @@
+import { z } from 'zod';
+import { {{name}}ParamsSchema, {{name}}ResultSchema } from './schema';
+
+export const {{name}}Mock = async (params: z.infer<typeof {{name}}ParamsSchema>): Promise<z.infer<typeof {{name}}ResultSchema>> => {
+  return {
+    // Return mock data
+  } as any;
+};

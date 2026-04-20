@@ -1,0 +1,85 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+env:
+  NODE_VERSION: "25"
+
+jobs:
+  release:
+    name: Changesets Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      id-token: write   # Required for npm provenance
+
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build all packages
+        run: pnpm -r --if-present run build
+
+      # Generate SBOM for supply chain transparency (A.9)
+      - name: Generate SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          format: cyclonedx-json
+          output-file: sbom.json
+
+      - name: Create Release PR or Publish
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          publish: pnpm changeset publish
+          title: "chore: release packages"
+          commit: "chore: release packages"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create GitHub Release tags
+        if: steps.changesets.outputs.published == 'true'
+        run: |
+          echo "Published packages: ${{ steps.changesets.outputs.publishedPackages }}"
+
+      # Attest SBOM for supply chain verification (A.9)
+      - name: Attest SBOM
+        if: steps.changesets.outputs.published == 'true'
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: sbom.json
+          subject-name: ferroui-sbom
+          show-summary: true
+
+      # Attach SBOM to GitHub Release (A.9)
+      - name: Upload SBOM to Release
+        if: steps.changesets.outputs.published == 'true'
+        uses: softprops/action-gh-release@v3
+        with:
+          files: sbom.json
+          tag_name: ${{ github.ref_name }}
+          token: ${{ secrets.GITHUB_TOKEN }}

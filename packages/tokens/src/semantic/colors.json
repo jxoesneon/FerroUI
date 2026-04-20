@@ -1,0 +1,58 @@
+{
+  "color": {
+    "primary": {
+      "light": { "$value": "{color.blue.500}", "$type": "color" },
+      "dark": { "$value": "{color.blue.400}", "$type": "color" },
+      "enterprise": { "$value": "#0f62fe", "$type": "color" },
+      "high-contrast": { "$value": "#5cb3ff", "$type": "color" }
+    },
+    "danger": {
+      "light": { "$value": "{color.red.500}", "$type": "color" },
+      "dark": { "$value": "{color.red.400}", "$type": "color" },
+      "enterprise": { "$value": "#da1e28", "$type": "color" },
+      "high-contrast": { "$value": "#ff6666", "$type": "color" }
+    },
+    "success": {
+      "light": { "$value": "{color.green.500}", "$type": "color" },
+      "dark": { "$value": "{color.green.400}", "$type": "color" },
+      "enterprise": { "$value": "#24a148", "$type": "color" },
+      "high-contrast": { "$value": "#66ff66", "$type": "color" }
+    },
+    "warning": {
+      "light": { "$value": "{color.yellow.500}", "$type": "color" },
+      "dark": { "$value": "{color.yellow.400}", "$type": "color" },
+      "enterprise": { "$value": "#f1c21b", "$type": "color" },
+      "high-contrast": { "$value": "#ffff66", "$type": "color" }
+    },
+    "text": {
+      "primary": {
+        "light": { "$value": "{color.gray.900}", "$type": "color" },
+        "dark": { "$value": "{color.gray.100}", "$type": "color" },
+        "enterprise": { "$value": "{color.gray.900}", "$type": "color" },
+        "high-contrast": { "$value": "#ffffff", "$type": "color" }
+      },
+      "secondary": {
+        "light": { "$value": "{color.gray.600}", "$type": "color" },
+        "dark": { "$value": "{color.gray.300}", "$type": "color" },
+        "enterprise": { "$value": "{color.gray.700}", "$type": "color" },
+        "high-contrast": { "$value": "#ffffff", "$type": "color" }
+      }
+    },
+    "background": {
+      "DEFAULT": {
+        "light": { "$value": "{color.white}", "$type": "color" },
+        "dark": { "$value": "{color.gray.900}", "$type": "color" },
+        "enterprise": { "$value": "{color.white}", "$type": "color" },
+        "high-contrast": { "$value": "#000000", "$type": "color" }
+      }
+    },
+    "border": {
+      "DEFAULT": {
+        "light": { "$value": "{color.gray.200}", "$type": "color" },
+        "dark": { "$value": "{color.gray.700}", "$type": "color" },
+        "enterprise": { "$value": "{color.gray.200}", "$type": "color" },
+        "high-contrast": { "$value": "#ffffff", "$type": "color" }
+      }
+    }
+  }
+}

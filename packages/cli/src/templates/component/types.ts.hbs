@@ -1,0 +1,4 @@
+import { z } from 'zod';
+import { {{name}}Schema } from './schema';
+
+export type {{name}}Props = z.infer<typeof {{name}}Schema>;

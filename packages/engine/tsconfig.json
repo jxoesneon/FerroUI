@@ -1,0 +1,19 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "src",
+    "types": ["node"],
+    "composite": true,
+    "declaration": true
+  },
+  "references": [
+    { "path": "../schema" },
+    { "path": "../telemetry" },
+    { "path": "../registry" },
+    { "path": "../tools" },
+    { "path": "../i18n" }
+  ],
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "src/**/*.test.ts", "src/**/*.test.tsx", "src/**/__tests__/**"]
+}

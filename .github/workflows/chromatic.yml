@@ -1,0 +1,54 @@
+name: Visual Regression (Chromatic)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'packages/registry/**'
+      - 'packages/tokens/**'
+      - '.storybook/**'
+  pull_request:
+    paths:
+      - 'packages/registry/**'
+      - 'packages/tokens/**'
+      - '.storybook/**'
+  workflow_dispatch:
+
+concurrency:
+  group: chromatic-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  chromatic:
+    name: Chromatic Visual Testing
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Required for Chromatic
+
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '25'
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Storybook
+        run: pnpm run storybook:build
+
+      - name: Publish to Chromatic
+        if: env.CHROMATIC_PROJECT_TOKEN != ''
+        uses: chromaui/action@latest
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          storybookBuildDir: storybook-static
+          exitZeroOnChanges: true  # Don't block on visual changes
+          exitOnceUploaded: true
+          onlyChanged: true  # TurboSnap for faster builds
+        env:
+          CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}

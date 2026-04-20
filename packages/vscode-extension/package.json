@@ -1,0 +1,102 @@
+{
+  "name": "@ferroui/extension",
+  "private": true,
+  "displayName": "FerroUI",
+  "description": "AI-powered UI development assistant",
+  "version": "0.1.0",
+  "publisher": "ferroui",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Machine Learning",
+    "Snippets",
+    "Other"
+  ],
+  "keywords": [
+    "ai",
+    "ui",
+    "ferroui",
+    "components"
+  ],
+  "activationEvents": [
+    "onLanguage:typescript",
+    "onLanguage:typescriptreact"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "ferroui.generateComponent",
+        "title": "FerroUI: Generate Component",
+        "icon": "$(sparkle)"
+      },
+      {
+        "command": "ferroui.explainComponent",
+        "title": "FerroUI: Explain Component"
+      },
+      {
+        "command": "ferroui.validateLayout",
+        "title": "FerroUI: Validate Layout"
+      },
+      {
+        "command": "ferroui.previewLayout",
+        "title": "FerroUI: Preview Layout"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "ferroui.generateComponent",
+          "group": "9_cutcopypaste@5",
+          "when": "editorLangId == typescript || editorLangId == typescriptreact"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "FerroUI",
+      "properties": {
+        "ferroui.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "FerroUI API key"
+        },
+        "ferroui.apiUrl": {
+          "type": "string",
+          "default": "https://api.ferroui.dev",
+          "description": "FerroUI API endpoint"
+        },
+        "ferroui.defaultProvider": {
+          "type": "string",
+          "default": "anthropic",
+          "enum": ["anthropic", "openai", "google"],
+          "description": "Default LLM provider"
+        }
+      }
+    },
+    "views": {
+      "explorer": [
+        {
+          "id": "ferroui.components",
+          "name": "FerroUI Components",
+          "when": "workspaceHasFerroui"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^25",
+    "@types/vscode": "^1.85.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.0",
+    "typescript": "^6"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.0"
+  }
+}

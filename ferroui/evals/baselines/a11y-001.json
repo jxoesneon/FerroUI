@@ -1,0 +1,58 @@
+{
+  "id": "a11y-001",
+  "category": "a11y",
+  "name": "Interactive Component ARIA",
+  "prompt": "Create a form with a submit button",
+  "capturedAt": "2025-01-01T00:00:00.000Z",
+  "modelVersion": "claude-3-5-sonnet-20241022",
+  "metrics": {
+    "schemaValid": true,
+    "repairAttempts": 0,
+    "toolsInvoked": [],
+    "componentCount": 3,
+    "latencyMs": 900
+  },
+  "goldenLayout": {
+    "schemaVersion": "1.1.0",
+    "requestId": "eval-a11y-001",
+    "locale": "en",
+    "page": {
+      "type": "organism",
+      "id": "form-root",
+      "layout": "stack",
+      "aria": { "role": "main", "label": "Form" },
+      "props": { "heading": "Form" },
+      "children": [
+        {
+          "type": "molecule",
+          "id": "form-group-1",
+          "layout": "stack",
+          "aria": { "role": "group", "label": "Form Fields" },
+          "props": {},
+          "children": [
+            {
+              "type": "atom",
+              "id": "submit-btn",
+              "aria": {
+                "role": "button",
+                "label": "Submit",
+                "describedBy": "form-group-1"
+              },
+              "props": {
+                "label": "Submit",
+                "variant": "primary"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "assertions": {
+    "allInteractiveElementsHaveAriaLabel": true,
+    "allInputsHaveLabels": true,
+    "mustHaveAriaRoles": ["button", "group"],
+    "wcagLevel": "AA",
+    "schemaVersion": "1.1.0"
+  }
+}

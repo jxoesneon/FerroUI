@@ -1,0 +1,20 @@
+{
+  "name": "ferroui-app-edge",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev src/index.ts",
+    "deploy": "wrangler deploy src/index.ts",
+    "typecheck": "tsc"
+  },
+  "dependencies": {
+    "@ferroui/engine": "workspace:*",
+    "@ferroui/shared": "workspace:*",
+    "hono": "^4.0.0"
+  },
+  "devDependencies": {
+    "wrangler": "^3.0.0",
+    "typescript": "^6.0.0"
+  }
+}
