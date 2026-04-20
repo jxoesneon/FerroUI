@@ -6,13 +6,13 @@
 import type { Request, Response, NextFunction } from 'express';
 import { AuditLogger, AuditEventType } from '../audit/audit-logger.js';
 
-interface BudgetConfig {
+export interface BudgetConfig {
   maxTokensPerDay: number;
   maxRequestsPerDay: number;
   maxCostPerDay: number; // in USD cents
 }
 
-interface TenantBudget {
+export interface TenantBudget {
   tenantId: string;
   config: BudgetConfig;
   usage: {

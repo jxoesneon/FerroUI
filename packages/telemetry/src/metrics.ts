@@ -48,7 +48,7 @@ export function getMeter(): Meter {
 /**
  * Common metrics registry
  */
-class MetricsRegistry {
+export class MetricsRegistry {
   private static instance: MetricsRegistry;
   private meter: Meter;
 

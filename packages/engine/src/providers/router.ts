@@ -29,7 +29,7 @@ export interface RoutedProvider {
   maxRpm?: number;
 }
 
-interface ProviderHealth {
+export interface ProviderHealth {
   failures: number;
   lastFailureAt: number;
   circuitOpen: boolean;

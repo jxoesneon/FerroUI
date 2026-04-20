@@ -3,7 +3,7 @@ import { I18nContext } from './I18nContext.js';
 import { SupportedLocale, Direction, LocaleBundle, TranslationOptions, I18nContextValue } from './types.js';
 import { getTextDirection, resolveLocale, formatDate, formatNumber, formatCurrency, interpolate, resolveKey } from './utils.js';
 
-interface I18nProviderProps {
+export interface I18nProviderProps {
   children: ReactNode;
   initialLocale?: SupportedLocale;
   initialBundles?: LocaleBundle;

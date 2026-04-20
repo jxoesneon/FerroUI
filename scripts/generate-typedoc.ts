@@ -22,31 +22,20 @@ async function main() {
       continue;
     }
 
-    const outDir = path.join(ROOT, 'docs', 'api', 'packages', '.typedoc', pkg);
+    const outDir = path.join(ROOT, 'docs', 'api', 'packages', 'typedoc_api', pkg);
     console.log(`  - @ferroui/${pkg} -> ${outDir}`);
 
     try {
-      // Try common entry points
-      const entries = [
-        path.join(pkgPath, 'src', 'index.ts'),
-        path.join(pkgPath, 'src', 'extension.ts'),
-        path.join(pkgPath, 'src', 'main.ts'),
-      ];
+      // Use glob pattern to include all source files
+      const entry = path.join(pkgPath, 'src', '**', '*.{ts,tsx}');
       
-      const entry = entries.find(e => fs.existsSync(e));
-      
-      if (!entry) {
-        console.warn(`    ! No valid entry point found for ${pkg}, skipping.`);
-        continue;
-      }
-
       const tsconfig = path.join(pkgPath, 'tsconfig.json');
       const tsconfigArg = fs.existsSync(tsconfig) ? `--tsconfig ${tsconfig.split(path.sep).join('/')}` : '';
 
       const posixEntry = entry.split(path.sep).join('/');
       const posixOutDir = outDir.split(path.sep).join('/');
 
-      execSync(`pnpm exec typedoc --out ${posixOutDir} --plugin typedoc-plugin-markdown ${posixEntry} ${tsconfigArg} --hidePageTitle --hideBreadcrumbs --entryPointStrategy resolve --cleanOutputDir true`, {
+      execSync(`pnpm exec typedoc --out ${posixOutDir} --plugin typedoc-plugin-markdown "${posixEntry}" ${tsconfigArg} --hidePageTitle --hideBreadcrumbs --entryPointStrategy expand --cleanOutputDir true --excludeInternal false --excludePrivate false --excludeProtected false --excludeExternals false --exclude "**/*.test.ts" --exclude "**/__tests__/*"`, {
         stdio: 'inherit',
         cwd: ROOT
       });

@@ -15,7 +15,7 @@ export interface CacheBackend {
 
 // ─── In-Memory Backend ────────────────────────────────────────────────────────
 
-interface MemoryEntry { value: string; expiresAt: number; }
+export interface MemoryEntry { value: string; expiresAt: number; }
 
 export class InMemoryCacheBackend implements CacheBackend {
   private store = new Map<string, MemoryEntry>();

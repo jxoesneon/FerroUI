@@ -481,11 +481,16 @@ const APP_METADATA: Array<{ app: string; title: string; description: string; pat
 
 async function writePackageStub(pkg: typeof PACKAGE_METADATA[number]): Promise<void> {
   const target = path.join(API_DIR, 'packages', `${pkg.pkg}.md`);
-  const generatedDir = path.join(API_DIR, 'packages', '.typedoc', pkg.pkg);
+  const generatedDir = path.join(API_DIR, 'packages', 'typedoc_api', pkg.pkg);
   let typedocBlock: string;
   try {
     const readme = path.join(generatedDir, 'README.md');
-    const content = await fs.readFile(readme, 'utf-8');
+    let content = await fs.readFile(readme, 'utf-8');
+    
+    // Rewrite relative Markdown links to point to the subfolder
+    // [Text](path/file.md) -> [Text](typedoc_api/pkgname/path/file.md)
+    content = content.replace(/\[([^\]]+)\]\((?!https?:\/\/|\/)([^)]+)\)/g, `[$1](typedoc_api/${pkg.pkg}/$2)`);
+    
     typedocBlock = `\n\n## Generated API\n\n${content}\n`;
   } catch {
     typedocBlock = '\n\n> TypeDoc output is not yet available for this package. Run `pnpm docs:typedoc` or consult the source in the repository.\n';

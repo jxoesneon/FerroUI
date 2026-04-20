@@ -18,6 +18,6 @@ VS Code editor integration with live layout preview.
 
 ## Functions
 
-- [activate](functions/activate.md)
-- [deactivate](functions/deactivate.md)
+- [activate](typedoc_api/vscode-extension/functions/activate.md)
+- [deactivate](typedoc_api/vscode-extension/functions/deactivate.md)
 
