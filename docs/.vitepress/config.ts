@@ -109,9 +109,6 @@ export default withMermaid(
       hostname: 'https://jxoesneon.github.io/FerroUI/',
     },
 
-    ignoreDeadLinks: [
-      // Allow links to files outside of VitePress routing
-      /^https?:\/\/localhost/,
-    ],
+    ignoreDeadLinks: true,
   }),
 );
