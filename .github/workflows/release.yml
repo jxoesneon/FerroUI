@@ -69,7 +69,7 @@ jobs:
       # Attest SBOM for supply chain verification (A.9)
       - name: Attest SBOM
         if: steps.changesets.outputs.published == 'true'
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v4
         with:
           subject-path: sbom.json
           subject-name: ferroui-sbom

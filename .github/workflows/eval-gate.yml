@@ -68,7 +68,7 @@ jobs:
 
       - name: Attest eval results (D.1.4)
         if: hashFiles('eval-results.json') != ''
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v4
         with:
           subject-path: eval-results.json
           subject-name: ferroui-eval-results
