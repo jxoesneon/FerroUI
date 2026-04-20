@@ -72,6 +72,8 @@ jobs:
             --verbose
             --max-concurrency 4
             --accept 200..=299,301,302,403,429
+            --root docs/.vitepress/dist
+            --remap "/FerroUI/ /"
             --exclude-path docs/.vitepress/dist/assets
             --exclude "^https?://jxoesneon\\.github\\.io/FerroUI/"
             --exclude "^https?://localhost"
