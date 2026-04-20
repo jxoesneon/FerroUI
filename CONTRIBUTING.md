@@ -1,113 +1,40 @@
-# Contributing to FerroUI
+﻿# Contributing to FerroUI
 
-Thank you for your interest in contributing to FerroUI! This document provides guidelines for contributing to the project.
-
----
+Thank you for your interest in contributing to FerroUI! We're excited to build the future of AI-powered UI together.
 
 ## Code of Conduct
 
-This project adheres to a [Code of Conduct](./CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
+This project adheres to the [Contributor Covenant Code of Conduct](./CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
 
----
-
-## How Can I Contribute?
+## How to Contribute
 
 ### Reporting Bugs
+If you find a bug, please search existing issues to see if it has already been reported. If not, open a new issue using our [Bug Report Template](https://github.com/jxoesneon/FerroUI/issues/new?template=bug_report.md).
 
-Before creating a bug report:
-- Check the [Known Issues](../support/Known_Issues_Troubleshooting.md)
-- Search existing issues
-
-When creating a bug report, include:
-- Clear title and description
-- Steps to reproduce
-- Expected vs actual behavior
-- Environment details (OS, Node version, etc.)
-- Screenshots if applicable
-
-### Suggesting Enhancements
-
-- Use a clear, descriptive title
-- Provide detailed description
-- Explain why this enhancement would be useful
+### Feature Requests
+We welcome ideas for new features! Please use our [Feature Request Template](https://github.com/jxoesneon/FerroUI/issues/new?template=feature_request.md) to suggest improvements.
 
 ### Pull Requests
+1. **Fork** the repository and create your branch from `main`.
+2. **Setup** the project using `./setup.sh`.
+3. **Commit** your changes using [Conventional Commits](https://www.conventionalcommits.org/).
+4. **Verify** your changes by running tests: `pnpm run test`.
+5. **Submit** your PR and wait for review.
 
-1. Fork the repository
-2. Create a branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes
-4. Commit with clear messages
-5. Push to your fork
-6. Open a Pull Request
+## Development Workflow
 
----
-
-## Development Setup
-
-```bash
-# Clone the repository
-git clone https://github.com/ferrouiui/ferroui.git
-cd ferroui
-
-# Install dependencies
-pnpm install
-
-# Start development
-pnpm dev
-```
-
----
+1. Install pnpm (if you haven't already): `npm install -g pnpm`
+2. Install dependencies: `pnpm install`
+3. Start the dev server: `pnpm run dev`
+4. Run tests: `pnpm run test`
 
 ## Coding Standards
 
-### TypeScript
-
-- Use strict mode
-- Explicit return types for public APIs
-- No `any` types
-
-### Testing
-
-- Unit tests for all new code
-- Minimum 80% coverage
-- Integration tests for critical paths
-
-### Documentation
-
-- JSDoc for public APIs
-- Update README if needed
-- Add to changelog
-
----
-
-## Commit Messages
-
-Follow conventional commits:
-
-```
-feat: add new component﻿
-fix: resolve validation bug
-docs: update API reference
-refactor: simplify engine logic
-test: add integration tests
-chore: update dependencies
-```
-
----
-
-## Review Process
-
-- All PRs require at least one review
-- CI checks must pass
-- No merge conflicts
-
----
+- **TypeScript**: Use strict mode. Avoid `any` types.
+- **Naming**: Use `kebab-case` for file names and `PascalCase` for React components.
+- **Testing**: Add unit tests for all new functionality.
+- **Documentation**: Update the `README.md` or `docs/` if your change introduces new features or changes existing behavior.
 
 ## Questions?
 
-- Discord: https://discord.gg/ferrouiui
-- Discussions: https://github.com/ferrouiui/ferroui/discussions
-
----
-
-Thank you for contributing!
+Feel free to open a [Discussion](https://github.com/jxoesneon/FerroUI/discussions) or join our [Discord](https://discord.gg/ferrouiui).

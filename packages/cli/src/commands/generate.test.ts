@@ -121,7 +121,7 @@ describe('generateCommand', () => {
     });
 
     it('should fallback to default template if template file does not exist', async () => {
-      vi.mocked(fs.pathExists).mockResolvedValue(true as never);
+      vi.mocked(fs.pathExists).mockResolvedValue(false as never);
 
       await generateCommand.parseAsync(['node', 'generate', 'prompt', 'System Expert']);
 

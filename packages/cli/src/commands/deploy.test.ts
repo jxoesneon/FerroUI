@@ -45,7 +45,7 @@ describe('deployCommand', () => {
   });
 
   it('should exit if dist directory does not exist', async () => {
-    vi.mocked(fs.pathExists).mockResolvedValue(true as never);
+    vi.mocked(fs.pathExists).mockResolvedValue(false as never);
 
     await deployCommand.parseAsync(['node', 'deploy', 'web']);
 

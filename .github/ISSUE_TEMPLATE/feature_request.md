@@ -1,37 +1,20 @@
----
-name: Feature Request
-about: Propose a new feature or enhancement
-title: "[Feature] "
-labels: enhancement, needs-triage
+﻿---
+name: Feature request
+about: Suggest an idea for this project
+title: ''
+labels: enhancement
 assignees: ''
+
 ---
 
-## Problem Statement
+**Is your feature request related to a problem? Please describe.**
+A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
 
-<!-- What problem does this solve? Who is affected? -->
+**Describe the solution you'd like**
+A clear and concise description of what you want to happen.
 
-## Proposed Solution
+**Describe alternatives you've considered**
+A clear and concise description of any alternative solutions or features you've considered.
 
-<!-- Describe the feature you'd like to see implemented. -->
-
-## Alternatives Considered
-
-<!-- What other approaches did you consider? Why did you prefer your proposal? -->
-
-## API / Interface Sketch
-
-<!-- If applicable, sketch the proposed API, schema change, or component interface. -->
-
-```typescript
-// Example
-```
-
-## Acceptance Criteria
-
-- [ ] 
-- [ ] 
-- [ ] 
-
-## Related Issues / RFCs
-
-<!-- Link any related issues, ADRs, or RFCs. -->
+**Additional context**
+Add any other context or screenshots about the feature request here.

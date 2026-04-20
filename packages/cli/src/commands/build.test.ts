@@ -98,7 +98,7 @@ describe('buildCommand', () => {
   });
 
   it('should skip directories that do not exist', async () => {
-    vi.mocked(fs.pathExists).mockResolvedValue(true as never);
+    vi.mocked(fs.pathExists).mockResolvedValue(false as never);
 
     await buildCommand.parseAsync(['node', 'build', '--skip-typecheck']);
 

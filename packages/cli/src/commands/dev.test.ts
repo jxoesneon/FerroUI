@@ -160,7 +160,7 @@ describe('devCommand', () => {
   });
 
   it('should warn if services are not found', async () => {
-    vi.mocked(fs.pathExists).mockResolvedValue(true as never);
+    vi.mocked(fs.pathExists).mockResolvedValue(false as never);
 
     await devCommand.parseAsync(['node', 'dev', '--no-open']);
 
