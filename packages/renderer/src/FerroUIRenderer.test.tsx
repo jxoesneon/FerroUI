@@ -16,12 +16,8 @@ globalThis.TextEncoder = class {
   encode(s: string) { return new Uint8Array([...s].map(c => c.charCodeAt(0))); }
 } as any;
 
-// Mock atob (simple string conversion for tests)
-globalThis.atob = (s: string) => {
-  const binary = [];
-  const decoded = atob ? atob(s) : s; // fall back to identity if not in env
-  return decoded;
-};
+// Mock atob (simple mock for tests)
+globalThis.atob = vi.fn((s: string) => s);
 
 describe('FerroUIRenderer (C2PA)', () => {
   const mockLayout = {
@@ -45,12 +41,16 @@ describe('FerroUIRenderer (C2PA)', () => {
         verify: vi.fn().mockResolvedValue(true),
       },
     };
+    
+    // Stub global crypto
     vi.stubGlobal('crypto', mockCrypto);
-    // In jsdom, window.crypto might already exist, so we stub it carefully
+    
+    // If in JSDOM, ensure window.crypto is also mocked
     if (typeof window !== 'undefined') {
-      vi.stubGlobal('window', { ...window, crypto: mockCrypto });
-    } else {
-      vi.stubGlobal('window', { crypto: mockCrypto });
+      Object.defineProperty(window, 'crypto', {
+        value: mockCrypto,
+        configurable: true,
+      });
     }
   });
 
