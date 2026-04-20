@@ -26,7 +26,7 @@ jobs:
     env:
       JWT_SECRET: test-secret-min32chars-padding-here!!
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v6
@@ -76,7 +76,7 @@ jobs:
           JWT_TOKEN: ${{ env.JWT_TOKEN }}
 
       - name: Upload results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: load-test-results
           path: |

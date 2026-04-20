@@ -1,6 +1,7 @@
 import OpenAI from 'openai';
 import { LlmProvider } from './base.js';
 import { LlmRequest, LlmResponse } from '../types.js';
+import { PROVIDER_PRICING } from '../middleware/tenant-quota.js';
 
 export interface OpenAIProviderOptions {
   apiKey?: string;
@@ -82,5 +83,11 @@ export class OpenAIProvider implements LlmProvider {
 
   estimateTokens(text: string): number {
     return Math.ceil(text.length / 4);
+  }
+
+  estimateCost(tokens: { input: number; output: number }): number {
+    const pricing = PROVIDER_PRICING[this.id];
+    if (!pricing) return 0;
+    return (tokens.input * pricing.input + tokens.output * pricing.output) * 0.1;
   }
 }

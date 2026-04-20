@@ -166,7 +166,7 @@ All 4 RFCs are **Draft** — none are approved or implemented. Implementation is
 
 | RFC | Topic | Status | Target |
 |-----|-------|--------|--------|
-| RFC-001 | Layout Actions & State Machines | 🔵 DRAFT | Q2–Q3 2025 |
+| RFC-001 | Layout Actions & State Machines | ✅ COMPLETE | Implemented |
 | RFC-002 | Shared Semantic Cache | 🔵 DRAFT | ADR-002 extension |
 | RFC-003 | Partial Layout Updates | 🔵 DRAFT | Q2–Q3 2025 |
 | RFC-004 | Multi-Modal Input | 🔵 DRAFT | Future |

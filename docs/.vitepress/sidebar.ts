@@ -65,7 +65,7 @@ export const sidebar: DefaultTheme.Sidebar = {
       text: 'Frontend',
       collapsed: false,
       items: [
-        { text: 'Component Development Guidelines', link: '/engineering/frontend/Component_Development_Guidelines' },
+        { text: 'Component Guidelines', link: '/engineering/frontend/Component_Development_Guidelines' },
         { text: 'Design Token & Theming', link: '/engineering/frontend/Design_Token_Theming_Specification' },
         { text: 'i18n & RTL', link: '/engineering/frontend/I18n_RTL_Implementation_Guide' },
         { text: 'Accessibility Checklist', link: '/engineering/frontend/A11y_Compliance_Checklist' },
@@ -140,6 +140,9 @@ export const sidebar: DefaultTheme.Sidebar = {
       collapsed: false,
       items: [
         { text: 'Overview', link: '/ops/deployment-guides/' },
+        { text: 'Edge Workers', link: '/ops/deployment-guides/Edge_Workers_Provisioning' },
+        { text: 'Desktop (Tauri)', link: '/ops/deployment-guides/Tauri_Desktop_Packaging' },
+        { text: 'Web SaaS', link: '/ops/deployment-guides/Web_SaaS_Containerization' },
       ],
     },
   ],
@@ -224,6 +227,9 @@ export const sidebar: DefaultTheme.Sidebar = {
       items: [
         { text: 'System Prompt SOP', link: '/ai/System_Prompt_SOP' },
         { text: 'Prompt Evaluation Rubric', link: '/ai/Prompt_Evaluation_Rubric_Testing_Playbook' },
+        { text: 'LLM Provider Benchmarks', link: '/ai/LLM_Provider_Benchmarking_Reports' },
+        { text: 'Hallucination Case Studies', link: '/ai/Hallucination_Mitigation_Case_Studies' },
+        { text: 'Prompt Versioning', link: '/ai/Prompt_Versioning_Rollback_Ledger' },
       ],
     },
   ],
@@ -236,6 +242,7 @@ export const sidebar: DefaultTheme.Sidebar = {
         { text: 'Documentation Audit 2026-04', link: '/audit/Documentation_Audit_2026_04' },
         { text: 'Internal Audit Report', link: '/audit/AUDIT_REPORT' },
         { text: 'Enterprise Audit v4', link: '/audit/AUDIT_REPORT_v4_ENTERPRISE' },
+        { text: 'Enterprise Readiness Report', link: '/audit/Enterprise_Readiness_Report' },
       ],
     },
   ],
@@ -247,6 +254,16 @@ export const sidebar: DefaultTheme.Sidebar = {
         { text: 'End-User FAQ', link: '/support/End_User_FAQ' },
         { text: 'Known Issues & Troubleshooting', link: '/support/Known_Issues_Troubleshooting' },
         { text: 'Support Escalation Paths', link: '/support/Support_Escalation_Paths' },
+        { text: 'KB Article Templates', link: '/support/KB_Article_Templates' },
+      ],
+    },
+  ],
+
+  '/superpowers/': [
+    {
+      text: 'Implementation Roadmap',
+      items: [
+        { text: 'Full Implementation Plan', link: '/superpowers/plans/2026-05-19-full-implementation' },
       ],
     },
   ],
@@ -268,7 +285,8 @@ export const sidebar: DefaultTheme.Sidebar = {
     {
       text: 'Whitepapers',
       items: [
-        { text: 'Index', link: '/whitepapers/' },
+        { text: 'Overview', link: '/whitepapers/' },
+        { text: 'Strategic Whitepaper', link: '/whitepapers/FerroUI_UI_Whitepaper' },
       ],
     },
   ],

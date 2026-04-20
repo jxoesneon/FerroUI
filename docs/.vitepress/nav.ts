@@ -8,6 +8,7 @@ export const nav: DefaultTheme.NavItem[] = [
       { text: 'Quickstart', link: '/dev-experience/Quickstart_Developer_Onboarding' },
       { text: 'CLI Guide', link: '/dev-experience/CLI_Usage_Guide' },
       { text: 'Monorepo Architecture', link: '/architecture/Monorepo_Architecture_Package_Governance' },
+      { text: 'Whitepapers', link: '/whitepapers/' },
     ],
   },
   {
@@ -59,7 +60,11 @@ export const nav: DefaultTheme.NavItem[] = [
       { text: 'SLAs', link: '/ops/SLA_Definitions' },
       { text: 'Disaster Recovery', link: '/ops/Disaster_Recovery_Business_Continuity' },
       { text: 'Security Threat Model', link: '/security/Security_Threat_Model' },
+      { text: 'Acceptable Use Policy', link: '/security/Acceptable_Use_Policy' },
       { text: 'Privacy & Compliance', link: '/security/Data_Privacy_Compliance_Guide' },
+      { text: 'C2PA Provenance', link: '/security/C2PA_Provenance' },
+      { text: 'Sub-Processor Agreements', link: '/security/Data_Sub_processor_Agreements' },
+      { text: 'Security Audits', link: '/security/Third_Party_Security_Audit_Reports' },
       { text: 'Licensing Matrix', link: '/security/Open_Source_Licensing_Dependency_Matrix' },
     ],
   },
@@ -68,8 +73,18 @@ export const nav: DefaultTheme.NavItem[] = [
     items: [
       { text: 'Personas', link: '/product/User_Personas_Developer_Journeys' },
       { text: 'Competitor Matrix', link: '/product/Competitor_Feature_Matrix' },
+      { text: 'Launch Communications', link: '/product/Launch_Communications_PR_Plan' },
       { text: 'Release Notes', link: '/product/Release_Notes_Changelogs' },
       { text: 'PRDs', link: '/product/PRDs/' },
+    ],
+  },
+  {
+    text: 'Audit',
+    items: [
+      { text: 'Documentation Audit 2026-04', link: '/audit/Documentation_Audit_2026_04' },
+      { text: 'Enterprise Audit v4', link: '/audit/AUDIT_REPORT_v4_ENTERPRISE' },
+      { text: 'Internal Audit Report', link: '/audit/AUDIT_REPORT' },
+      { text: 'Readiness Report', link: '/audit/Enterprise_Readiness_Report' },
     ],
   },
   {
@@ -88,6 +103,9 @@ export const nav: DefaultTheme.NavItem[] = [
     items: [
       { text: 'System Prompt SOP', link: '/ai/System_Prompt_SOP' },
       { text: 'Prompt Eval Rubric', link: '/ai/Prompt_Evaluation_Rubric_Testing_Playbook' },
+      { text: 'LLM Provider Benchmarks', link: '/ai/LLM_Provider_Benchmarking_Reports' },
+      { text: 'Hallucination Case Studies', link: '/ai/Hallucination_Mitigation_Case_Studies' },
+      { text: 'Prompt Versioning', link: '/ai/Prompt_Versioning_Rollback_Ledger' },
     ],
   },
   {
@@ -96,8 +114,12 @@ export const nav: DefaultTheme.NavItem[] = [
       { text: 'FAQ', link: '/support/End_User_FAQ' },
       { text: 'Troubleshooting', link: '/support/Known_Issues_Troubleshooting' },
       { text: 'Escalation Paths', link: '/support/Support_Escalation_Paths' },
+      { text: 'KB Article Templates', link: '/support/KB_Article_Templates' },
       { text: 'Contributing', link: '/meta/contributing' },
       { text: 'Security Policy', link: '/meta/security-policy' },
+      { text: 'Code of Conduct', link: '/meta/code-of-conduct' },
+      { text: 'License', link: '/meta/license' },
+      { text: 'Monitoring & CI', link: '/meta/monitoring' },
     ],
   },
   {

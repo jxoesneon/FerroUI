@@ -137,6 +137,10 @@ export class ProviderRouter implements LlmProvider {
     return this.providers[0]?.provider.estimateTokens(text) ?? Math.ceil(text.length / 4);
   }
 
+  estimateCost(tokens: { input: number; output: number }): number {
+    return this.providers[0]?.provider.estimateCost(tokens) ?? 0;
+  }
+
   /** Returns a snapshot of current provider health for observability */
   getHealthSnapshot(): Record<string, ProviderHealth & { providerId: string }> {
     const out: Record<string, ProviderHealth & { providerId: string }> = {};

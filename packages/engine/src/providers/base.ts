@@ -19,4 +19,9 @@ export interface LlmProvider {
    * Estimates tokens for a given text.
    */
   estimateTokens(text: string): number;
+
+  /**
+   * Estimates cost (in cents) for a given token count.
+   */
+  estimateCost(tokens: { input: number; output: number }): number;
 }

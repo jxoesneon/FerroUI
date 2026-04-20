@@ -6,8 +6,9 @@ title: Whitepapers
 
 Strategic and research whitepapers published by the FerroUI team.
 
-| Title | Format |
-|-------|--------|
-| FerroUI UI Whitepaper | [DOCX](https://github.com/jxoesneon/FerroUI/blob/main/docs/whitepapers/FerroUI_UI_Whitepaper.docx) |
+| Title | HTML | Offline |
+|-------|------|---------|
+| FerroUI Strategic Whitepaper | [Read HTML](/whitepapers/FerroUI_UI_Whitepaper) | [DOCX](https://github.com/jxoesneon/FerroUI/blob/main/docs/whitepapers/FerroUI_UI_Whitepaper.docx) |
 
-> Whitepapers are preserved in DOCX for offline distribution. An HTML rendering is planned — track [issue #TBD](https://github.com/jxoesneon/FerroUI/issues).
+## About our Research
+The FerroUI research team publishes quarterly whitepapers on the intersection of Generative AI, Human-Computer Interaction (HCI), and Software Architecture.

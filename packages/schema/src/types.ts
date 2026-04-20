@@ -141,6 +141,8 @@ export const LayoutMetadataSchema = z.object({
   latencyMs: z.number().min(0).optional(),
   repairAttempts: z.number().min(0).optional(),
   cacheHit: z.boolean().optional(),
+  signature: z.string().optional(),
+  publicKey: z.string().optional(),
 });
 
 export type LayoutMetadata = z.infer<typeof LayoutMetadataSchema>;

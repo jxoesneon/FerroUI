@@ -4,10 +4,24 @@ title: Deployment Guides
 
 # Deployment Guides
 
-Deployment guides for the supported FerroUI runtime topologies.
+This section provides step-by-step instructions for deploying FerroUI across various environments and platform architectures.
 
-- **Cloudflare Edge** — deploy the engine as a Cloudflare Worker. See [`apps/edge`](/api/apps/edge).
-- **Containerized Engine** — Dockerfile at [`packages/engine/Dockerfile`](https://github.com/jxoesneon/FerroUI/blob/main/packages/engine/Dockerfile).
-- **Managed Kubernetes** — infrastructure samples under [`infra/`](https://github.com/jxoesneon/FerroUI/tree/main/infra).
+## Supported Deployment Targets
 
-> Detailed per-platform runbooks are being migrated from internal docs. Track progress on the [docs-deploy workflow](https://github.com/jxoesneon/FerroUI/actions/workflows/docs-deploy.yml).
+| Target | Architecture | Best For |
+|--------|--------------|----------|
+| **[Cloudflare Edge](/ops/deployment-guides/Edge_Workers_Provisioning)** | Serverless Worker | Low-latency globally distributed apps |
+| **[Tauri Desktop](/ops/deployment-guides/Tauri_Desktop_Packaging)** | Rust/Native | High-performance desktop applications |
+| **[Web SaaS](/ops/deployment-guides/Web_SaaS_Containerization)** | Docker/K8s | Enterprise multitenant SaaS platforms |
+
+## Core Deployment Principles
+
+1. **Schema Pinning:** Always deploy with a specific version of `@ferroui/schema`. LLM prompts are optimized for the schema current at the time of deployment.
+2. **Provider Redundancy:** Configure at least two LLM providers (e.g., Anthropic + Google) to handle upstream outages or rate limits.
+3. **Cache Warming:** After a new deployment, run the `Core-v4` eval suite to warm the semantic cache for common user paths.
+
+## Next Steps
+
+- **[Edge Workers Provisioning](/ops/deployment-guides/Edge_Workers_Provisioning)** — Configure Wrangler and Cloudflare secrets.
+- **[Tauri Desktop Packaging](/ops/deployment-guides/Tauri_Desktop_Packaging)** — Bundle native assets and sign binaries.
+- **[Web SaaS Containerization](/ops/deployment-guides/Web_SaaS_Containerization)** — Optimize Docker images for Node.js 25.

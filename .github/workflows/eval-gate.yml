@@ -24,7 +24,7 @@ jobs:
       contents: read
       id-token: write  # For attestation
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v6
@@ -61,14 +61,14 @@ jobs:
 
       - name: Upload eval results
         if: hashFiles('eval-results.json') != ''
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: eval-results
           path: eval-results.json
 
       - name: Attest eval results (D.1.4)
         if: hashFiles('eval-results.json') != ''
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v4
         with:
           subject-path: eval-results.json
           subject-name: ferroui-eval-results
@@ -77,7 +77,7 @@ jobs:
     name: Red Team Corpus Scan (D.2)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Run prompt injection detection
         run: |
@@ -94,7 +94,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: pnpm/action-setup@v6
 

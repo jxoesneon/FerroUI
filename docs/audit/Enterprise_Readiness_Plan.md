@@ -124,7 +124,7 @@ The order minimizes blockers: fix correctness first, then enforce guardrails, th
 
 ### B.3 Mutation testing (StrykerJS)
 
-- [ ] B.3.1 `pnpm -D add -w stryker @stryker-mutator/core @stryker-mutator/vitest-runner`
+- [ ] B.3.1 `pnpm -D add -w @stryker-mutator/core @stryker-mutator/vitest-runner`
 - [ ] B.3.2 Add `stryker.conf.mjs` scoped to `packages/engine` + `packages/schema`
 - [ ] B.3.3 Set mutation-score threshold: engine 70%, schema 85%
 - [ ] B.3.4 Add `stryker.yml` workflow on-demand + weekly

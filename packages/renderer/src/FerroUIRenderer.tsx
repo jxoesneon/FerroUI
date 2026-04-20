@@ -1,10 +1,14 @@
 import React, { useMemo, useState, useEffect } from 'react';
-import type { FerroUIComponent } from '@ferroui/schema';
+import type { FerroUIComponent, FerroUILayout, LayoutMetadata } from '@ferroui/schema';
 import { registry } from '@ferroui/registry';
 
 export interface FerroUIRendererProps {
-  /** The FerroUILayout root component tree to render. */
-  layout: FerroUIComponent;
+  /** The root layout object or root component tree. */
+  layout: FerroUIComponent | FerroUILayout;
+  /** Optional metadata if passing only the component tree. */
+  metadata?: LayoutMetadata;
+  /** If true, enables signature verification. */
+  strictProvenance?: boolean;
   /** Optional fallback component when a type is not found in the registry. */
   fallback?: React.ComponentType<{ type: string; props?: Record<string, unknown> }>;
   /** Optional override map: type → React component (takes priority over registry). */
@@ -22,6 +26,91 @@ const DefaultFallback: React.FC<{ type: string }> = ({ type }) => (
     Unknown component: <code>{type}</code>
   </div>
 );
+
+/**
+ * Signature verification badge.
+ */
+const ProvenanceBadge: React.FC<{ verified: boolean | null }> = ({ verified }) => {
+  if (verified === null) return null;
+
+  return (
+    <div 
+      className={`ferroui-provenance-badge ${verified ? 'verified' : 'unverified'}`}
+      style={{
+        position: 'absolute',
+        top: 8,
+        right: 8,
+        fontSize: '10px',
+        padding: '2px 6px',
+        borderRadius: '12px',
+        backgroundColor: verified ? '#e6fffa' : '#fff5f5',
+        color: verified ? '#2c7a7b' : '#c53030',
+        border: `1px solid ${verified ? '#38b2ac' : '#feb2b2'}`,
+        display: 'flex',
+        alignItems: 'center',
+        gap: '4px',
+        zIndex: 10,
+        fontWeight: 600,
+        pointerEvents: 'none'
+      }}
+    >
+      <span style={{ fontSize: '12px' }}>{verified ? '✓' : '⚠'}</span>
+      {verified ? 'Provenance Verified' : 'Provenance Unverified'}
+    </div>
+  );
+};
+
+/**
+ * Browser-compatible signature verification using Web Crypto API.
+ */
+async function verifyLayoutSignature(layout: FerroUILayout): Promise<boolean> {
+  const { metadata } = layout;
+  if (!metadata?.signature || !metadata?.publicKey) return false;
+
+  try {
+    // 1. Prepare data (remove signature/publicKey from metadata to match engine signing)
+    const dataToVerify = {
+      ...layout,
+      metadata: {
+        ...metadata,
+        signature: undefined,
+        publicKey: undefined,
+      }
+    };
+    const encodedData = new TextEncoder().encode(JSON.stringify(dataToVerify));
+
+    // 2. Prepare Public Key (strip PEM headers)
+    const pem = metadata.publicKey;
+    const rawPublicKey = pem
+      .replace(/-----BEGIN PUBLIC KEY-----/g, '')
+      .replace(/-----END PUBLIC KEY-----/g, '')
+      .replace(/\s/g, '');
+    
+    // b64 to binary
+    const binaryPublicKey = Uint8Array.from(atob(rawPublicKey), c => c.charCodeAt(0));
+    const binarySignature = Uint8Array.from(atob(metadata.signature), c => c.charCodeAt(0));
+
+    // 3. Import Key
+    const cryptoKey = await window.crypto.subtle.importKey(
+      'spki',
+      binaryPublicKey,
+      { name: 'Ed25519' },
+      true,
+      ['verify']
+    );
+
+    // 4. Verify
+    return await window.crypto.subtle.verify(
+      { name: 'Ed25519' },
+      cryptoKey,
+      binarySignature,
+      encodedData
+    );
+  } catch (err) {
+    console.error('[FerroUI] Signature verification error:', err);
+    return false;
+  }
+}
 
 /**
  * Resolves a React component for a given FerroUIComponent type.
@@ -120,6 +209,10 @@ const RenderNode: React.FC<{
   return <Component {...componentProps}>{children}</Component>;
 };
 
+const isFullLayout = (layout: any): layout is FerroUILayout => {
+  return layout && layout.requestId !== undefined && layout.layout !== undefined;
+};
+
 /**
  * FerroUIRenderer — the core layout renderer.
  *
@@ -128,15 +221,47 @@ const RenderNode: React.FC<{
  *
  * @example
  * ```tsx
- * <FerroUIRenderer layout={ferrouiLayout.layout} />
+ * <FerroUIRenderer layout={ferrouiLayout} strictProvenance />
  * ```
  */
-export const FerroUIRenderer: React.FC<FerroUIRendererProps> = ({ layout, fallback, overrides }) => {
+export const FerroUIRenderer: React.FC<FerroUIRendererProps> = ({ 
+  layout, 
+  metadata: metadataProp,
+  strictProvenance,
+  fallback, 
+  overrides 
+}) => {
   const memoizedOverrides = useMemo(() => overrides, [overrides]);
+  const [isVerified, setIsVerified] = useState<boolean | null>(null);
+
+  const fullLayout = useMemo(() => {
+    if (isFullLayout(layout)) return layout;
+    return {
+      schemaVersion: '1.1.0',
+      requestId: '00000000-0000-0000-0000-000000000000',
+      locale: 'en-US',
+      layout: layout as FerroUIComponent,
+      metadata: metadataProp
+    } as FerroUILayout;
+  }, [layout, metadataProp]);
+
+  useEffect(() => {
+    if (!strictProvenance) {
+      setIsVerified(null);
+      return;
+    }
+
+    if (fullLayout.metadata?.signature && fullLayout.metadata?.publicKey) {
+      verifyLayoutSignature(fullLayout).then(setIsVerified);
+    } else {
+      setIsVerified(false);
+    }
+  }, [fullLayout, strictProvenance]);
 
   return (
-    <div className="ferroui-renderer" data-ferroui-root>
-      <RenderNode node={layout} overrides={memoizedOverrides} fallback={fallback} />
+    <div className="ferroui-renderer" data-ferroui-root style={{ position: 'relative' }}>
+      {strictProvenance && <ProvenanceBadge verified={isVerified} />}
+      <RenderNode node={fullLayout.layout} overrides={memoizedOverrides} fallback={fallback} />
     </div>
   );
 };

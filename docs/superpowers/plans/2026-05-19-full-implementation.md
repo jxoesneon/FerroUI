@@ -1,6 +1,6 @@
 # Full Gap Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Close all 13 implementation gaps identified in AUDIT_REPORT.md v2 — real LLM providers, auth middleware, structured audit logging, OTLP telemetry export, persistent session state, real deploy command, `ferroui logs` command, design token system, a11y keyboard nav + axe tests, and `dataClassification` cache routing.
 
@@ -20,14 +20,14 @@
 - Modify: `packages/engine/package.json`
 - Test: `packages/engine/src/providers/openai.test.ts`
 
-- [ ] **Step 1: Install provider SDKs**
+- [x] **Step 1: Install provider SDKs**
 
 ```bash
 cd packages/engine
 pnpm add openai @anthropic-ai/sdk @google/generative-ai
 ```
 
-- [ ] **Step 2: Write failing tests for OpenAI provider**
+- [x] **Step 2: Write failing tests for OpenAI provider**
 
 Create `packages/engine/src/providers/openai.test.ts`:
 
@@ -81,7 +81,7 @@ describe('OpenAIProvider', () => {
 });
 ```
 
-- [ ] **Step 3: Run test to verify it fails**
+- [x] **Step 3: Run test to verify it fails**
 
 ```bash
 cd packages/engine
@@ -89,7 +89,7 @@ pnpm vitest run src/providers/openai.test.ts
 ```
 Expected: FAIL — module mocking not set up yet / stub returns wrong content
 
-- [ ] **Step 4: Implement OpenAI provider**
+- [x] **Step 4: Implement OpenAI provider**
 
 Replace `packages/engine/src/providers/openai.ts`:
 
@@ -181,7 +181,7 @@ export class OpenAIProvider implements LlmProvider {
 }
 ```
 
-- [ ] **Step 5: Run test to verify it passes**
+- [x] **Step 5: Run test to verify it passes**
 
 ```bash
 cd packages/engine
@@ -189,7 +189,7 @@ pnpm vitest run src/providers/openai.test.ts
 ```
 Expected: PASS
 
-- [ ] **Step 6: Implement Anthropic provider**
+- [x] **Step 6: Implement Anthropic provider**
 
 Replace `packages/engine/src/providers/anthropic.ts`:
 
@@ -279,7 +279,7 @@ export class AnthropicProvider implements LlmProvider {
 }
 ```
 
-- [ ] **Step 7: Implement Google provider**
+- [x] **Step 7: Implement Google provider**
 
 Replace `packages/engine/src/providers/google.ts`:
 
@@ -366,7 +366,7 @@ export class GoogleProvider implements LlmProvider {
 }
 ```
 
-- [ ] **Step 8: Implement Ollama provider**
+- [x] **Step 8: Implement Ollama provider**
 
 Replace `packages/engine/src/providers/ollama.ts`:
 
@@ -481,7 +481,7 @@ export class OllamaProvider implements LlmProvider {
 }
 ```
 
-- [ ] **Step 9: Build and commit**
+- [x] **Step 9: Build and commit**
 
 ```bash
 cd packages/engine
@@ -501,7 +501,7 @@ git commit -m "feat(engine): implement real LLM provider SDKs (OpenAI, Anthropic
 - Modify: `packages/engine/src/server.ts`
 - Test: `packages/engine/src/audit/audit-logger.test.ts`
 
-- [ ] **Step 1: Write failing test**
+- [x] **Step 1: Write failing test**
 
 Create `packages/engine/src/audit/audit-logger.test.ts`:
 
@@ -565,7 +565,7 @@ describe('AuditLogger', () => {
 });
 ```
 
-- [ ] **Step 2: Run to verify fail**
+- [x] **Step 2: Run to verify fail**
 
 ```bash
 cd packages/engine
@@ -573,7 +573,7 @@ pnpm vitest run src/audit/audit-logger.test.ts
 ```
 Expected: FAIL — module not found
 
-- [ ] **Step 3: Implement AuditLogger**
+- [x] **Step 3: Implement AuditLogger**
 
 Create `packages/engine/src/audit/audit-logger.ts`:
 
@@ -706,7 +706,7 @@ export class AuditLogger {
 export const auditLogger = AuditLogger.getInstance();
 ```
 
-- [ ] **Step 4: Run to verify pass**
+- [x] **Step 4: Run to verify pass**
 
 ```bash
 cd packages/engine
@@ -714,7 +714,7 @@ pnpm vitest run src/audit/audit-logger.test.ts
 ```
 Expected: PASS
 
-- [ ] **Step 5: Wire audit logger into dual-phase pipeline**
+- [x] **Step 5: Wire audit logger into dual-phase pipeline**
 
 In `packages/engine/src/pipeline/dual-phase.ts`, add at the top after existing imports:
 
@@ -764,7 +764,7 @@ After `yield { type: 'complete' };`, add:
   });
 ```
 
-- [ ] **Step 6: Build and commit**
+- [x] **Step 6: Build and commit**
 
 ```bash
 cd packages/engine
@@ -783,14 +783,14 @@ git commit -m "feat(engine): add structured audit logging (AuditLogger + pipelin
 - Modify: `packages/telemetry/package.json`
 - Test: `packages/telemetry/src/tracer.test.ts`
 
-- [ ] **Step 1: Install OTLP exporter**
+- [x] **Step 1: Install OTLP exporter**
 
 ```bash
 cd packages/telemetry
 pnpm add @opentelemetry/exporter-trace-otlp-http @opentelemetry/exporter-metrics-otlp-http @opentelemetry/sdk-metrics
 ```
 
-- [ ] **Step 2: Write failing test**
+- [x] **Step 2: Write failing test**
 
 Create `packages/telemetry/src/tracer.test.ts`:
 
@@ -833,14 +833,14 @@ describe('initializeTelemetry', () => {
 });
 ```
 
-- [ ] **Step 3: Run to verify fail**
+- [x] **Step 3: Run to verify fail**
 
 ```bash
 cd packages/telemetry
 pnpm vitest run src/tracer.test.ts
 ```
 
-- [ ] **Step 4: Update tracer.ts to support OTLP export**
+- [x] **Step 4: Update tracer.ts to support OTLP export**
 
 Replace `packages/telemetry/src/tracer.ts`:
 
@@ -919,14 +919,14 @@ export function setCommonAttributes(
 }
 ```
 
-- [ ] **Step 5: Run test to verify pass**
+- [x] **Step 5: Run test to verify pass**
 
 ```bash
 cd packages/telemetry
 pnpm vitest run src/tracer.test.ts
 ```
 
-- [ ] **Step 6: Build and commit**
+- [x] **Step 6: Build and commit**
 
 ```bash
 cd packages/telemetry
@@ -944,7 +944,7 @@ git commit -m "feat(telemetry): wire OTLP trace exporter via OTEL_EXPORTER_OTLP_
 - Modify: `packages/engine/src/cache/semantic-cache.ts`
 - Test: `packages/engine/src/cache/semantic-cache.test.ts`
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 Create `packages/engine/src/cache/semantic-cache.test.ts`:
 
@@ -984,14 +984,14 @@ describe('SemanticCache', () => {
 });
 ```
 
-- [ ] **Step 2: Run to verify fail**
+- [x] **Step 2: Run to verify fail**
 
 ```bash
 cd packages/engine
 pnpm vitest run src/cache/semantic-cache.test.ts
 ```
 
-- [ ] **Step 3: Update SemanticCache to accept dataClassification map**
+- [x] **Step 3: Update SemanticCache to accept dataClassification map**
 
 Replace `packages/engine/src/cache/semantic-cache.ts`:
 
@@ -1098,7 +1098,7 @@ export class SemanticCache {
 export const semanticCache = SemanticCache.getInstance();
 ```
 
-- [ ] **Step 4: Update dual-phase.ts to pass classifications to cache**
+- [x] **Step 4: Update dual-phase.ts to pass classifications to cache**
 
 In `packages/engine/src/pipeline/dual-phase.ts`, update the cache get/set calls to pass a `classifications` map built from tool registry:
 
@@ -1118,18 +1118,18 @@ const cachedLayout = await semanticCache.get(prompt, context.permissions, contex
 await semanticCache.set(prompt, context.permissions, context.userId, cacheToolOutputs, finalLayout, classifications);
 ```
 
-- [ ] **Step 5: Export ToolRegistry from @ferroui/tools**
+- [x] **Step 5: Export ToolRegistry from @ferroui/tools**
 
 In `packages/tools/src/index.ts` verify `ToolRegistry` is exported (it's exported via `registry.ts`'s `export class ToolRegistry`). Confirm no change needed.
 
-- [ ] **Step 6: Run tests to verify pass**
+- [x] **Step 6: Run tests to verify pass**
 
 ```bash
 cd packages/engine
 pnpm vitest run src/cache/semantic-cache.test.ts
 ```
 
-- [ ] **Step 7: Build and commit**
+- [x] **Step 7: Build and commit**
 
 ```bash
 cd packages/engine
@@ -1148,7 +1148,7 @@ git commit -m "feat(engine): implement dataClassification-aware cache routing (R
 - Modify: `packages/cli/src/index.ts`
 - Test: `packages/cli/src/commands/logs.test.ts`
 
-- [ ] **Step 1: Write failing test**
+- [x] **Step 1: Write failing test**
 
 Create `packages/cli/src/commands/logs.test.ts`:
 
@@ -1173,14 +1173,14 @@ describe('logsCommand', () => {
 });
 ```
 
-- [ ] **Step 2: Run to verify fail**
+- [x] **Step 2: Run to verify fail**
 
 ```bash
 cd packages/cli
 pnpm vitest run src/commands/logs.test.ts
 ```
 
-- [ ] **Step 3: Implement logsCommand**
+- [x] **Step 3: Implement logsCommand**
 
 Create `packages/cli/src/commands/logs.ts`:
 
@@ -1305,7 +1305,7 @@ function printLogEvent(event: any, jsonOutput: boolean): void {
 }
 ```
 
-- [ ] **Step 4: Wire into CLI index**
+- [x] **Step 4: Wire into CLI index**
 
 In `packages/cli/src/index.ts`, add:
 
@@ -1315,7 +1315,7 @@ import { logsCommand } from './commands/logs';
 program.addCommand(logsCommand);
 ```
 
-- [ ] **Step 5: Add `/admin/logs` endpoint to engine server**
+- [x] **Step 5: Add `/admin/logs` endpoint to engine server**
 
 In `packages/engine/src/server.ts`, after the `/admin/circuit-reset` route, add:
 
@@ -1328,14 +1328,14 @@ In `packages/engine/src/server.ts`, after the `/admin/circuit-reset` route, add:
   });
 ```
 
-- [ ] **Step 6: Run tests to verify pass**
+- [x] **Step 6: Run tests to verify pass**
 
 ```bash
 cd packages/cli
 pnpm vitest run src/commands/logs.test.ts
 ```
 
-- [ ] **Step 7: Build and commit**
+- [x] **Step 7: Build and commit**
 
 ```bash
 cd packages/cli
@@ -1353,7 +1353,7 @@ git commit -m "feat(cli): add ferroui logs --follow command + engine /admin/logs
 - Modify: `packages/cli/src/commands/deploy.ts`
 - Test: `packages/cli/src/commands/deploy.test.ts`
 
-- [ ] **Step 1: Write failing test**
+- [x] **Step 1: Write failing test**
 
 Create `packages/cli/src/commands/deploy.test.ts`:
 
@@ -1378,7 +1378,7 @@ describe('deployCommand', () => {
 });
 ```
 
-- [ ] **Step 2: Implement real deploy command**
+- [x] **Step 2: Implement real deploy command**
 
 Replace `packages/cli/src/commands/deploy.ts`:
 
@@ -1519,14 +1519,14 @@ async function commandExists(cmd: string): Promise<boolean> {
 }
 ```
 
-- [ ] **Step 3: Run tests to verify pass**
+- [x] **Step 3: Run tests to verify pass**
 
 ```bash
 cd packages/cli
 pnpm vitest run src/commands/deploy.test.ts
 ```
 
-- [ ] **Step 4: Build and commit**
+- [x] **Step 4: Build and commit**
 
 ```bash
 cd packages/cli
@@ -1546,14 +1546,14 @@ git commit -m "feat(cli): implement real ferroui deploy (Vercel/Netlify for web,
 - Modify: `apps/web/src/components/FerroUIRenderer.test.tsx`
 - Modify: `apps/web/package.json`
 
-- [ ] **Step 1: Install axe-core**
+- [x] **Step 1: Install axe-core**
 
 ```bash
 cd apps/web
 pnpm add -D @axe-core/react axe-core
 ```
 
-- [ ] **Step 2: Write failing a11y tests**
+- [x] **Step 2: Write failing a11y tests**
 
 In `apps/web/src/components/FerroUIRenderer.test.tsx`, add after existing imports:
 
@@ -1582,7 +1582,7 @@ it('renders without a11y violations', async () => {
 });
 ```
 
-- [ ] **Step 3: Add keyboard navigation to Button component**
+- [x] **Step 3: Add keyboard navigation to Button component**
 
 In `apps/web/src/components/components-registration.tsx`, update the Button component:
 
@@ -1614,14 +1614,14 @@ export const Card: React.FC<{ title: string; content?: string; children?: React.
 );
 ```
 
-- [ ] **Step 4: Build and verify tests**
+- [x] **Step 4: Build and verify tests**
 
 ```bash
 cd apps/web
 pnpm vitest run src/components/FerroUIRenderer.test.tsx
 ```
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add apps/web/src/components/ apps/web/package.json
@@ -1643,7 +1643,7 @@ git commit -m "feat(web): add WCAG 2.1 AA keyboard navigation + axe-core tests t
 - Create: `scripts/build-tokens.ts`
 - Modify: `apps/web/src/index.css`
 
-- [ ] **Step 1: Create primitive color tokens**
+- [x] **Step 1: Create primitive color tokens**
 
 Create `tokens/primitive/colors.json`:
 
@@ -1669,7 +1669,7 @@ Create `tokens/primitive/colors.json`:
 }
 ```
 
-- [ ] **Step 2: Create primitive spacing tokens**
+- [x] **Step 2: Create primitive spacing tokens**
 
 Create `tokens/primitive/spacing.json`:
 
@@ -1689,7 +1689,7 @@ Create `tokens/primitive/spacing.json`:
 }
 ```
 
-- [ ] **Step 3: Create primitive typography tokens**
+- [x] **Step 3: Create primitive typography tokens**
 
 Create `tokens/primitive/typography.json`:
 
@@ -1711,7 +1711,7 @@ Create `tokens/primitive/typography.json`:
 }
 ```
 
-- [ ] **Step 4: Create semantic color tokens**
+- [x] **Step 4: Create semantic color tokens**
 
 Create `tokens/semantic/colors.json`:
 
@@ -1732,7 +1732,7 @@ Create `tokens/semantic/colors.json`:
 }
 ```
 
-- [ ] **Step 5: Create semantic spacing tokens**
+- [x] **Step 5: Create semantic spacing tokens**
 
 Create `tokens/semantic/spacing.json`:
 
@@ -1744,7 +1744,7 @@ Create `tokens/semantic/spacing.json`:
 }
 ```
 
-- [ ] **Step 6: Create component tokens**
+- [x] **Step 6: Create component tokens**
 
 Create `tokens/component/button.json`:
 
@@ -1772,7 +1772,7 @@ Create `tokens/component/card.json`:
 }
 ```
 
-- [ ] **Step 7: Create token build script**
+- [x] **Step 7: Create token build script**
 
 Create `scripts/build-tokens.ts`:
 
@@ -1833,7 +1833,7 @@ async function buildCssVariables(): Promise<void> {
 buildCssVariables().catch(console.error);
 ```
 
-- [ ] **Step 8: Run token build and verify CSS output**
+- [x] **Step 8: Run token build and verify CSS output**
 
 ```bash
 cd /opt/ferroui
@@ -1842,7 +1842,7 @@ npx tsx scripts/build-tokens.ts
 
 Expected: creates `apps/web/src/tokens.css` with `--ferroui-*` CSS custom properties.
 
-- [ ] **Step 9: Import tokens in web app**
+- [x] **Step 9: Import tokens in web app**
 
 In `apps/web/src/index.css`, add at the top:
 
@@ -1850,7 +1850,7 @@ In `apps/web/src/index.css`, add at the top:
 @import './tokens.css';
 ```
 
-- [ ] **Step 10: Commit**
+- [x] **Step 10: Commit**
 
 ```bash
 git add tokens/ scripts/build-tokens.ts apps/web/src/tokens.css apps/web/src/index.css
@@ -1866,7 +1866,7 @@ git commit -m "feat: add design token system (3-tier primitive/semantic/componen
 - Create: `packages/engine/src/session/session-store.test.ts`
 - Modify: `packages/engine/src/server.ts`
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 Create `packages/engine/src/session/session-store.test.ts`:
 
@@ -1914,7 +1914,7 @@ describe('InMemorySessionStore', () => {
 });
 ```
 
-- [ ] **Step 2: Implement session store**
+- [x] **Step 2: Implement session store**
 
 Create `packages/engine/src/session/session-store.ts`:
 
@@ -1986,14 +1986,14 @@ export function createSessionStore(): SessionStore {
 export const sessionStore = createSessionStore();
 ```
 
-- [ ] **Step 3: Run tests to verify pass**
+- [x] **Step 3: Run tests to verify pass**
 
 ```bash
 cd packages/engine
 pnpm vitest run src/session/session-store.test.ts
 ```
 
-- [ ] **Step 4: Attach sessionStore to server**
+- [x] **Step 4: Attach sessionStore to server**
 
 In `packages/engine/src/server.ts`, after the existing imports add:
 
@@ -2009,7 +2009,7 @@ Then expose `/admin/sessions` for inspection:
   });
 ```
 
-- [ ] **Step 5: Build and commit**
+- [x] **Step 5: Build and commit**
 
 ```bash
 cd packages/engine
@@ -2023,25 +2023,25 @@ git commit -m "feat(engine): add session store abstraction (InMemory + Redis-rea
 
 ## Final: Full Build Verification and Audit Report Update
 
-- [ ] **Step 1: Run full monorepo build**
+- [x] **Step 1: Run full monorepo build**
 
 ```bash
 pnpm run -r build
 ```
 Expected: all packages exit 0.
 
-- [ ] **Step 2: Run all tests**
+- [x] **Step 2: Run all tests**
 
 ```bash
 pnpm run -r test
 ```
 Expected: all test suites pass.
 
-- [ ] **Step 3: Update AUDIT_REPORT.md**
+- [x] **Step 3: Update AUDIT_REPORT.md**
 
 Update the executive summary table and checklist to reflect all items now implemented.
 
-- [ ] **Step 4: Final commit**
+- [x] **Step 4: Final commit**
 
 ```bash
 git add AUDIT_REPORT.md

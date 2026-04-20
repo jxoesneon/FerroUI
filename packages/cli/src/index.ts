@@ -12,6 +12,7 @@ import { updateCommand } from './commands/update.js';
 import { logsCommand } from './commands/logs.js';
 import { tokensCommand } from './commands/tokens.js';
 import { migrateCommand } from './commands/migrate.js';
+import { promptCommand } from './commands/prompt.js';
 
 const program = new Command();
 
@@ -33,6 +34,7 @@ program.addCommand(updateCommand);
 program.addCommand(logsCommand);
 program.addCommand(tokensCommand);
 program.addCommand(migrateCommand);
+program.addCommand(promptCommand);
 
 program.on('command:*', () => {
   console.error(chalk.red('Invalid command: %s\nSee --help for a list of available commands.'), program.args.join(' '));

@@ -12,6 +12,8 @@ export enum AuditEventType {
   CIRCUIT_RESET = 'circuit_reset',
   RATE_LIMITED = 'rate_limited',
   SESSION_UPDATED = 'session_updated',
+  COST_ESTIMATED = 'cost_estimated',
+  PROVENANCE_SIGNED = 'provenance_signed',
 }
 
 interface BaseAuditEvent {
@@ -72,6 +74,21 @@ export interface SessionUpdatedEvent extends BaseAuditEvent {
   newState: string;
 }
 
+export interface CostEstimatedEvent extends BaseAuditEvent {
+  type: AuditEventType.COST_ESTIMATED;
+  tenantId: string;
+  phase: number;
+  costCents: number;
+  cumulativeCostCents: number;
+  limitCents: number;
+}
+
+export interface ProvenanceSignedEvent extends BaseAuditEvent {
+  type: AuditEventType.PROVENANCE_SIGNED;
+  signature: string;
+  publicKey: string;
+}
+
 export type AuditEvent =
   | ToolCallEvent
   | RequestCompleteEvent
@@ -79,7 +96,9 @@ export type AuditEvent =
   | RequestErrorEvent
   | CircuitEvent
   | RateLimitedEvent
-  | SessionUpdatedEvent;
+  | SessionUpdatedEvent
+  | CostEstimatedEvent
+  | ProvenanceSignedEvent;
 
 export interface AuditLoggerOptions {
   output?: 'console' | 'memory' | 'file' | 'sqlite';
