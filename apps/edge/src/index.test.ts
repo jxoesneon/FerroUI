@@ -116,7 +116,7 @@ describe('Edge App', () => {
 
     beforeEach(() => {
       globalFetchMock = vi.fn();
-      global.fetch = globalFetchMock as any;
+      globalThis.fetch = globalFetchMock as any;
     });
 
     it('calls engine and returns result', async () => {

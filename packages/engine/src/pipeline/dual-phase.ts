@@ -1,5 +1,5 @@
 import { LlmProvider } from '../providers/base.js';
-import { RequestContext, EngineChunk, EngineConfig, LlmRequest } from '../types.js';
+import { RequestContext, EngineChunk, EngineConfig, LlmRequest, LlmResponse } from '../types.js';
 import { getToolsForUser, executeTool, registerCacheHandler, isToolSensitive, ToolLogger } from '@ferroui/tools';
 import { validateLayout, FerroUILayout } from '@ferroui/schema';
 import { registry } from '@ferroui/registry';
@@ -385,6 +385,7 @@ export async function* runDualPhasePipeline(
   const signature = Signer.sign(JSON.stringify(finalLayout), privateKey);
   
   finalLayout.metadata = {
+    generatedAt: finalLayout.metadata?.generatedAt ?? new Date().toISOString(),
     ...finalLayout.metadata,
     signature,
     publicKey,

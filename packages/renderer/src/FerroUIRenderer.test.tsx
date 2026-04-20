@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import React, { act } from 'react';
 import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import { FerroUIRenderer } from './FerroUIRenderer.js';
@@ -12,12 +12,16 @@ vi.mock('@ferroui/registry', () => ({
 }));
 
 // Mock TextEncoder
-global.TextEncoder = class {
+globalThis.TextEncoder = class {
   encode(s: string) { return new Uint8Array([...s].map(c => c.charCodeAt(0))); }
 } as any;
 
-// Mock atob
-global.atob = (s: string) => Buffer.from(s, 'base64').toString('binary');
+// Mock atob (simple string conversion for tests)
+globalThis.atob = (s: string) => {
+  const binary = [];
+  const decoded = atob ? atob(s) : s; // fall back to identity if not in env
+  return decoded;
+};
 
 describe('FerroUIRenderer (C2PA)', () => {
   const mockLayout = {

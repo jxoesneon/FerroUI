@@ -15,9 +15,9 @@ describe('evalCommand', () => {
     consoleLogMock = vi.spyOn(console, 'log').mockImplementation(() => {});
     processExitMock = vi.spyOn(process, 'exit').mockImplementation(((code: any) => { throw new Error(`Exit ${code}`); }) as any);
 
-    originalFetch = global.fetch;
+    originalFetch = globalThis.fetch;
     fetchMock = vi.fn();
-    global.fetch = fetchMock;
+    globalThis.fetch = fetchMock;
 
     vi.mocked(fs.pathExists).mockResolvedValue(true as never);
     vi.mocked(fs.ensureDir).mockResolvedValue(undefined as never);
@@ -25,7 +25,7 @@ describe('evalCommand', () => {
   });
 
   afterEach(() => {
-    global.fetch = originalFetch;
+    globalThis.fetch = originalFetch;
     vi.restoreAllMocks();
   });
 

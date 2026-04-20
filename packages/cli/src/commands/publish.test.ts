@@ -15,7 +15,7 @@ describe('publishCommand', () => {
     originalEnv = { ...process.env };
     consoleLogMock = vi.spyOn(console, 'log').mockImplementation(() => {});
     fetchMock = vi.fn();
-    global.fetch = fetchMock;
+    globalThis.fetch = fetchMock;
   });
 
   afterEach(() => {
