@@ -1,17 +1,3 @@
----
-title: "@ferroui/tokens"
----
-
-# @ferroui/tokens
-
-Design token pipeline with Style Dictionary outputs.
-
-- **Source:** [`packages/tokens`](https://github.com/jxoesneon/FerroUI/tree/main/packages/tokens)
-- **package.json:** [view on GitHub](https://github.com/jxoesneon/FerroUI/blob/main/packages/tokens/package.json)
-
-
-## Generated API
-
 **@ferroui/tokens**
 
 ***
@@ -78,4 +64,3 @@ N/A
 ```css
 @import "@ferroui/tokens/dist/variables.css";
 ```
-

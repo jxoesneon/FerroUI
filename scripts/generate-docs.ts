@@ -529,22 +529,22 @@ ${app.description}
 /* -------------------------------------------------------------------------- */
 
 async function main(): Promise<void> {
-  console.log('▶ Generating Component API reference…');
+  console.log('> Generating Component API reference...');
   await writeComponentsPage();
-  console.log('▶ Generating Tool API reference…');
+  console.log('> Generating Tool API reference...');
   await writeToolsPage();
-  console.log('▶ Generating FerroUILayout schema page…');
+  console.log('> Generating FerroUILayout schema page...');
   await writeSchemaPage();
-  console.log('▶ Writing package and app stubs…');
+  console.log('> Writing package and app stubs...');
   await Promise.all([
     ...PACKAGE_METADATA.map((pkg) => writePackageStub(pkg)),
     ...APP_METADATA.map((app) => writeAppStub(app)),
   ]);
-  console.log('✓ Documentation generation complete.');
+  console.log('OK Documentation generation complete.');
 }
 
 main().catch((err) => {
-  console.error('✗ Documentation generation failed.');
+  console.error('X Documentation generation failed.');
   console.error(err);
   process.exit(1);
 });

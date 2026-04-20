@@ -1,17 +1,3 @@
----
-title: "@ferroui/shared"
----
-
-# @ferroui/shared
-
-Internal utilities shared across FerroUI packages.
-
-- **Source:** [`packages/shared`](https://github.com/jxoesneon/FerroUI/tree/main/packages/shared)
-- **package.json:** [view on GitHub](https://github.com/jxoesneon/FerroUI/blob/main/packages/shared/package.json)
-
-
-## Generated API
-
 **@ferroui/shared**
 
 ***
@@ -63,4 +49,3 @@ N/A
 ```typescript
 import { deepMerge } from '@ferroui/shared';
 ```
-

@@ -10,4 +10,14 @@ VS Code editor integration with live layout preview.
 - **package.json:** [view on GitHub](https://github.com/jxoesneon/FerroUI/blob/main/packages/vscode-extension/package.json)
 
 
-> TypeDoc output is not yet available for this package. Run `pnpm docs:typedoc` or consult the source in the repository.
+## Generated API
+
+**@ferroui/extension**
+
+***
+
+## Functions
+
+- [activate](functions/activate.md)
+- [deactivate](functions/deactivate.md)
+

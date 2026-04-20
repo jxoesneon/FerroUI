@@ -13,38 +13,48 @@ const packages = [
 ];
 
 async function main() {
-  console.log('▶ Generating TypeDoc for all packages...');
+  console.log('> Generating TypeDoc for all packages...');
   
   for (const pkg of packages) {
     const pkgPath = path.join(ROOT, 'packages', pkg);
     if (!fs.existsSync(pkgPath)) {
-      console.warn(`⚠️ Package ${pkg} not found at ${pkgPath}, skipping.`);
+      console.warn(`! Package ${pkg} not found at ${pkgPath}, skipping.`);
       continue;
     }
 
     const outDir = path.join(ROOT, 'docs', 'api', 'packages', '.typedoc', pkg);
-    console.log(`  - Generating for @ferroui/${pkg} -> ${outDir}`);
+    console.log(`  - @ferroui/${pkg} -> ${outDir}`);
 
     try {
-      // We use src/index.ts as entry point. Some packages might not have it.
-      const entry = path.join(pkgPath, 'src', 'index.ts');
-      if (!fs.existsSync(entry)) {
-        console.warn(`    ⚠️ Entry point ${entry} not found, skipping.`);
+      // Try common entry points
+      const entries = [
+        path.join(pkgPath, 'src', 'index.ts'),
+        path.join(pkgPath, 'src', 'extension.ts'),
+        path.join(pkgPath, 'src', 'main.ts'),
+      ];
+      
+      const entry = entries.find(e => fs.existsSync(e));
+      
+      if (!entry) {
+        console.warn(`    ! No valid entry point found for ${pkg}, skipping.`);
         continue;
       }
+
+      const tsconfig = path.join(pkgPath, 'tsconfig.json');
+      const tsconfigArg = fs.existsSync(tsconfig) ? `--tsconfig ${tsconfig.split(path.sep).join('/')}` : '';
 
       const posixEntry = entry.split(path.sep).join('/');
       const posixOutDir = outDir.split(path.sep).join('/');
 
-      execSync(`pnpm exec typedoc --out ${posixOutDir} --plugin typedoc-plugin-markdown ${posixEntry} --hidePageTitle --hideBreadcrumbs --entryPointStrategy resolve --cleanOutputDir true`, {
+      execSync(`pnpm exec typedoc --out ${posixOutDir} --plugin typedoc-plugin-markdown ${posixEntry} ${tsconfigArg} --hidePageTitle --hideBreadcrumbs --entryPointStrategy resolve --cleanOutputDir true`, {
         stdio: 'inherit',
         cwd: ROOT
       });
     } catch (err) {
-      console.error(`    ❌ Failed to generate TypeDoc for ${pkg}:`, err);
+      console.error(`    x Failed to generate TypeDoc for ${pkg}:`, err);
     }
   }
-  console.log('✓ TypeDoc generation complete.');
+  console.log('OK TypeDoc generation complete.');
 }
 
 main().catch(console.error);
