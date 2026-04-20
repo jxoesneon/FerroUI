@@ -20,6 +20,10 @@ describe('FerroUIRenderer', () => {
     vi.clearAllMocks();
   });
 
+  afterEach(() => {
+    cleanup();
+  });
+
   it('renders a missing component fallback', () => {
     render(<FerroUIRenderer component={{ type: 'Unknown', id: '1', props: {} } as any} />);
     expect(screen.getByText('Unknown')).toBeInTheDocument();
