@@ -40,7 +40,7 @@
   ],
   "devDependencies": {
     "@ferroui/config": "workspace:*",
-    "@types/node": "^25.6.2",
+    "@types/node": "^26.2.0",
     "typescript": "latest"
   }
 }
