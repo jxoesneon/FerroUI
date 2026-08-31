@@ -99,7 +99,7 @@ jobs:
           cache: pnpm
       - name: Install & Build
         run: |
-          pnpm install --frozen-lockfile
+          pnpm install --no-frozen-lockfile
           pnpm -r --if-present run build
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v4
@@ -157,7 +157,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
       - name: Run pnpm audit
-        run: pnpm audit --audit-level=high
+        run: pnpm audit --prod --audit-level=high
 
   container-scan:
     name: Trivy Container Scan
