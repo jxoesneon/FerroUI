@@ -40,7 +40,7 @@
   "author": "FerroUI Project Team",
   "license": "MIT",
   "devDependencies": {
-    "@axe-core/playwright": "^4.11.3",
+    "@axe-core/playwright": "^4.13.0",
     "@changesets/cli": "latest",
     "@chromatic-com/storybook": "^3.2.7",
     "@eslint/js": "^10.0.1",
