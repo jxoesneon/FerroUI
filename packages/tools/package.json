@@ -33,7 +33,7 @@
   "dependencies": {
     "@ferroui/schema": "workspace:*",
     "@ferroui/telemetry": "workspace:*",
-    "zod": "^4.3.6",
+    "zod": "^4.6.2",
     "zod-to-json-schema": "^3.25.2"
   },
   "devDependencies": {
