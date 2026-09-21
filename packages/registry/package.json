@@ -26,7 +26,7 @@
     "@ferroui/i18n": "workspace:*",
     "@ferroui/schema": "workspace:*",
     "react": "^19.2.5",
-    "zod": "^4.3.6"
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@types/node": "^25.6.2",
